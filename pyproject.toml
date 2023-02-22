@@ -13,3 +13,6 @@ dependencies = [
 pythonpath = [
   "edpop_explorer"
 ]
+
+[tool.setuptools.packages.find]
+where = ["."]

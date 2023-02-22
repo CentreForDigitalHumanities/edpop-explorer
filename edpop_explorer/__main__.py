@@ -2,8 +2,8 @@ from typing import Dict, List, Optional
 import readline
 import math
 
-from apireader import APIReader, APIRecord
-from readers.hpb import HPBReader
+from edpop_explorer.apireader import APIReader, APIRecord
+from edpop_explorer.readers.hpb import HPBReader
 
 
 readercommands: Dict[str, APIReader] = {

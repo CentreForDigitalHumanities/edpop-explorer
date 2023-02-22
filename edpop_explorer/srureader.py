@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Dict, List, Optional
 from dataclasses import dataclass, field as dataclass_field
 
-from apireader import APIReader
+from edpop_explorer.apireader import APIReader
 
 
 READABLE_FIELDS_FILE = Path(__file__).parent / 'M21_fields.csv'
