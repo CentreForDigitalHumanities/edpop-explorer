@@ -69,8 +69,21 @@ class SRURecord:
                 returned_fields.append(field)
         return returned_fields
 
+    def get_title(self):
+        field_245 = self.get_first_field('245')
+        if field_245:
+            return field_245.subfields.get('a', '(unknown title)')
+        else:
+            return '(unknown title)'
+
+    def show_record(self) -> str:
+        field_strings = []
+        for field in self.fields:
+            field_strings.append(str(field))
+        return '\n'.join(field_strings)
+
     def __repr__(self):
-        return '\n'.join([str(x) for x in self.fields])
+        return self.get_title()
 
 
 RECORDS_PER_PAGE = 10
@@ -79,13 +92,16 @@ RECORDS_PER_PAGE = 10
 class SRUReader(APIReader):
     sru_url: str = None
     sru_version: str = None
+    query: str = None
+    records: List[SRURecord]
+    fetching_exhausted: bool = False
 
-    def fetch(self, query: str) -> List[SRURecord]:
+    def _perform_query(self, query: str, start_record: int) -> List[SRURecord]:
         try:
             response = sruthi.searchretrieve(
                 self.sru_url,
                 query,
-                start_record=1,
+                start_record=start_record,
                 maximum_records=RECORDS_PER_PAGE,
                 sru_version=self.sru_version
             )
@@ -95,6 +111,7 @@ class SRUReader(APIReader):
             raise
 
         records: List[SRURecord] = []
+        self.number_of_results = response.count
 
         for sruthirecord in response[0:RECORDS_PER_PAGE]:
             record = SRURecord()
@@ -120,5 +137,17 @@ class SRUReader(APIReader):
                         sruthisubfield['text']
                 record.fields.append(field)
             records.append(record)
-
         return records
+
+    def fetch(self, query) -> List[SRURecord]:
+        self.records = []
+        self.query = query
+        results = self._perform_query(query, 1)
+        self.records.extend(results)
+        return results
+
+    def fetch_next(self) -> List[SRURecord]:
+        start_record = len(self.records) + 1
+        results = self._perform_query(self.query, start_record)
+        self.records.extend(results)
+        return results
