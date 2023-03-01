@@ -2,35 +2,44 @@ from typing import Dict, List, Optional
 import readline
 import math
 
-from edpop_explorer.apireader import APIReader, APIRecord
+from edpop_explorer.apireader import APIReader, APIRecord, APIException
 from edpop_explorer.readers.hpb import HPBReader
+from edpop_explorer.readers.vd import VD16Reader, VD17Reader, VD18Reader
+from edpop_explorer.readers.stcn import STCNReader
 
 
 readercommands: Dict[str, APIReader] = {
     'hpb': HPBReader,
+    'vd16': VD16Reader,
+    'vd17': VD17Reader,
+    'vd18': VD18Reader,
+    'stcn': STCNReader
 }
 
 
 def show_records(records: List[APIRecord],
                  start: int,
-                 end: Optional[int] = None) -> None:
+                 limit: Optional[int] = None) -> int:
+    """Show the records from start, with limit as the maximum number of records
+    to show. Return the number of records shown."""
     if len(records) == 0:
-        return
-    if end is None:
-        end = len(records)
+        return 0
+    if limit is None or limit > len(records) - start:
+        limit = len(records) - start
     digits = int(math.log10(len(records))) + 1
     i = start
-    while i < end:
+    while i < (start + limit):
         print('{:{digits}} - {}'.format(
             i + 1, records[i].get_title(), digits=digits
         ))
         i += 1
+    return i - start
 
 
 def main() -> None:
     print(
         'Welcome to the EDPOP explorer!\n'
-        'Available commands: {}, next, exit'
+        'Available commands: {}, next, show, exit'
         .format(', '.join(readercommands))
     )
     reader: APIReader = None
@@ -57,17 +66,22 @@ def main() -> None:
             # Invoke constructor of readerclass
             reader = readerclass()
             shown = 0
-            records = reader.fetch(arguments[0])
+            try:
+                reader.fetch(arguments[0])
+            except APIException as err:
+                print('Error while fetching results: {}'.format(err))
+                reader = None
             print('{} records found.'.format(reader.number_of_results))
-            show_records(records, shown)
-            shown += len(records)
+            shown += show_records(reader.records, shown, 10)
         elif command == 'next':
             if reader is None:
                 print('First perform an initial search')
+            elif shown >= reader.number_of_results:
+                print('All records have been shown')
             else:
-                records = reader.fetch_next()
-                show_records(reader.records, shown)
-                shown += len(records)
+                if reader.number_fetched - shown < 10:
+                    reader.fetch_next()
+                shown += show_records(reader.records, shown, 10)
         elif command == 'show':
             if reader is None:
                 print('First perform an initial search')

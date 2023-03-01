@@ -49,7 +49,7 @@ class SRURecord:
     # We use a list for the fields and not a dictionary because they may
     # appear more than once
     fields: List[SRURecordField] = dataclass_field(default_factory=list)
-    url: Optional[str] = None
+    link: Optional[str] = None
 
     def get_first_field(self, fieldnumber: str) -> SRURecordField:
         '''Return the first occurance of a field with a given field number.
@@ -78,6 +78,8 @@ class SRURecord:
 
     def show_record(self) -> str:
         field_strings = []
+        if self.link:
+            field_strings.append(self.link)
         for field in self.fields:
             field_strings.append(str(field))
         return '\n'.join(field_strings)
@@ -96,11 +98,17 @@ class SRUReader(APIReader):
     records: List[SRURecord]
     fetching_exhausted: bool = False
 
+    def transform_query(self, query: str) -> str:
+        raise NotImplementedError('Should be implemented by subclass')
+
+    def get_link(self, record: SRURecord) -> str:
+        raise NotImplementedError('Should be implemented by subclass')
+
     def _perform_query(self, query: str, start_record: int) -> List[SRURecord]:
         try:
             response = sruthi.searchretrieve(
                 self.sru_url,
-                query,
+                self.transform_query(query),
                 start_record=start_record,
                 maximum_records=RECORDS_PER_PAGE,
                 sru_version=self.sru_version
@@ -136,18 +144,25 @@ class SRUReader(APIReader):
                     field.subfields[sruthisubfield['code']] = \
                         sruthisubfield['text']
                 record.fields.append(field)
+            record.link = self.get_link(record)
             records.append(record)
         return records
 
-    def fetch(self, query) -> List[SRURecord]:
+    def fetch(self, query: str) -> None:
         self.records = []
         self.query = query
         results = self._perform_query(query, 1)
         self.records.extend(results)
-        return results
+        self.number_fetched = len(self.records)
+        if self.number_fetched == self.number_of_results:
+            self.fetching_exhausted = True
 
-    def fetch_next(self) -> List[SRURecord]:
+    def fetch_next(self) -> None:
+        if self.fetching_exhausted:
+            return
         start_record = len(self.records) + 1
         results = self._perform_query(self.query, start_record)
         self.records.extend(results)
-        return results
+        self.number_fetched = len(self.records)
+        if self.number_fetched == self.number_of_results:
+            self.fetching_exhausted = True
