@@ -58,6 +58,7 @@ class SparqlReader(APIReader):
     filter: str = None
     wrapper: SPARQLWrapper
     records: List[SparqlRecord]
+    name_predicate: str = None
 
     def __init__(self):
         self.wrapper = SPARQLWrapper(self.url)
@@ -69,7 +70,7 @@ prefix schema: <http://schema.org/>
 select ?s ?name where
 {{
   ?s ?p ?o .
-  ?s schema:name ?name .
+  ?s {self.name_predicate} ?name .
   {self.filter}
   FILTER (regex(?o, "{query}","i"))
 }}
