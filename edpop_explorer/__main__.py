@@ -1,10 +1,12 @@
 from typing import Dict, List, Optional
-import readline
+import readline  # noqa: F401
 import math
+from termcolor import colored, cprint
 
 from edpop_explorer.apireader import APIReader, APIRecord, APIException
 from edpop_explorer.readers.hpb import HPBReader
 from edpop_explorer.readers.vd import VD16Reader, VD17Reader, VD18Reader
+from edpop_explorer.readers.cerl_thesaurus import CERLThesaurusReader
 from edpop_explorer.readers.stcn import STCNReader
 
 
@@ -13,8 +15,17 @@ readercommands: Dict[str, APIReader] = {
     'vd16': VD16Reader,
     'vd17': VD17Reader,
     'vd18': VD18Reader,
+    'cerl-thesaurus': CERLThesaurusReader,
     'stcn': STCNReader
 }
+
+
+def success(message: str) -> None:
+    cprint(message, 'green', attrs=['bold'])
+
+
+def error(message: str) -> None:
+    cprint(message, 'red', attrs=['bold'])
 
 
 def show_records(records: List[APIRecord],
@@ -37,16 +48,16 @@ def show_records(records: List[APIRecord],
 
 
 def main() -> None:
-    print(
+    cprint(
         'Welcome to the EDPOP explorer!\n'
         'Available commands: {}, next, show, exit'
-        .format(', '.join(readercommands))
+        .format(', '.join(readercommands)), 'yellow', attrs=['bold']
     )
     reader: APIReader = None
     shown: int = 0
     while True:
         try:
-            line = input('# ')
+            line = input(colored('# ', attrs=['bold']))
         except EOFError:
             break
         except KeyboardInterrupt:
@@ -60,7 +71,7 @@ def main() -> None:
             break
         elif command in readercommands:
             if len(arguments) != 1:
-                print('{} command expects one argument.'.format(command))
+                error('{} command expects one argument.'.format(command))
                 continue
             readerclass = readercommands[command]
             # Invoke constructor of readerclass
@@ -69,34 +80,35 @@ def main() -> None:
             try:
                 reader.fetch(arguments[0])
             except APIException as err:
-                print('Error while fetching results: {}'.format(err))
+                error('Error while fetching results: {}'.format(err))
                 reader = None
-            print('{} records found.'.format(reader.number_of_results))
+                continue
+            success('{} records found.'.format(reader.number_of_results))
             shown += show_records(reader.records, shown, 10)
         elif command == 'next':
             if reader is None:
-                print('First perform an initial search')
+                error('First perform an initial search')
             elif shown >= reader.number_of_results:
-                print('All records have been shown')
+                error('All records have been shown')
             else:
                 if reader.number_fetched - shown < 10:
                     reader.fetch_next()
                 shown += show_records(reader.records, shown, 10)
         elif command == 'show':
             if reader is None:
-                print('First perform an initial search')
+                error('First perform an initial search')
                 continue
             try:
                 index = int(arguments[0]) - 1
             except (IndexError, ValueError):
-                print('Please provide a valid number')
+                error('Please provide a valid number')
                 continue
             try:
                 print(reader.records[index].show_record())
             except IndexError:
-                print('Please provide a record number that has been loaded')
+                error('Please provide a record number that has been loaded')
         else:
-            print('Command does not exist: {}'.format(command))
+            error('Command does not exist: {}'.format(command))
 
 
 if __name__ == '__main__':
