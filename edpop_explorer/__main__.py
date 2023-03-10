@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Any
 import readline  # noqa: F401
 import math
 from termcolor import colored, cprint
@@ -10,13 +10,43 @@ from edpop_explorer.readers.cerl_thesaurus import CERLThesaurusReader
 from edpop_explorer.readers.stcn import STCNReader
 
 
-readercommands: Dict[str, APIReader] = {
-    'hpb': HPBReader,
-    'vd16': VD16Reader,
-    'vd17': VD17Reader,
-    'vd18': VD18Reader,
-    'cerl-thesaurus': CERLThesaurusReader,
-    'stcn': STCNReader
+readercommands: Dict[str, Dict[str, Any]] = {
+    'hpb': {
+        'help': 'Heritage of the Printed Book Database',
+        'reader': HPBReader
+    },
+    'vd16': {
+        'help': 'Verzeichnis der im deutschen Sprachbereich erschienenen Drucke des 16. Jahrhunderts',
+        'reader': VD16Reader
+    },
+    'vd17': {
+        'help': 'Verzeichnis der im deutschen Sprachbereich erschienenen Drucke des 17. Jahrhunderts',
+        'reader': VD17Reader
+    },
+    'vd18': {
+        'help': 'Verzeichnis der im deutschen Sprachbereich erschienenen Drucke des 18. Jahrhunderts',
+        'reader': VD18Reader
+    },
+    'ct': {
+        'help': 'CERL Thesaurus',
+        'reader': CERLThesaurusReader
+    },
+    'show': {
+        'help': 'Show details of a given entry. Usage: show <entry-number>',
+        'reader': None
+    },
+    'next': {
+        'help': 'Fetch and show next 10 entries',
+        'reader': None
+    },
+    'help': {
+        'help': 'Show help about commands',
+        'reader': None
+    },
+    'exit': {
+        'help': 'Exit this programme',
+        'reader': None
+    },
 }
 
 
@@ -50,7 +80,7 @@ def show_records(records: List[APIRecord],
 def main() -> None:
     cprint(
         'Welcome to the EDPOP explorer!\n'
-        'Available commands: {}, next, show, exit'
+        'Available commands: {}\nType ‘help’ for help.'
         .format(', '.join(readercommands)), 'yellow', attrs=['bold']
     )
     reader: APIReader = None
@@ -64,27 +94,14 @@ def main() -> None:
             print('')
             continue
         if line.strip() != '':
-            command, *arguments = line.split()
+            try:
+                command, argument = line.split(maxsplit=1)
+            except ValueError:
+                command, argument = line, None
         else:
             continue
         if command == 'exit':
             break
-        elif command in readercommands:
-            if len(arguments) != 1:
-                error('{} command expects one argument.'.format(command))
-                continue
-            readerclass = readercommands[command]
-            # Invoke constructor of readerclass
-            reader = readerclass()
-            shown = 0
-            try:
-                reader.fetch(arguments[0])
-            except APIException as err:
-                error('Error while fetching results: {}'.format(err))
-                reader = None
-                continue
-            success('{} records found.'.format(reader.number_of_results))
-            shown += show_records(reader.records, shown, 10)
         elif command == 'next':
             if reader is None:
                 error('First perform an initial search')
@@ -99,14 +116,33 @@ def main() -> None:
                 error('First perform an initial search')
                 continue
             try:
-                index = int(arguments[0]) - 1
-            except (IndexError, ValueError):
+                index = int(argument) - 1
+            except (TypeError, ValueError):
                 error('Please provide a valid number')
                 continue
             try:
                 print(reader.records[index].show_record())
             except IndexError:
                 error('Please provide a record number that has been loaded')
+        elif command == 'help':
+            for cmd in readercommands:
+                print('{}: {}'.format(cmd, readercommands[cmd]['help']))
+        elif command in readercommands:
+            if not argument:
+                error('{} command expects an argument.'.format(command))
+                continue
+            readerclass = readercommands[command][reader]
+            # Invoke constructor of readerclass
+            reader = readerclass()
+            shown = 0
+            try:
+                reader.fetch(argument)
+            except APIException as err:
+                error('Error while fetching results: {}'.format(err))
+                reader = None
+                continue
+            success('{} records found.'.format(reader.number_of_results))
+            shown += show_records(reader.records, shown, 10)
         else:
             error('Command does not exist: {}'.format(command))
 
