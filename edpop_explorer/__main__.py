@@ -131,7 +131,7 @@ def main() -> None:
             if not argument:
                 error('{} command expects an argument.'.format(command))
                 continue
-            readerclass = readercommands[command][reader]
+            readerclass = readercommands[command]['reader']
             # Invoke constructor of readerclass
             reader = readerclass()
             shown = 0
