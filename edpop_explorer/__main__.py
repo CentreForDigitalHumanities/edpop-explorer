@@ -12,6 +12,12 @@ from edpop_explorer.readers.cerl_thesaurus import CERLThesaurusReader
 from edpop_explorer.readers.stcn import STCNReader
 
 
+try:
+    from colorama import just_fix_windows_console
+    just_fix_windows_console()
+except ImportError:
+    pass
+
 historyfile = Path(AppDirs('edpop-explorer', 'cdh').user_data_dir) / 'history'
 
 

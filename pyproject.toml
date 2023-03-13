@@ -9,7 +9,9 @@ dependencies = [
   "sruthi",
   "termcolor",
   "appdirs",
-  "SPARQLWrapper"
+  "SPARQLWrapper",
+  'pyreadline3 ; platform_system == "Windows"',
+  'colorama ; platform_system == "Windows"',
 ]
 
 [tool.pytest.ini_options]
