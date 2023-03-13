@@ -71,7 +71,7 @@ def error(message: str) -> None:
 
 def save_history() -> None:
     if not historyfile.parent.exists():
-        historyfile.parent.mkdir()
+        historyfile.parent.mkdir(parents=True)
     readline.write_history_file(historyfile)
 
 
