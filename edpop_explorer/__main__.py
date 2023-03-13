@@ -1,13 +1,18 @@
 from typing import Dict, List, Optional, Any
 import readline  # noqa: F401
 import math
+from appdirs import AppDirs
 from termcolor import colored, cprint
+from pathlib import Path
 
 from edpop_explorer.apireader import APIReader, APIRecord, APIException
 from edpop_explorer.readers.hpb import HPBReader
 from edpop_explorer.readers.vd import VD16Reader, VD17Reader, VD18Reader
 from edpop_explorer.readers.cerl_thesaurus import CERLThesaurusReader
 from edpop_explorer.readers.stcn import STCNReader
+
+
+historyfile = Path(AppDirs('edpop-explorer', 'cdh').user_data_dir) / 'history'
 
 
 readercommands: Dict[str, Dict[str, Any]] = {
@@ -58,6 +63,12 @@ def error(message: str) -> None:
     cprint(message, 'red', attrs=['bold'])
 
 
+def save_history() -> None:
+    if not historyfile.parent.exists():
+        historyfile.parent.mkdir()
+    readline.write_history_file(historyfile)
+
+
 def show_records(records: List[APIRecord],
                  start: int,
                  limit: Optional[int] = None) -> int:
@@ -85,10 +96,13 @@ def main() -> None:
     )
     reader: APIReader = None
     shown: int = 0
+    if historyfile.exists():
+        readline.read_history_file(historyfile)
     while True:
         try:
             line = input(colored('# ', attrs=['bold']))
         except EOFError:
+            save_history()
             break
         except KeyboardInterrupt:
             print('')
@@ -101,6 +115,7 @@ def main() -> None:
         else:
             continue
         if command == 'exit':
+            save_history()
             break
         elif command == 'next':
             if reader is None:
