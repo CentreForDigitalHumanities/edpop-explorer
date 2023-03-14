@@ -9,6 +9,7 @@ from edpop_explorer.apireader import APIReader, APIRecord, APIException
 from edpop_explorer.readers.hpb import HPBReader
 from edpop_explorer.readers.vd import VD16Reader, VD17Reader, VD18Reader
 from edpop_explorer.readers.cerl_thesaurus import CERLThesaurusReader
+from edpop_explorer.readers.gallica import GallicaReader
 from edpop_explorer.readers.stcn import STCNReader
 
 
@@ -37,6 +38,10 @@ readercommands: Dict[str, Dict[str, Any]] = {
     'vd18': {
         'help': 'Verzeichnis der im deutschen Sprachbereich erschienenen Drucke des 18. Jahrhunderts',
         'reader': VD18Reader
+    },
+    'gallica': {
+        'help': 'Gallica',
+        'reader': GallicaReader
     },
     'ct': {
         'help': 'CERL Thesaurus',
