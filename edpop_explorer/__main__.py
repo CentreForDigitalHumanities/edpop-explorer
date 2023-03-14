@@ -21,6 +21,8 @@ except ImportError:
 
 historyfile = Path(AppDirs('edpop-explorer', 'cdh').user_data_dir) / 'history'
 
+RECORDS_PER_PAGE = 10
+
 
 readercommands: Dict[str, Dict[str, Any]] = {
     'hpb': {
@@ -56,7 +58,7 @@ readercommands: Dict[str, Dict[str, Any]] = {
         'reader': None
     },
     'next': {
-        'help': 'Fetch and show next 10 entries',
+        'help': f'Fetch and show next {RECORDS_PER_PAGE} entries',
         'reader': None
     },
     'help': {
@@ -138,9 +140,9 @@ def main() -> None:
             elif shown >= reader.number_of_results:
                 error('All records have been shown')
             else:
-                if reader.number_fetched - shown < 10:
+                if reader.number_fetched - shown < RECORDS_PER_PAGE:
                     reader.fetch_next()
-                shown += show_records(reader.records, shown, 10)
+                shown += show_records(reader.records, shown, RECORDS_PER_PAGE)
         elif command == 'show':
             if reader is None:
                 error('First perform an initial search')
@@ -174,7 +176,7 @@ def main() -> None:
                 reader = None
                 continue
             success('{} records found.'.format(reader.number_of_results))
-            shown += show_records(reader.records, shown, 10)
+            shown += show_records(reader.records, shown, RECORDS_PER_PAGE)
         else:
             error('Command does not exist: {}'.format(command))
 
