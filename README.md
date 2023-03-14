@@ -1,5 +1,20 @@
 # edpop-explorer
-Tool to explore the APIs to be included in the EDPOP VRE
+Commandline tool to explore the APIs to be included in the EDPOP VRE
+
+## Install
+
+To install locally, type (inside or outside a virtual environment):
+
+    # pip install .
+
+`edpop-explorer` can then be run using `python -m edpop_explorer`.
+
+For development purposes it may be better to use the `--editable` option:
+
+    # pip install --editable .
+
+This way, the source code will be read directly from the original directory
+when running the application and changes will have immediate effect.
 
 ## Usage
 
@@ -21,3 +36,8 @@ particular record:
 To exit, type Ctrl+D or use the `exit` command:
 
     # exit
+
+## Design
+
+This tool is built up as an executable Python package called
+`edpop_explorer`
