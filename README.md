@@ -39,5 +39,21 @@ To exit, type Ctrl+D or use the `exit` command:
 
 ## Design
 
-This tool is built up as an executable Python package called
-`edpop_explorer`
+The commandline programme in `__main__.py` uses the common interface of
+the `APIReader` and `APIRecord` classes to query the various databases that
+EDPOP is ought to support. Interfaces to concrete APIs, such as Gallica and
+HPB, are defined using classes that inherit from these two classes.
+
+Class hierarcy (interfaces to concrete APIs in bold):
+
+- APIReader / APIRecord
+  - SRUReader
+    - **GallicaReader** / GallicaRecord
+    - **CERLThesaurusReader** / CERLThesaurusRecord
+    - SRUMarc21Reader / Marc21Record
+      - **HPBReader**
+      - **VD16Reader**
+      - **VD17Reader**
+      - **VD18Reader**
+  - SparqlReader / SparqlRecord
+    - **STCNReader**
