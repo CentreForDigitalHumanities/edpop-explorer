@@ -31,7 +31,6 @@ select ?p ?o
             raise APIException(
                 'Malformed SPARQL query: {}'.format(err)
             )
-        print(response)
         results = response['results']['bindings']
         for result in results:
             self.fields[result['p']['value']] = result['o']['value']
@@ -44,7 +43,7 @@ select ?p ?o
         self.fetch()
         field_strings = []
         if self.link:
-            field_strings.append(self.link)
+            field_strings.append('URL: ' + self.link)
         for field in self.fields:
             field_strings.append('{}: {}'.format(field, self.fields[field]))
         return '\n'.join(field_strings)
@@ -64,8 +63,8 @@ class SparqlReader(APIReader):
         self.wrapper = SPARQLWrapper(self.url)
         self.wrapper.setReturnFormat(JSON)
 
-    def fetch(self, query: str) -> List[APIRecord]:
-        self.wrapper.setQuery(f"""
+    def prepare_query(self, query: str):
+        self.prepared_query = f"""
 prefix schema: <http://schema.org/>
 select ?s ?name where
 {{
@@ -75,7 +74,12 @@ select ?s ?name where
   FILTER (regex(?o, "{query}","i"))
 }}
 order by ?s
-        """)
+        """
+
+    def fetch(self) -> List[APIRecord]:
+        if not self.prepared_query:
+            raise APIException('First call prepare_query method')
+        self.wrapper.setQuery(self.prepared_query)
         try:
             response = self.wrapper.queryAndConvert()
         except SPARQLExceptions.QueryBadFormed as err:

@@ -47,6 +47,10 @@ readercommands: Dict[str, Dict[str, Any]] = {
         'help': 'CERL Thesaurus',
         'reader': CERLThesaurusReader
     },
+    'stcn': {
+        'help': 'Short Title Catalogue Netherlands',
+        'reader': STCNReader
+    },
     'show': {
         'help': 'Show details of a given entry. Usage: show <entry-number>',
         'reader': None
@@ -162,7 +166,9 @@ def main() -> None:
             reader = readerclass()
             shown = 0
             try:
-                reader.fetch(argument)
+                reader.prepare_query(argument)
+                success('Performing query: {}'.format(reader.prepared_query))
+                reader.fetch()
             except APIException as err:
                 error('Error while fetching results: {}'.format(err))
                 reader = None

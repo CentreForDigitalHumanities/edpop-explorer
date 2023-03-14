@@ -20,7 +20,7 @@ class GallicaRecord(APIRecord):
     def show_record(self) -> str:
         field_strings = []
         if self.link:
-            field_strings.append(self.link)
+            field_strings.append('URL: ' + self.link)
         for key in self.data:
             value = self.data[key]
             if type(value) == dict:

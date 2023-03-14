@@ -20,8 +20,12 @@ class APIReader:
     number_of_results: int = None
     number_fetched: int = None
     records: List[APIRecord]
+    prepared_query: str = None
 
-    def fetch(self, query: str):
+    def prepare_query(self, query: str) -> None:
+        raise NotImplementedError('Should be implemented by subclass')
+
+    def fetch(self):
         raise NotImplementedError('Should be implemented by subclass')
 
     def fetch_next(self):

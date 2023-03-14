@@ -79,7 +79,7 @@ class Marc21Record(APIRecord):
     def show_record(self) -> str:
         field_strings = []
         if self.link:
-            field_strings.append(self.link)
+            field_strings.append('URL: ' + self.link)
         for field in self.fields:
             field_strings.append(str(field))
         return '\n'.join(field_strings)
