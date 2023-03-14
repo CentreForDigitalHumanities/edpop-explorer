@@ -159,6 +159,7 @@ def main() -> None:
         elif command == 'help':
             for cmd in readercommands:
                 print('{}: {}'.format(cmd, readercommands[cmd]['help']))
+        # All other commands are mapped to one of the readers
         elif command in readercommands:
             if not argument:
                 error('{} command expects an argument.'.format(command))

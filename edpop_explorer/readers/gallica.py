@@ -1,8 +1,7 @@
 from edpop_explorer.srureader import SRUReader
 from edpop_explorer.apireader import APIRecord
 from dataclasses import dataclass, field as dataclass_field
-from typing import Optional, Dict, List
-from termcolor import colored
+from typing import Optional
 import pandas as pd
 
 
