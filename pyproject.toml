@@ -12,6 +12,7 @@ dependencies = [
   "SPARQLWrapper",
   'pyreadline3 ; platform_system == "Windows"',
   'colorama ; platform_system == "Windows"',
+  'pandas',
 ]
 
 [tool.pytest.ini_options]
