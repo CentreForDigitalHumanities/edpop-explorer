@@ -33,6 +33,7 @@ class CERLThesaurusRecord(APIRecord):
         tablestring = ''
         # Add columns to the data to show them too
         columnsrow = {column: column + ':' for column in columns}
+        data = data.copy()
         data.insert(0, columnsrow)
         # Make a table of all rows
         for row in data:
