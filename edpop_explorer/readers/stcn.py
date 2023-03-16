@@ -6,3 +6,7 @@ class STCNReader(SparqlReader):
     filter = '?s schema:mainEntityOfPage/schema:isPartOf ' \
         '<http://data.bibliotheken.nl/id/dataset/stcn> .'
     name_predicate = '<http://schema.org/name>'
+
+    def __init__(self):
+        super().__init__()
+        self.prefixes.update({})  # Empty for now, but keep as an example

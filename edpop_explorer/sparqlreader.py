@@ -10,8 +10,21 @@ class SparqlRecord(APIRecord):
     name: str = None
     identifier: str = None
     sparql_endpoint: str = None
+    prefixes: Dict[str, str] = None
     fetched: bool = False
     fields: dict = dataclass_field(default_factory=dict)
+
+    def _replace_prefix(self, inputstring: str) -> str:
+        '''Replace fully qualified URIs to prefixed URIs if they occur in
+        the prefix table in the prefixes attribute'''
+        if not self.prefixes:
+            return inputstring
+        replacement_table = {
+            self.prefixes[key]: (key + ':') for key in self.prefixes
+        }
+        for key in replacement_table:
+            inputstring = inputstring.replace(key, replacement_table[key], 1)
+        return inputstring
 
     def fetch(self) -> None:
         if self.fetched:
@@ -45,7 +58,10 @@ select ?p ?o
         if self.link:
             field_strings.append('URL: ' + self.link)
         for field in self.fields:
-            field_strings.append('{}: {}'.format(field, self.fields[field]))
+            fieldstring = self._replace_prefix(field)
+            field_strings.append(
+                '{}: {}'.format(fieldstring, self.fields[field])
+            )
         return '\n'.join(field_strings)
 
     def __repr__(self):
@@ -58,14 +74,26 @@ class SparqlReader(APIReader):
     wrapper: SPARQLWrapper
     records: List[SparqlRecord]
     name_predicate: str = None
+    prefixes: Dict[str, str]
 
     def __init__(self):
         self.wrapper = SPARQLWrapper(self.url)
         self.wrapper.setReturnFormat(JSON)
+        self.prefixes = {
+            'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+            'rdfs': 'http://www.w3.org/2000/01/rdf-schema#',
+            'schema': 'http://schema.org/',
+            'owl': 'http://www.w3.org/2002/07/owl#',
+        }
+
+    def _give_sparql_prefixes(self):
+        return '\n'.join([
+            f'prefix {key}: <{self.prefixes[key]}>' for key in self.prefixes
+        ])
 
     def prepare_query(self, query: str):
         self.prepared_query = f"""
-prefix schema: <http://schema.org/>
+{self._give_sparql_prefixes()}
 select ?s ?name where
 {{
   ?s ?p ?o .
@@ -93,6 +121,7 @@ order by ?s
             record = SparqlRecord(
                 identifier=result['s']['value'],
                 sparql_endpoint=self.url,
+                prefixes=self.prefixes,
                 link=result['s']['value'],
                 name=result['name']['value'],
             )
