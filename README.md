@@ -48,7 +48,8 @@ the `APIReader` and `APIRecord` classes to query the various databases that
 EDPOP is ought to support. Interfaces to concrete APIs, such as Gallica and
 HPB, are defined using classes that inherit from these two classes.
 
-Class hierarcy (interfaces to concrete APIs in bold):
+Class hierarcy (interfaces to concrete APIs are in bold -- these are located
+in the `readers` subpackage):
 
 - APIReader / APIRecord
   - SRUReader
