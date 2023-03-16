@@ -120,7 +120,7 @@ def main() -> None:
         readline.read_history_file(historyfile)
     while True:
         try:
-            line = input(colored('# ', attrs=['bold']))
+            line = input('[edpop-explorer] # ')
         except EOFError:
             save_history()
             break
