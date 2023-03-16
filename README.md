@@ -7,7 +7,7 @@ To install locally, type (inside or outside a virtual environment):
 
     # pip install .
 
-`edpop-explorer` can then be run using `python -m edpop_explorer`.
+The tool can then be run using the `edpopx` command.
 
 For development purposes it may be better to use the `--editable` option:
 
@@ -17,6 +17,10 @@ This way, the source code will be read directly from the original directory
 when running the application and changes will have immediate effect.
 
 ## Usage
+
+Start the programme from the command line using the `edpopx` command:
+
+    $ edpopx
 
 To perform a search on a database, give the name of the database followed by
 the query you want to perform, such as:

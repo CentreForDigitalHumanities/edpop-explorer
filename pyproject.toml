@@ -15,6 +15,9 @@ dependencies = [
   'pandas',
 ]
 
+[project.scripts]
+edpopx = "edpop_explorer.__main__:main"
+
 [tool.pytest.ini_options]
 pythonpath = [
   "edpop_explorer"
