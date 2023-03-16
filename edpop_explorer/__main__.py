@@ -91,18 +91,21 @@ def show_records(records: List[APIRecord],
                  limit: Optional[int] = None) -> int:
     """Show the records from start, with limit as the maximum number of records
     to show. Return the number of records shown."""
-    if len(records) == 0:
+    total = len(records)
+    remaining = total - start
+    if remaining < 1:
         return 0
-    if limit is None or limit > len(records) - start:
-        limit = len(records) - start
-    digits = int(math.log10(len(records))) + 1
-    i = start
-    while i < (start + limit):
+    # Determine count (the number of items to show)
+    if limit is None:
+        count = limit
+    else:
+        count = min(remaining, limit)
+    digits = len(str(total))
+    for i in range(start, start + count):
         print('{:{digits}} - {}'.format(
             i + 1, records[i].get_title(), digits=digits
         ))
-        i += 1
-    return i - start
+    return count
 
 
 def main() -> None:
