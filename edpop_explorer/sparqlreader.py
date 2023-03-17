@@ -5,39 +5,65 @@ from SPARQLWrapper import SPARQLWrapper, JSON, SPARQLExceptions
 from edpop_explorer.apireader import APIReader, APIRecord, APIException
 
 
+PREFIXES = {
+    'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+    'rdfs': 'http://www.w3.org/2000/01/rdf-schema#',
+    'schema': 'http://schema.org/',
+    'owl': 'http://www.w3.org/2002/07/owl#',
+}
+
+PREFIXES_REVERSE_REPLACEMENT_TABLE = {
+    PREFIXES[key]: (key + ':') for key in PREFIXES
+}
+
+PREFIX_DEFINITIONS = '\n'.join([
+    f'prefix {key}: <{PREFIXES[key]}>' for key in PREFIXES
+])
+
+prepare_listing_query = (PREFIX_DEFINITIONS + """
+select ?s ?name where
+{{
+  ?s ?p ?o .
+  ?s {name_predicate} ?name .
+  {filter}
+  FILTER (regex(?o, "{query}","i"))
+}}
+order by ?s
+""").format
+
+prepare_lookup_query = """
+prefix schema: <http://schema.org/>
+select ?p ?o
+{{
+    <{identifier}> ?p ?o
+}}
+""".format
+
+
+def replace_fqu_with_prefixed_uris(inputstring: str) -> str:
+    '''Replace fully qualified URIs to prefixed URIs if they occur in
+    the prefix table in the prefixes attribute'''
+    for key in PREFIXES_REVERSE_REPLACEMENT_TABLE:
+        inputstring = inputstring.replace(
+            key, PREFIXES_REVERSE_REPLACEMENT_TABLE[key], 1
+        )
+    return inputstring
+
+
 @dataclass
 class SparqlRecord(APIRecord):
     name: str = None
     identifier: str = None
     sparql_endpoint: str = None
-    prefixes: Dict[str, str] = None
     fetched: bool = False
     fields: dict = dataclass_field(default_factory=dict)
-
-    def _replace_prefix(self, inputstring: str) -> str:
-        '''Replace fully qualified URIs to prefixed URIs if they occur in
-        the prefix table in the prefixes attribute'''
-        if not self.prefixes:
-            return inputstring
-        replacement_table = {
-            self.prefixes[key]: (key + ':') for key in self.prefixes
-        }
-        for key in replacement_table:
-            inputstring = inputstring.replace(key, replacement_table[key], 1)
-        return inputstring
 
     def fetch(self) -> None:
         if self.fetched:
             return
         wrapper = SPARQLWrapper(self.sparql_endpoint)
         wrapper.setReturnFormat(JSON)
-        wrapper.setQuery(f"""
-prefix schema: <http://schema.org/>
-select ?p ?o
-{{
-    <{self.identifier}> ?p ?o
-}}
-        """)
+        wrapper.setQuery(prepare_lookup_query(identifier=self.identifier))
         try:
             response = wrapper.queryAndConvert()
         except SPARQLExceptions.QueryBadFormed as err:
@@ -58,7 +84,7 @@ select ?p ?o
         if self.link:
             field_strings.append('URL: ' + self.link)
         for field in self.fields:
-            fieldstring = self._replace_prefix(field)
+            fieldstring = replace_fqu_with_prefixed_uris(field)
             field_strings.append(
                 '{}: {}'.format(fieldstring, self.fields[field])
             )
@@ -74,35 +100,17 @@ class SparqlReader(APIReader):
     wrapper: SPARQLWrapper
     records: List[SparqlRecord]
     name_predicate: str = None
-    prefixes: Dict[str, str]
 
     def __init__(self):
         self.wrapper = SPARQLWrapper(self.url)
         self.wrapper.setReturnFormat(JSON)
-        self.prefixes = {
-            'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
-            'rdfs': 'http://www.w3.org/2000/01/rdf-schema#',
-            'schema': 'http://schema.org/',
-            'owl': 'http://www.w3.org/2002/07/owl#',
-        }
-
-    def _give_sparql_prefixes(self):
-        return '\n'.join([
-            f'prefix {key}: <{self.prefixes[key]}>' for key in self.prefixes
-        ])
 
     def prepare_query(self, query: str):
-        self.prepared_query = f"""
-{self._give_sparql_prefixes()}
-select ?s ?name where
-{{
-  ?s ?p ?o .
-  ?s {self.name_predicate} ?name .
-  {self.filter}
-  FILTER (regex(?o, "{query}","i"))
-}}
-order by ?s
-        """
+        self.prepared_query = prepare_listing_query(
+            name_predicate=self.name_predicate,
+            filter=self.filter,
+            query=query
+        )
 
     def fetch(self) -> List[APIRecord]:
         if not self.prepared_query:
@@ -121,7 +129,6 @@ order by ?s
             record = SparqlRecord(
                 identifier=result['s']['value'],
                 sparql_endpoint=self.url,
-                prefixes=self.prefixes,
                 link=result['s']['value'],
                 name=result['name']['value'],
             )

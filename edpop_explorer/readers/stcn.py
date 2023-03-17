@@ -9,4 +9,3 @@ class STCNReader(SparqlReader):
 
     def __init__(self):
         super().__init__()
-        self.prefixes.update({})  # Empty for now, but keep as an example
