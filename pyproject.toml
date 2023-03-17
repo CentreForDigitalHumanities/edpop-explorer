@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "edpop-explorer"
+version = "0.0.1"
+dependencies = [
+  "sruthi",
+  "termcolor",
+  "appdirs",
+  "SPARQLWrapper",
+  'pyreadline3 ; platform_system == "Windows"',
+  'colorama ; platform_system == "Windows"',
+  'pandas',
+]
+
+[project.scripts]
+edpopx = "edpop_explorer.__main__:main"
+
+[tool.pytest.ini_options]
+pythonpath = [
+  "edpop_explorer"
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
