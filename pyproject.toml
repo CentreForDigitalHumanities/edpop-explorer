@@ -13,6 +13,7 @@ dependencies = [
   'pyreadline3 ; platform_system == "Windows"',
   'colorama ; platform_system == "Windows"',
   'pandas',
+  'cmd2',
 ]
 
 [project.scripts]
