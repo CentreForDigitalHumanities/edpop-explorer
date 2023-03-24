@@ -7,6 +7,7 @@ from edpop_explorer.readers.vd import VD16Reader, VD17Reader, VD18Reader
 from edpop_explorer.readers.cerl_thesaurus import CERLThesaurusReader
 from edpop_explorer.readers.gallica import GallicaReader
 from edpop_explorer.readers.stcn import STCNReader
+from edpop_explorer.readers.sbtireader import SBTIReader
 
 
 class EDPOPXShell(cmd2.Cmd):
@@ -74,6 +75,10 @@ class EDPOPXShell(cmd2.Cmd):
         'Short Title Catalogue Netherlands'
         self._query(STCNReader, args)
 
+    def do_sbti(self, args) -> None:
+        'Scottish Book Trade Index'
+        self._query(SBTIReader, args)
+
     def _show_records(self, records: List[APIRecord],
                       start: int,
                       limit: Optional[int] = None) -> int:
@@ -108,6 +113,7 @@ class EDPOPXShell(cmd2.Cmd):
             self.perror('Error while fetching results: {}'.format(err))
             self.reader = None
             self.shown = 0
+            return
         self.pfeedback(
             '{} records found.'.format(self.reader.number_of_results)
         )
