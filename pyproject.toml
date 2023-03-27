@@ -6,13 +6,15 @@ build-backend = "setuptools.build_meta"
 name = "edpop-explorer"
 version = "0.1.0"
 dependencies = [
-  "sruthi",
+  "sruthi@git+https://github.com/UUDigitalHumanitieslab/sruthi@feature/additional-params",
   "termcolor",
   "appdirs",
   "SPARQLWrapper",
   'pyreadline3 ; platform_system == "Windows"',
   'colorama ; platform_system == "Windows"',
   'pandas',
+  'cmd2',
+  'pyyaml',
 ]
 
 [project.scripts]

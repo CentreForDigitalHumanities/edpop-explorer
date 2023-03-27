@@ -1,5 +1,5 @@
 import sruthi
-from typing import List
+from typing import List, Dict, Optional
 
 from edpop_explorer.apireader import APIReader, APIRecord, APIException
 
@@ -12,11 +12,9 @@ class SRUReader(APIReader):
     query: str = None
     records: List[APIRecord]  # Move to superclass?
     fetching_exhausted: bool = False
+    additional_params: Optional[Dict[str, str]] = None
 
     def transform_query(self, query: str) -> str:
-        raise NotImplementedError('Should be implemented by subclass')
-
-    def get_link(self, record: APIRecord) -> str:
         raise NotImplementedError('Should be implemented by subclass')
 
     def _convert_record(self, sruthirecord: dict) -> APIRecord:
@@ -29,7 +27,8 @@ class SRUReader(APIReader):
                 self.transform_query(self.prepared_query),
                 start_record=start_record,
                 maximum_records=RECORDS_PER_PAGE,
-                sru_version=self.sru_version
+                sru_version=self.sru_version,
+                additional_params=self.additional_params
             )
         except (
             sruthi.errors.SruError
