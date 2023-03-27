@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field as dataclass_field
+import yaml
 
 from edpop_explorer.apireader import APIRecord
 from edpop_explorer.srureader import SRUReader
@@ -20,7 +21,7 @@ class BibliopolisRecord(APIRecord):
         return '(unknown title)'
 
     def show_record(self) -> str:
-        return self.data
+        return yaml.safe_dump(self.data)
 
 
 class BibliopolisReader(SRUReader):

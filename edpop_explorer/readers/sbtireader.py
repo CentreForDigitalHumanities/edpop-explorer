@@ -1,7 +1,7 @@
 import requests
 from dataclasses import dataclass, field as dataclass_field
 from typing import List, Dict, Optional
-import json
+import yaml
 
 from edpop_explorer.apireader import APIReader, APIRecord, APIException
 
@@ -14,7 +14,7 @@ class SBTIRecord(APIRecord):
     identifier: Optional[str] = None
 
     def show_record(self) -> str:
-        contents = json.dumps(self.data, indent=2)
+        contents = yaml.safe_dump(self.data)
         if self.link:
             contents = self.link + '\n' + contents
         return contents
@@ -23,10 +23,10 @@ class SBTIRecord(APIRecord):
         try:
             heading = self.data['heading'][0]
             name = '{} {} ({})'.format(
-                heading['firstname'],
+                heading.get('firstname', ''),
                 heading['name'],
                 heading['headingOf'][0]
-            )
+            ).strip()
         except (KeyError, IndexError, TypeError):
             name = '(unknown title)'
         return name

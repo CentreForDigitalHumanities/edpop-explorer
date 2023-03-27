@@ -14,6 +14,7 @@ dependencies = [
   'colorama ; platform_system == "Windows"',
   'pandas',
   'cmd2',
+  'pyyaml',
 ]
 
 [project.scripts]
