@@ -17,9 +17,6 @@ class SRUReader(APIReader):
     def transform_query(self, query: str) -> str:
         raise NotImplementedError('Should be implemented by subclass')
 
-    def get_link(self, record: APIRecord) -> str:
-        raise NotImplementedError('Should be implemented by subclass')
-
     def _convert_record(self, sruthirecord: dict) -> APIRecord:
         raise NotImplementedError('Should be implemented by subclass')
 
