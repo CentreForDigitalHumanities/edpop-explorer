@@ -4,6 +4,7 @@ from typing import List, Optional, Type
 from edpop_explorer.apireader import APIReader, APIRecord, APIException
 from edpop_explorer.readers.hpb import HPBReader
 from edpop_explorer.readers.vd import VD16Reader, VD17Reader, VD18Reader
+from edpop_explorer.readers.bibliopolis import BibliopolisReader
 from edpop_explorer.readers.cerl_thesaurus import CERLThesaurusReader
 from edpop_explorer.readers.gallica import GallicaReader
 from edpop_explorer.readers.stcn import STCNReader
@@ -66,6 +67,10 @@ class EDPOPXShell(cmd2.Cmd):
     def do_gallica(self, args) -> None:
         'Gallica'
         self._query(GallicaReader, args)
+
+    def do_bibliopolis(self, args) -> None:
+        'Bibliopolis Personendatabase'
+        self._query(BibliopolisReader, args)
 
     def do_ct(self, args) -> None:
         'CERL Thesaurus'
