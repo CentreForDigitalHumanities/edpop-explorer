@@ -3,6 +3,8 @@ from dataclasses import dataclass, field as dataclass_field
 from pathlib import Path
 import sqlite3
 import yaml
+import requests
+from appdirs import AppDirs
 
 from edpop_explorer.apireader import APIReader, APIRecord, APIException
 
@@ -29,12 +31,37 @@ class FBTEERecord(APIRecord):
 
 
 class FBTEEReader(APIReader):
-    DATABASE_FILE = Path(__file__).parent.parent / 'cl.sqlite3'
+    DATABASE_URL = 'https://dhstatic.hum.uu.nl/edpop/cl.sqlite3'
+    DATABASE_LICENSE = 'https://dhstatic.hum.uu.nl/edpop/LICENSE.txt'
     FBTEE_LINK = 'http://fbtee.uws.edu.au/stn/interface/browse.php?t=book&' \
         'id={}'
 
     def __init__(self):
-        self.con = sqlite3.connect(str(self.DATABASE_FILE))
+        self.database_file = Path(
+            AppDirs('edpop-explorer', 'cdh').user_data_dir
+        ) / 'cl.sqlite3'
+        if not self.database_file.exists():
+            self._download_database()
+        self.con = sqlite3.connect(str(self.database_file))
+
+    def _download_database(self):
+        print('Downloading database...')
+        response = requests.get(self.DATABASE_URL)
+        if response.ok:
+            try:
+                with open(self.database_file, 'wb') as f:
+                    f.write(response.content)
+            except OSError as err:
+                raise APIException(
+                    'Error writing database file to disk: {}'.format(err)
+                )
+        else:
+            raise APIException(
+                'Error downloading database file from {}'
+                .format(self.DATABASE_URL)
+            )
+        print('Successfully saved database to {}.'.format(self.database_file))
+        print('See license: {}'.format(self.DATABASE_LICENSE))
 
     def prepare_query(self, query: str):
         self.prepared_query = '%' + query + '%'
