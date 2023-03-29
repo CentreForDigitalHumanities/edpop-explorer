@@ -17,6 +17,8 @@ class FBTEERecord(APIRecord):
 
     def show_record(self) -> str:
         return_string = yaml.safe_dump(self.data, allow_unicode=True)
+        if self.link:
+            return_string = self.link + '\n' + return_string
         if self.authors:
             authorstrings = [x[0] + ' - ' + x[1] for x in self.authors]
             return_string += '\nAuthors:\n' + '\n'.join(authorstrings)
@@ -28,6 +30,8 @@ class FBTEERecord(APIRecord):
 
 class FBTEEReader(APIReader):
     DATABASE_FILE = Path(__file__).parent.parent / 'cl.sqlite3'
+    FBTEE_LINK = 'http://fbtee.uws.edu.au/stn/interface/browse.php?t=book&' \
+        'id={}'
 
     def __init__(self):
         self.con = sqlite3.connect(str(self.DATABASE_FILE))
@@ -60,6 +64,7 @@ class FBTEEReader(APIReader):
                 record.data = {}
                 for i in range(len(columns)):
                     record.data[columns[i]] = row[i]
+                record.link = self.FBTEE_LINK.format(book_code)
                 self.records.append(record)
                 last_book_code = book_code
             # Add author_code and author_name to the last record
