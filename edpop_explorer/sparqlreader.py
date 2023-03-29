@@ -112,7 +112,7 @@ class SparqlReader(APIReader):
             query=query
         )
 
-    def fetch(self) -> List[APIRecord]:
+    def fetch(self):
         if not self.prepared_query:
             raise APIException('First call prepare_query method')
         self.wrapper.setQuery(self.prepared_query)
@@ -134,3 +134,6 @@ class SparqlReader(APIReader):
             )
             self.records.append(record)
         self.number_fetched = self.number_of_results
+
+    def fetch_next(self):
+        pass
