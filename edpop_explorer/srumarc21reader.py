@@ -95,6 +95,7 @@ class Marc21Record(APIRecord):
 
 class SRUMarc21Reader(SRUReader):
     marcxchange_prefix = ''
+    records: List[Marc21Record]
 
     def _convert_record(self, sruthirecord: dict) -> Marc21Record:
         record = Marc21Record()
