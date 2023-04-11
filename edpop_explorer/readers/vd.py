@@ -58,3 +58,15 @@ class VD18Reader(SRUMarc21Reader):
                     field.subfields['a'][5:]
                 )
         return None
+
+
+class VDLiedReader(SRUMarc21Reader):
+    sru_url = 'http://sru.gbv.de/vdlied'
+    sru_version = '1.1'
+    VDLIED_LINK = 'https://gso.gbv.de/DB=1.60/PPNSET?PPN={}'
+
+    def transform_query(self, query: str) -> str:
+        return query
+
+    def get_link(self, record: Marc21Record):
+        return self.VDLIED_LINK.format(record.controlfields['001'])
