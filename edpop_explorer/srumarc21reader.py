@@ -111,11 +111,18 @@ class SRUMarc21Reader(SRUReader):
 
     def _convert_record(self, sruthirecord: dict) -> Marc21Record:
         record = Marc21Record()
+        # marcxml (marc21 in xml) consists of a controlfield and a datafield.
+        # The controlfield and the datafield contain multiple fields.
+        # The controlfield consists of simple pairs of tags (field numbers)
+        # and texts (field values).
         for sruthicontrolfield in \
                 sruthirecord[f'{self.marcxchange_prefix}controlfield']:
             tag = sruthicontrolfield['tag']
             text = sruthicontrolfield['text']
             record.controlfields[tag] = text
+        # The datafield is more complex; these fields also have two indicators,
+        # one-digit numbers that carry special meanings, and multiple subfields
+        # that each have a one-character code.
         for sruthifield in sruthirecord[f'{self.marcxchange_prefix}datafield']:
             fieldnumber = sruthifield['tag']
             field = Marc21RecordField(
@@ -124,6 +131,9 @@ class SRUMarc21Reader(SRUReader):
                 indicator2=sruthifield['ind2'],
                 subfields={}
             )
+            # The translation_dictionary contains descriptions for a number
+            # of important fields. Include them so that the user can more
+            # easily understand the record.
             if fieldnumber in translation_dictionary:
                 field.description = translation_dictionary[fieldnumber]
             sruthisubfields = self._get_subfields(sruthifield)
