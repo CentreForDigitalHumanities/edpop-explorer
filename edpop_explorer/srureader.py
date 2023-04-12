@@ -24,7 +24,7 @@ class SRUReader(APIReader):
         try:
             response = sruthi.searchretrieve(
                 self.sru_url,
-                self.transform_query(self.prepared_query),
+                self.prepared_query,
                 start_record=start_record,
                 maximum_records=RECORDS_PER_PAGE,
                 sru_version=self.sru_version,

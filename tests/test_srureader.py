@@ -1,4 +1,3 @@
-import unittest
 from unittest.mock import patch
 import json
 from pathlib import Path
@@ -32,3 +31,5 @@ class TestSRUReader:
             'Subject Added Entry - Topical Term'
         # Field that occurs multiple times
         assert len(results[0].get_fields('500')) == 5
+        # Control field
+        assert results[0].controlfields['007'] == 'tu'

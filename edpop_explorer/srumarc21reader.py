@@ -49,7 +49,9 @@ class Marc21Record(APIRecord):
     # We use a list for the fields and not a dictionary because they may
     # appear more than once
     fields: List[Marc21RecordField] = dataclass_field(default_factory=list)
+    controlfields: Dict[str, str] = dataclass_field(default_factory=dict)
     link: Optional[str] = None
+    title_field_subfield = ['245', 'a']
 
     def get_first_field(self, fieldnumber: str) -> Marc21RecordField:
         '''Return the first occurance of a field with a given field number.
@@ -70,9 +72,12 @@ class Marc21Record(APIRecord):
         return returned_fields
 
     def get_title(self):
-        field_245 = self.get_first_field('245')
-        if field_245:
-            return field_245.subfields.get('a', '(unknown title)')
+        title_field = self.get_first_field(self.title_field_subfield[0])
+        if title_field:
+            return title_field.subfields.get(
+                self.title_field_subfield[1],
+                '(unknown title)'
+            )
         else:
             return '(unknown title)'
 
@@ -89,9 +94,29 @@ class Marc21Record(APIRecord):
 
 
 class SRUMarc21Reader(SRUReader):
-    def _convert_record(self, sruthirecord: dict) -> APIRecord:
+    marcxchange_prefix = ''
+    records: List[Marc21Record]
+
+    def _get_subfields(self, sruthifield) -> list:
+        # If there is only one subfield, sruthi puts it directly in
+        # a dict, otherwise it uses a list of dicts. Make sure that
+        # we always have a list.
+        subfielddata = sruthifield[f'{self.marcxchange_prefix}subfield']
+        if type(subfielddata) == dict:
+            sruthisubfields = [subfielddata]
+        else:
+            sruthisubfields = subfielddata
+        assert type(sruthisubfields) == list
+        return sruthisubfields
+
+    def _convert_record(self, sruthirecord: dict) -> Marc21Record:
         record = Marc21Record()
-        for sruthifield in sruthirecord['datafield']:
+        for sruthicontrolfield in \
+                sruthirecord[f'{self.marcxchange_prefix}controlfield']:
+            tag = sruthicontrolfield['tag']
+            text = sruthicontrolfield['text']
+            record.controlfields[tag] = text
+        for sruthifield in sruthirecord[f'{self.marcxchange_prefix}datafield']:
             fieldnumber = sruthifield['tag']
             field = Marc21RecordField(
                 fieldnumber=fieldnumber,
@@ -101,13 +126,8 @@ class SRUMarc21Reader(SRUReader):
             )
             if fieldnumber in translation_dictionary:
                 field.description = translation_dictionary[fieldnumber]
-            # If there are multiple subfields, sruthi puts it directly in
-            # a dict, otherwise it uses a list of dicts
-            if type(sruthifield['subfield']) == dict:
-                sruthisubfields = [sruthifield['subfield']]
-            else:
-                sruthisubfields = sruthifield['subfield']
-            assert type(sruthisubfields) == list
+            sruthisubfields = self._get_subfields(sruthifield)
+
             for sruthisubfield in sruthisubfields:
                 field.subfields[sruthisubfield['code']] = \
                     sruthisubfield['text']
@@ -115,5 +135,5 @@ class SRUMarc21Reader(SRUReader):
         record.link = self.get_link(record)
         return record
 
-    def get_link(self, record: APIRecord) -> str:
+    def get_link(self, record: APIRecord) -> Optional[str]:
         raise NotImplementedError('Should be implemented by subclass')

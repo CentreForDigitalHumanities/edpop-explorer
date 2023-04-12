@@ -3,7 +3,9 @@ from typing import List, Optional, Type
 
 from edpop_explorer.apireader import APIReader, APIRecord, APIException
 from edpop_explorer.readers.hpb import HPBReader
-from edpop_explorer.readers.vd import VD16Reader, VD17Reader, VD18Reader
+from edpop_explorer.readers.vd import VD16Reader, VD17Reader, VD18Reader, \
+    VDLiedReader
+from edpop_explorer.readers.bnf import BnFReader
 from edpop_explorer.readers.bibliopolis import BibliopolisReader
 from edpop_explorer.readers.cerl_thesaurus import CERLThesaurusReader
 from edpop_explorer.readers.gallica import GallicaReader
@@ -64,6 +66,14 @@ class EDPOPXShell(cmd2.Cmd):
         """Verzeichnis der im deutschen Sprachbereich erschienenen Drucke
         des 18. Jahrhunderts"""
         self._query(VD18Reader, args)
+
+    def do_vdlied(self, args) -> None:
+        """Verzeichnis der deutschsprachigen Liedflugschriften"""
+        self._query(VDLiedReader, args)
+
+    def do_bnf(self, args) -> None:
+        """Bibliothèque nationale de France"""
+        self._query(BnFReader, args)
 
     def do_gallica(self, args) -> None:
         'Gallica'
