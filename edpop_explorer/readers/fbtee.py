@@ -74,7 +74,7 @@ class FBTEEReader(APIReader):
         columns = [x[1] for x in cur.execute('PRAGMA table_info(books)')]
         res = cur.execute(
             'SELECT B.*, BA.author_code, A.author_name FROM books B '
-            'JOIN books_authors BA on B.book_code=BA.book_code '
+            'LEFT OUTER JOIN books_authors BA on B.book_code=BA.book_code '
             'JOIN authors A on BA.author_code=A.author_code '
             'WHERE full_book_title LIKE ? '
             'ORDER BY B.book_code',
