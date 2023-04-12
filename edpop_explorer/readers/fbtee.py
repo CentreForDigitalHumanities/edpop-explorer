@@ -49,6 +49,7 @@ class FBTEEReader(APIReader):
         response = requests.get(self.DATABASE_URL)
         if response.ok:
             try:
+                self.database_file.parent.mkdir(exist_ok=True, parents=True)
                 with open(self.database_file, 'wb') as f:
                     f.write(response.content)
             except OSError as err:
