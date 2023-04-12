@@ -7,7 +7,9 @@ To install locally, type (inside or outside a virtual environment):
 
     # pip install .
 
-The tool can then be run using the `edpopx` command.
+The tool can then be run using the `edpopx` command. (On Windows it may
+be that the `edpopx` command does not become available on the path. In that
+case you can also run it using the command `python -m edpop_explorer`.)
 
 For development purposes it may be better to use the `--editable` option:
 
@@ -37,9 +39,9 @@ particular record:
 
     # show 8
 
-To exit, type Ctrl+D or use the `exit` command:
+To exit, type Ctrl+D or use the `quit` command:
 
-    # exit
+    # quit
 
 ## Design
 
@@ -55,6 +57,7 @@ in the `readers` subpackage):
   - SRUReader
     - **GallicaReader** / GallicaRecord
     - **CERLThesaurusReader** / CERLThesaurusRecord
+    - **BibliopolisReader** / BibliopolisRecord
     - SRUMarc21Reader / Marc21Record
       - **HPBReader**
       - **VD16Reader**
@@ -62,3 +65,5 @@ in the `readers` subpackage):
       - **VD18Reader**
   - SparqlReader / SparqlRecord
     - **STCNReader**
+  - **SBTIReader** / SBTIRecord
+  - **FBTEEReader** / FBTEERecord
