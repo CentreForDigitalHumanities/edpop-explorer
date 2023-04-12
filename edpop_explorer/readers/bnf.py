@@ -10,7 +10,6 @@ class BnFReader(SRUMarc21Reader):
     marcxchange_prefix = 'info:lc/xmlns/marcxchange-v2:'
 
     def transform_query(self, query: str) -> str:
-        # return query
         return 'bib.anywhere all ({})'.format(query)
 
     def _convert_record(self, sruthirecord: dict) -> Marc21Record:
@@ -22,8 +21,5 @@ class BnFReader(SRUMarc21Reader):
         return record
 
     def get_link(self, record: Marc21Record) -> Optional[str]:
-        # The record id can be found in field 035 in subfield a starting
-        # with (CERL), like this: (CERL)HU-SzSEK.01.bibJAT603188.
-        # The URI can then be created using HPB_URI.
-        # HPB records have field 035 two times.
+        # The link can be found in control field 003
         return record.controlfields.get('003', None)
