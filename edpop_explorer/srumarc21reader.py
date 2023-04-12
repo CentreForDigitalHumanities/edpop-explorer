@@ -97,6 +97,18 @@ class SRUMarc21Reader(SRUReader):
     marcxchange_prefix = ''
     records: List[Marc21Record]
 
+    def _get_subfields(self, sruthifield) -> list:
+        # If there is only one subfield, sruthi puts it directly in
+        # a dict, otherwise it uses a list of dicts. Make sure that
+        # we always have a list.
+        subfielddata = sruthifield[f'{self.marcxchange_prefix}subfield']
+        if type(subfielddata) == dict:
+            sruthisubfields = [subfielddata]
+        else:
+            sruthisubfields = subfielddata
+        assert type(sruthisubfields) == list
+        return sruthisubfields
+
     def _convert_record(self, sruthirecord: dict) -> Marc21Record:
         record = Marc21Record()
         for sruthicontrolfield in \
@@ -114,15 +126,8 @@ class SRUMarc21Reader(SRUReader):
             )
             if fieldnumber in translation_dictionary:
                 field.description = translation_dictionary[fieldnumber]
-            # If there are multiple subfields, sruthi puts it directly in
-            # a dict, otherwise it uses a list of dicts
-            if type(sruthifield[f'{self.marcxchange_prefix}subfield']) == dict:
-                sruthisubfields = \
-                    [sruthifield[f'{self.marcxchange_prefix}subfield']]
-            else:
-                sruthisubfields = \
-                    sruthifield[f'{self.marcxchange_prefix}subfield']
-            assert type(sruthisubfields) == list
+            sruthisubfields = self._get_subfields(sruthifield)
+
             for sruthisubfield in sruthisubfields:
                 field.subfields[sruthisubfield['code']] = \
                     sruthisubfield['text']
