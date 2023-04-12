@@ -54,15 +54,14 @@ class FBTEEReader(APIReader):
                     f.write(response.content)
             except OSError as err:
                 raise APIException(
-                    'Error writing database file to disk: {}'.format(err)
+                    f'Error writing database file to disk: {err}'
                 )
         else:
             raise APIException(
-                'Error downloading database file from {}'
-                .format(self.DATABASE_URL)
+                f'Error downloading database file from {self.DATABASE_URL}'
             )
-        print('Successfully saved database to {}.'.format(self.database_file))
-        print('See license: {}'.format(self.DATABASE_LICENSE))
+        print(f'Successfully saved database to {self.database_file}.')
+        print(f'See license: {self.DATABASE_LICENSE}')
 
     def prepare_query(self, query: str):
         self.prepared_query = '%' + query + '%'
