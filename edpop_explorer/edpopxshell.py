@@ -43,8 +43,11 @@ class EDPOPXShell(cmd2.Cmd):
         except (TypeError, ValueError):
             self.perror('Please provide a valid number')
             return None
+        record = self.reader.records[index]
+        if record.link:
+            self.pfeedback(cmd2.ansi.style_success(record.link, bold=True))
         try:
-            self.poutput(self.reader.records[index].show_record())
+            self.poutput(record.show_record())
         except IndexError:
             self.perror('Please provide a record number that has been loaded')
 
