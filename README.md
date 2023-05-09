@@ -58,12 +58,15 @@ in the `readers` subpackage):
     - **GallicaReader** / GallicaRecord
     - **CERLThesaurusReader** / CERLThesaurusRecord
     - **BibliopolisReader** / BibliopolisRecord
+    - **KBReader** / KBRecord
     - SRUMarc21Reader / Marc21Record
       - **HPBReader**
       - **VD16Reader**
       - **VD17Reader**
       - **VD18Reader**
+      - **BnFReader**
   - SparqlReader / SparqlRecord
     - **STCNReader**
   - **SBTIReader** / SBTIRecord
   - **FBTEEReader** / FBTEERecord
+  - **USTCReader** / USTCRecord
