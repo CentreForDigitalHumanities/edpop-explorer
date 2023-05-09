@@ -12,6 +12,7 @@ from edpop_explorer.readers.gallica import GallicaReader
 from edpop_explorer.readers.stcn import STCNReader
 from edpop_explorer.readers.sbtireader import SBTIReader
 from edpop_explorer.readers.fbtee import FBTEEReader
+from edpop_explorer.readers.ustc import USTCReader
 
 
 class EDPOPXShell(cmd2.Cmd):
@@ -98,6 +99,10 @@ class EDPOPXShell(cmd2.Cmd):
     def do_fbtee(self, args) -> None:
         'French Book Trade in Enlightenment Europe'
         self._query(FBTEEReader, args)
+
+    def do_ustc(self, args) -> None:
+        'Universal Short Title Catalogue'
+        self._query(USTCReader, args)
 
     def _show_records(self, records: List[APIRecord],
                       start: int,
