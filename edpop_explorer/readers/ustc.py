@@ -1,9 +1,8 @@
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List
 from dataclasses import dataclass, field as dataclass_field
 from pathlib import Path
 import sqlite3
 import yaml
-import requests
 from appdirs import AppDirs
 
 from edpop_explorer.apireader import APIReader, APIRecord, APIException
@@ -50,6 +49,9 @@ class USTCReader(APIReader):
 
         cur = self.con.cursor()
         columns = [x[1] for x in cur.execute('PRAGMA table_info(editions)')]
+        # This kind of query is far from ideal, but the alternative is to
+        # implement SQLite full text search which is probably too much work
+        # for our current goal (i.e. getting insight in the data structures)
         res = cur.execute(
             'SELECT E.* FROM editions E '
             'WHERE E.std_title LIKE ? '
