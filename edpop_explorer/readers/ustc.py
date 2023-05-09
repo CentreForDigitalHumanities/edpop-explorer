@@ -34,9 +34,9 @@ class USTCReader(APIReader):
             AppDirs('edpop-explorer', 'cdh').user_data_dir
         ) / self.DATABASE_FILENAME
         if not self.database_file.exists():
-            print(f'USTC database not found. Please download the file '
-                  f'{self.DATABASE_FILENAME} and add it to the following '
-                  f'directory: {self.database_file.parent}')
+            print(f'USTC database not found. Please obtain the file '
+                  f'{self.DATABASE_FILENAME} from the project team and add it '
+                  f'to the following directory: {self.database_file.parent}')
             raise APIException('Database file not found')
         self.con = sqlite3.connect(str(self.database_file))
 

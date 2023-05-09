@@ -46,11 +46,11 @@ class KBReader(SRUReader):
     def _find_ppn(self, data: dict):
         """Try to find the PPN given the data that comes from the SRU server"""
         # This seems to work fine; not thoroughly tested.
-        oaipmhidentifier = data.get('OaiPmhIdentifier', None)
+        oai_pmh_identifier = data.get('OaiPmhIdentifier', None)
         PREFIX = 'GGC:AC:'
         ppn = None
-        if oaipmhidentifier and oaipmhidentifier.startswith(PREFIX):
-            ppn = oaipmhidentifier[len(PREFIX):]
+        if oai_pmh_identifier and oai_pmh_identifier.startswith(PREFIX):
+            ppn = oai_pmh_identifier[len(PREFIX):]
         return ppn
 
     def _convert_record(self, sruthirecord: dict) -> KBRecord:
