@@ -25,8 +25,6 @@ class CERLThesaurusRecord(APIRecord):
             contents = self.link + '\n' + contents
         return contents
         field_strings = []
-        if self.link:
-            field_strings.append('URL: ' + self.link)
         for key in self.data:
             value = self.data[key]
             if type(value) == list:

@@ -38,20 +38,26 @@ class EDPOPXShell(cmd2.Cmd):
     def do_show(self, args) -> None:
         if self.reader is None:
             self.perror('First perform an initial search')
-            return None
+            return
         try:
             # TODO: consider using argparse
             index = int(args) - 1
         except (TypeError, ValueError):
             self.perror('Please provide a valid number')
-            return None
-        record = self.reader.records[index]
-        if record.link:
-            self.pfeedback(cmd2.ansi.style_success(record.link, bold=True))
+            return
         try:
-            self.poutput(record.show_record())
+            record = self.reader.records[index]
         except IndexError:
             self.perror('Please provide a record number that has been loaded')
+            return
+        self.poutput(cmd2.ansi.style_success(
+            record.get_title(), bold=True
+        ))
+        if record.link:
+            self.poutput(cmd2.ansi.style_success(
+                'URL: ' + record.link, bold=True
+            ))
+        self.poutput(record.show_record())
 
     def do_hpb(self, args) -> None:
         'CERL\'s Heritage of the Printed Book Database'

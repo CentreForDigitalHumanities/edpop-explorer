@@ -19,8 +19,6 @@ class FBTEERecord(APIRecord):
 
     def show_record(self) -> str:
         return_string = yaml.safe_dump(self.data, allow_unicode=True)
-        if self.link:
-            return_string = self.link + '\n' + return_string
         if self.authors:
             authorstrings = [x[0] + ' - ' + x[1] for x in self.authors]
             return_string += '\nAuthors:\n' + '\n'.join(authorstrings)

@@ -17,8 +17,6 @@ class USTCRecord(APIRecord):
 
     def show_record(self) -> str:
         return_string = yaml.safe_dump(self.data, allow_unicode=True)
-        if self.link:
-            return_string = self.link + '\n' + return_string
         return return_string
 
     def __repr__(self):

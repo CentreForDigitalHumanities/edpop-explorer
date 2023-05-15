@@ -15,8 +15,6 @@ class SBTIRecord(APIRecord):
 
     def show_record(self) -> str:
         contents = yaml.safe_dump(self.data)
-        if self.link:
-            contents = self.link + '\n' + contents
         return contents
 
     def get_title(self) -> str:
