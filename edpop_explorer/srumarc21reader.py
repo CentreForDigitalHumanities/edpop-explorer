@@ -143,5 +143,5 @@ class SRUMarc21Reader(SRUReader):
         record.link = self.get_link(record)
         return record
 
-    def get_link(self, record: APIRecord) -> Optional[str]:
+    def get_link(self, record: Marc21Record) -> Optional[str]:
         raise NotImplementedError('Should be implemented by subclass')
