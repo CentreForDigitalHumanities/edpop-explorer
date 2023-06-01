@@ -19,7 +19,7 @@ from edpop_explorer.readers.kb import KBReader
 class EDPOPXShell(cmd2.Cmd):
     intro = 'Welcome to the EDPOP explorer! Type ‘help’ for help.\n'
     prompt = '[edpop-explorer] # '
-    reader: APIReader = None
+    reader: Optional[APIReader] = None
     shown: int = 0
     RECORDS_PER_PAGE = 10
 
@@ -129,7 +129,7 @@ class EDPOPXShell(cmd2.Cmd):
             return 0
         # Determine count (the number of items to show)
         if limit is None:
-            count = limit
+            count = remaining
         else:
             count = min(remaining, limit)
         digits = len(str(total))
