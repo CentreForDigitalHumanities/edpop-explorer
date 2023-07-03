@@ -23,6 +23,14 @@ class EDPOPXShell(cmd2.Cmd):
     shown: int = 0
     RECORDS_PER_PAGE = 10
 
+    def __init__(self):
+        super().__init__()
+
+        self.exact = False
+        self.add_settable(cmd2.Settable(
+            'exact', bool, 'use exact queries without preprocessing', self
+        ))
+
     def do_next(self, args) -> None:
         if self.reader is None:
             self.perror('First perform an initial search')
@@ -143,10 +151,16 @@ class EDPOPXShell(cmd2.Cmd):
         self.reader = readerclass()
         self.shown = 0
         try:
-            self.reader.prepare_query(query)
-            self.pfeedback(
-                'Performing query: {}'.format(self.reader.prepared_query)
-            )
+            if not self.exact:
+                self.reader.prepare_query(query)
+                self.pfeedback(
+                    'Performing query: {}'.format(self.reader.prepared_query)
+                )
+            else:
+                self.reader.set_query(query)
+                self.pfeedback(
+                    'Performing exact query: {}'.format(query)
+                )
             self.reader.fetch()
         except APIException as err:
             self.perror('Error while fetching results: {}'.format(err))

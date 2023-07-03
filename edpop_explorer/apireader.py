@@ -25,6 +25,10 @@ class APIReader:
     def prepare_query(self, query: str) -> None:
         raise NotImplementedError('Should be implemented by subclass')
 
+    def set_query(self, query: str) -> None:
+        '''Set an exact query'''
+        self.prepared_query = query
+
     def fetch(self):
         raise NotImplementedError('Should be implemented by subclass')
 
