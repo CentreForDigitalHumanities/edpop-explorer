@@ -18,8 +18,6 @@ class GallicaRecord(APIRecord):
 
     def show_record(self) -> str:
         field_strings = []
-        if self.link:
-            field_strings.append('URL: ' + self.link)
         for key in self.data:
             value = self.data[key]
             if type(value) == dict:
@@ -40,7 +38,21 @@ class GallicaReader(SRUReader):
 
     def _convert_record(self, sruthirecord: dict) -> GallicaRecord:
         record = GallicaRecord()
-        record.identifier = sruthirecord['identifier']
+        # identifier field contains visitable Gallica URL and possibly
+        # also other types of identifier. In the first case we get it as a
+        # string from sruthi, in the latter case as a list of strings.
+        # Take the first string starting with https:// as the identifier
+        # and as the link.
+        if type(sruthirecord['identifier']) == list:
+            identifiers = sruthirecord['identifier']
+        elif type(sruthirecord['identifier']) == str:
+            identifiers = [sruthirecord['identifier']]
+        else:
+            identifiers = []
+        for identifier in identifiers:
+            if identifier.startswith('https://'):
+                record.identifier = identifier
+                record.link = identifier
         record.link = record.identifier
         for key in sruthirecord:
             if key in ['schema', 'id']:

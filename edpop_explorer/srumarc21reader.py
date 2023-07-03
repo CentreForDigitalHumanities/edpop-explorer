@@ -83,8 +83,6 @@ class Marc21Record(APIRecord):
 
     def show_record(self) -> str:
         field_strings = []
-        if self.link:
-            field_strings.append('URL: ' + self.link)
         for field in self.fields:
             field_strings.append(str(field))
         return '\n'.join(field_strings)
@@ -145,5 +143,5 @@ class SRUMarc21Reader(SRUReader):
         record.link = self.get_link(record)
         return record
 
-    def get_link(self, record: APIRecord) -> Optional[str]:
+    def get_link(self, record: Marc21Record) -> Optional[str]:
         raise NotImplementedError('Should be implemented by subclass')

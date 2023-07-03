@@ -5,6 +5,7 @@ from typing import Optional, Dict, List
 from termcolor import colored
 from textwrap import indent
 import pandas as pd
+import yaml
 
 
 @dataclass
@@ -19,9 +20,11 @@ class CERLThesaurusRecord(APIRecord):
             return '(no display name defined)'
 
     def show_record(self) -> str:
-        field_strings = []
+        contents = yaml.safe_dump(self.data, allow_unicode=True)
         if self.link:
-            field_strings.append('URL: ' + self.link)
+            contents = self.link + '\n' + contents
+        return contents
+        field_strings = []
         for key in self.data:
             value = self.data[key]
             if type(value) == list:

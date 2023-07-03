@@ -1,4 +1,5 @@
 import cmd2
+import math
 from typing import List, Optional, Type
 
 from edpop_explorer.apireader import APIReader, APIRecord, APIException
@@ -19,9 +20,17 @@ from edpop_explorer.readers.kb import KBReader
 class EDPOPXShell(cmd2.Cmd):
     intro = 'Welcome to the EDPOP explorer! Type ‘help’ for help.\n'
     prompt = '[edpop-explorer] # '
-    reader: APIReader = None
+    reader: Optional[APIReader] = None
     shown: int = 0
     RECORDS_PER_PAGE = 10
+
+    def __init__(self):
+        super().__init__()
+
+        self.exact = False
+        self.add_settable(cmd2.Settable(
+            'exact', bool, 'use exact queries without preprocessing', self
+        ))
 
     def do_next(self, args) -> None:
         if self.reader is None:
@@ -38,17 +47,26 @@ class EDPOPXShell(cmd2.Cmd):
     def do_show(self, args) -> None:
         if self.reader is None:
             self.perror('First perform an initial search')
-            return None
+            return
         try:
             # TODO: consider using argparse
             index = int(args) - 1
         except (TypeError, ValueError):
             self.perror('Please provide a valid number')
-            return None
+            return
         try:
-            self.poutput(self.reader.records[index].show_record())
+            record = self.reader.records[index]
         except IndexError:
             self.perror('Please provide a record number that has been loaded')
+            return
+        self.poutput(cmd2.ansi.style_success(
+            record.get_title(), bold=True
+        ))
+        if record.link:
+            self.poutput(cmd2.ansi.style_success(
+                'URL: ' + str(record.link), bold=True
+            ))
+        self.poutput(record.show_record())
 
     def do_hpb(self, args) -> None:
         'CERL\'s Heritage of the Printed Book Database'
@@ -111,7 +129,7 @@ class EDPOPXShell(cmd2.Cmd):
 
     def _show_records(self, records: List[APIRecord],
                       start: int,
-                      limit: Optional[int] = None) -> int:
+                      limit=math.inf) -> int:
         """Show the records from start, with limit as the maximum number
         of records to show. Return the number of records shown."""
         total = len(records)
@@ -119,10 +137,7 @@ class EDPOPXShell(cmd2.Cmd):
         if remaining < 1:
             return 0
         # Determine count (the number of items to show)
-        if limit is None:
-            count = limit
-        else:
-            count = min(remaining, limit)
+        count = min(remaining, limit)
         digits = len(str(total))
         for i in range(start, start + count):
             print('{:{digits}} - {}'.format(
@@ -134,10 +149,16 @@ class EDPOPXShell(cmd2.Cmd):
         self.reader = readerclass()
         self.shown = 0
         try:
-            self.reader.prepare_query(query)
-            self.pfeedback(
-                'Performing query: {}'.format(self.reader.prepared_query)
-            )
+            if not self.exact:
+                self.reader.prepare_query(query)
+                self.pfeedback(
+                    'Performing query: {}'.format(self.reader.prepared_query)
+                )
+            else:
+                self.reader.set_query(query)
+                self.pfeedback(
+                    'Performing exact query: {}'.format(query)
+                )
             self.reader.fetch()
         except APIException as err:
             self.perror('Error while fetching results: {}'.format(err))
