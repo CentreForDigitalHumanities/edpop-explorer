@@ -1,4 +1,5 @@
 import cmd2
+import math
 from typing import List, Optional, Type
 
 from edpop_explorer.apireader import APIReader, APIRecord, APIException
@@ -63,7 +64,7 @@ class EDPOPXShell(cmd2.Cmd):
         ))
         if record.link:
             self.poutput(cmd2.ansi.style_success(
-                'URL: ' + record.link, bold=True
+                'URL: ' + str(record.link), bold=True
             ))
         self.poutput(record.show_record())
 
@@ -128,7 +129,7 @@ class EDPOPXShell(cmd2.Cmd):
 
     def _show_records(self, records: List[APIRecord],
                       start: int,
-                      limit: Optional[int] = None) -> int:
+                      limit=math.inf) -> int:
         """Show the records from start, with limit as the maximum number
         of records to show. Return the number of records shown."""
         total = len(records)
@@ -136,10 +137,7 @@ class EDPOPXShell(cmd2.Cmd):
         if remaining < 1:
             return 0
         # Determine count (the number of items to show)
-        if limit is None:
-            count = remaining
-        else:
-            count = min(remaining, limit)
+        count = min(remaining, limit)
         digits = len(str(total))
         for i in range(start, start + count):
             print('{:{digits}} - {}'.format(
