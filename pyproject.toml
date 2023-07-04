@@ -5,6 +5,9 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "edpop-explorer"
 version = "0.4.0"
+authors = [
+  # # {name="Utrecht University, Centre for Digital Humanities - Research Software Lab", email="cdh@uu.nl"}
+]
 dependencies = [
   "sruthi@git+https://github.com/UUDigitalHumanitieslab/sruthi@feature/additional-params",
   "termcolor",
@@ -16,6 +19,20 @@ dependencies = [
   'cmd2',
   'pyyaml',
 ]
+description = "Common interface to multiple library catalogues and bibliographical databases"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+  'Development Status :: 2 - Pre-Alpha',
+  'Environment :: Console',
+  'Intended Audience :: Science/Research',
+  'License :: OSI Approved :: BSD License',
+  'Operating System :: OS Independent',
+  'Programming Language :: Python :: 3'
+]
+
+[project.urls]
+"Homepage" = "https://github.com/UUDigitalHumanitieslab/edpop-explorer"
 
 [project.scripts]
 edpopx = "edpop_explorer.__main__:main"

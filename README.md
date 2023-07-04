@@ -1,5 +1,7 @@
 # edpop-explorer
-Commandline tool to explore the APIs to be included in the EDPOP VRE
+Common interface to multiple library catalogues and bibliographical databases
+with convenience commandline tool, created for the EDPOP virtual research
+environment.
 
 ## Install
 
@@ -19,6 +21,8 @@ This way, the source code will be read directly from the original directory
 when running the application and changes will have immediate effect.
 
 ## Usage
+
+(This section documents the commandline tool.
 
 Start the programme from the command line using the `edpopx` command:
 
