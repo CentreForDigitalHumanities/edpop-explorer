@@ -1,3 +1,5 @@
+[![PyPI Version](https://img.shields.io/pypi/v/edpop-explorer)](https://pypi.org/project/edpop-explorer/)
+
 # edpop-explorer
 Common interface to multiple library catalogues and bibliographical databases
 with convenience commandline tool, created for the EDPOP virtual research
@@ -5,15 +7,16 @@ environment.
 
 ## Install
 
-To install locally, type (inside or outside a virtual environment):
+`edpop-explorer` can easily be installed from PyPI:
 
-    # pip install .
+    # pip install edpop-explorer
 
 The tool can then be run using the `edpopx` command. (On Windows it may
 be that the `edpopx` command does not become available on the path. In that
 case you can also run it using the command `python -m edpop_explorer`.)
 
-For development purposes it may be better to use the `--editable` option:
+For development purposes, clone the repository and use the ``--editable``
+option:
 
     # pip install --editable .
 
@@ -22,7 +25,7 @@ when running the application and changes will have immediate effect.
 
 ## Usage
 
-(This section documents the commandline tool.
+(This section documents the commandline tool.)
 
 Start the programme from the command line using the `edpopx` command:
 
