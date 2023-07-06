@@ -33,8 +33,8 @@ class KBReader(SRUReader):
 
     def __init__(self):
         super().__init__()
-        # Set in init method because dicts are mutable
-        self.additional_params = {
+        # The KB SRU requires 'x-collection' as an additional GET parameter
+        self.session.params = {
             'x-collection': 'GGC'
         }
 

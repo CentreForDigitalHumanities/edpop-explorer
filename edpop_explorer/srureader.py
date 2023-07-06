@@ -1,4 +1,5 @@
 import sruthi
+import requests
 from typing import List, Dict, Optional
 
 from edpop_explorer.apireader import APIReader, APIRecord, APIException
@@ -12,7 +13,13 @@ class SRUReader(APIReader):
     query: str = None
     records: List[APIRecord]  # Move to superclass?
     fetching_exhausted: bool = False
-    additional_params: Optional[Dict[str, str]] = None
+    session: Optional[requests.Session]
+
+    def __init__(self):
+        # Set a session to allow reuse of HTTP sessions and to set additional
+        # parameters and settings, which some SRU APIs require -
+        # see https://github.com/metaodi/sruthi#custom-parameters-and-settings
+        self.session = requests.Session()
 
     def transform_query(self, query: str) -> str:
         raise NotImplementedError('Should be implemented by subclass')
@@ -28,7 +35,7 @@ class SRUReader(APIReader):
                 start_record=start_record,
                 maximum_records=RECORDS_PER_PAGE,
                 sru_version=self.sru_version,
-                additional_params=self.additional_params
+                session=self.session
             )
         except (
             sruthi.errors.SruError

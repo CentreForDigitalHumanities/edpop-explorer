@@ -6,10 +6,10 @@ build-backend = "setuptools.build_meta"
 name = "edpop-explorer"
 version = "0.4.1"
 authors = [
-  # # {name="Utrecht University, Centre for Digital Humanities - Research Software Lab", email="cdh@uu.nl"}
+  {name="Utrecht University, Centre for Digital Humanities - Research Software Lab", email="cdh@uu.nl"}
 ]
 dependencies = [
-  "sruthi@git+https://github.com/UUDigitalHumanitieslab/sruthi@feature/additional-params",
+  "sruthi>=2.0.0",
   "termcolor",
   "appdirs",
   "SPARQLWrapper",
