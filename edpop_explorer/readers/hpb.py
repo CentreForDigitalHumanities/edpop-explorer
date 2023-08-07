@@ -1,3 +1,5 @@
+from rdflib import URIRef
+
 from edpop_explorer.srumarc21reader import SRUMarc21Reader, Marc21Record
 
 
@@ -5,6 +7,9 @@ class HPBReader(SRUMarc21Reader):
     sru_url = 'http://sru.k10plus.de/hpb'
     sru_version = '1.1'
     HPB_LINK = 'http://hpb.cerl.org/record/{}'
+    CATALOG_URIREF = URIRef(
+        'https://dhstatic.hum.uu.nl/edpop-explorer/catalogs/hpb'
+    )
 
     def transform_query(self, query: str) -> str:
         return query

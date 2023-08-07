@@ -18,6 +18,8 @@ dependencies = [
   'pandas',
   'cmd2',
   'pyyaml',
+  'rdflib',
+  'Pygments',
 ]
 description = "Common interface to multiple library catalogues and bibliographical databases"
 readme = "README.md"
