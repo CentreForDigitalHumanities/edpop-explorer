@@ -1,9 +1,12 @@
 [![PyPI Version](https://img.shields.io/pypi/v/edpop-explorer)](https://pypi.org/project/edpop-explorer/)
 
 # edpop-explorer
-Common interface to multiple library catalogues and bibliographical databases
-with convenience commandline tool, created for the EDPOP virtual research
-environment.
+EDPOP Explorer is a Python library and commandline application that offers a common 
+interface to multiple library catalogues and bibliographical databases, such as the 
+Heritage of the Printed Book Database (HPB), the Universal Short Title Catalogue 
+(USTC), and the Bibliothèque nationale de France (BnF). It aims to normalize the 
+most important information from the metadata while keeping all original metadata 
+available. The data can be accessed as RDF data or directly from Python objects.
 
 ## Install
 
