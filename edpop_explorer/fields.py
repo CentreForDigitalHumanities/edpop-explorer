@@ -50,7 +50,12 @@ class Field:
     Subclasses should override the RDF_CLASS attribute to the corresponding
     RDF class. Subclasses can define additional subfields by adding additional
     public attributes and by registring them in the SUBFIELDS constant
-    attribute. Subclasses should define the `_normalized_text` private 
+    attribute. For registring, a constructor __init__ should be defined that
+    first calls the parent's constructor and then adds the subfields one
+    by one using `self.SUBFIELDS.append(('<attribute-name>',
+    EDPOPREC.<rdf-property-name>, '<datatype>'))`, where <datatype> is any
+    of the datatypes defined in the DATATYPES constant of this module.
+    Subclasses may furthermore define the `_normalized_text` private 
     method."""
     original_text: str
     subject_node: Node
