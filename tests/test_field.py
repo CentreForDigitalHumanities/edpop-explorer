@@ -58,7 +58,7 @@ class TestField:
     
     def test_normalized_text(self, basic_field: Field):
         # If nothing is set, this should be None
-        assert basic_field.normalized_text == None
+        assert basic_field.normalized_text is None
         # Set normalized text by hand
         text = 'normalized'
         basic_field.set_normalized_text(text)

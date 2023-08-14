@@ -1,15 +1,11 @@
-"""This module defines Field and a number of subclasses.
-
-A Field (edpoprec:Field) in 
+"""This module defines Field and a number of subclasses for specialized fields. 
 """
 
 from typing import Optional, Callable, List, Tuple
 from rdflib import Graph, Literal, BNode, RDF, URIRef
 from rdflib.term import Node
-from dataclasses import dataclass
 
 from edpop_explorer import EDPOPREC
-
 
 DATATYPES = {
     'string': {
@@ -20,6 +16,14 @@ DATATYPES = {
         'input_type': bool,
         'converter': (lambda x: Literal(x)),
     },
+    'edtf': {
+        'input_type': str,
+        'converter': (
+            lambda x: Literal(
+                x, datatype=URIRef("http://id.loc.gov/datatypes/edtf")
+            )
+        )
+    }
 }
 
 
@@ -27,21 +31,28 @@ class FieldError(Exception):
     pass
 
 
-@dataclass
 class Field:
     """Python representation of edpoprec:Field.
 
-    Instantiate with the original text, which is the only required attribute.
+    This base class has two user-defined subfields: `original_text` (which is
+    required and should be passed to the constructor), and `unknown`.
+    User-defined subfields are simple object attributes and can be accessed
+    directly. In addition, this base class defines an automatic
+    subfield `normalized_text`, which is a read-only property that is only
+    available if normalization is supported by the field -- this is
+    not the case for this base class. In those cases, it is still possible to
+    set this field using the `set_normalized_text` method.
+    Except `original_text`, all subfields are optional and are None by default.
     Use to_graph() to obtain an RDF graph. The subject node is by default 
     a blank node, but this may be overridden by setting the subject_node 
-    attribute. This base class does not provide any normalization.
+    attribute.
 
     Subclasses should override the RDF_CLASS attribute to the corresponding
-    RDF class.
-    Subclasses of Field define more specific kinds of fields that offer more
-    complexity, as well as a default way of """
+    RDF class. Subclasses can define additional subfields by adding additional
+    public attributes and by registring them in the SUBFIELDS constant
+    attribute. Subclasses should define the `_normalized_text` private 
+    method."""
     original_text: str
-    __doc_original_text__ = "The text as it was directly taken from the original record"
     subject_node: Node
     SUBFIELDS: List[Tuple[str, URIRef, str]]
     _normalized_text: Optional[str] = None
@@ -77,7 +88,7 @@ class Field:
             return self._normalized_text
         if callable(self._create_normalized_text):
             text = self._create_normalized_text()
-            assert type(text) == str
+            assert isinstance(text, str)
             return text
         else:
             return None
@@ -101,12 +112,12 @@ class Field:
                 typedef = DATATYPES[datatype]
             except ValueError:
                 raise FieldError(
-                    f"Datatype '{datatype}' was defined in subfield list on {self.__class__}"
-                    "but it does not exist"
+                    f"Datatype '{datatype}' was defined in subfield list on "
+                    "{self.__class__} but it does not exist"
                 )
             else:
                 input_type = typedef['input_type']
-                if type(value) != input_type:
+                if not isinstance(value, input_type):
                     raise FieldError(
                         f"Subfield {attrname} should be of type {str(input_type)} but "
                         "it is {str(type(value))}"
