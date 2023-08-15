@@ -1,20 +1,23 @@
 import cmd2
 import math
 from typing import List, Optional, Type
+from pygments import highlight
+from pygments.lexers import TurtleLexer
+from pygments.formatters import Terminal256Formatter
 
 from edpop_explorer.apireader import APIReader, APIRecord, APIException
 from edpop_explorer.readers.hpb import HPBReader
-from edpop_explorer.readers.vd import VD16Reader, VD17Reader, VD18Reader, \
-    VDLiedReader
-from edpop_explorer.readers.bnf import BnFReader
-from edpop_explorer.readers.bibliopolis import BibliopolisReader
-from edpop_explorer.readers.cerl_thesaurus import CERLThesaurusReader
-from edpop_explorer.readers.gallica import GallicaReader
-from edpop_explorer.readers.stcn import STCNReader
-from edpop_explorer.readers.sbtireader import SBTIReader
-from edpop_explorer.readers.fbtee import FBTEEReader
-from edpop_explorer.readers.ustc import USTCReader
-from edpop_explorer.readers.kb import KBReader
+#from edpop_explorer.readers.vd import VD16Reader, VD17Reader, VD18Reader, \
+#    VDLiedReader
+#from edpop_explorer.readers.bnf import BnFReader
+#from edpop_explorer.readers.bibliopolis import BibliopolisReader
+#from edpop_explorer.readers.cerl_thesaurus import CERLThesaurusReader
+#from edpop_explorer.readers.gallica import GallicaReader
+#from edpop_explorer.readers.stcn import STCNReader
+#from edpop_explorer.readers.sbtireader import SBTIReader
+#from edpop_explorer.readers.fbtee import FBTEEReader
+#from edpop_explorer.readers.ustc import USTCReader
+#from edpop_explorer.readers.kb import KBReader
 
 
 class EDPOPXShell(cmd2.Cmd):
@@ -32,19 +35,9 @@ class EDPOPXShell(cmd2.Cmd):
             'exact', bool, 'use exact queries without preprocessing', self
         ))
 
-    def do_next(self, args) -> None:
-        if self.reader is None:
-            self.perror('First perform an initial search')
-        elif self.shown >= self.reader.number_of_results:
-            self.perror('All records have been shown')
-        else:
-            if self.reader.number_fetched - self.shown < self.RECORDS_PER_PAGE:
-                self.reader.fetch_next()
-            self.shown += self._show_records(self.reader.records,
-                                             self.shown,
-                                             self.RECORDS_PER_PAGE)
-
-    def do_show(self, args) -> None:
+    def get_record_from_argument(self, args) -> Optional[APIRecord]:
+        """Get the record requested by the user; show error message
+        and return None if this fails"""
         if self.reader is None:
             self.perror('First perform an initial search')
             return
@@ -59,6 +52,27 @@ class EDPOPXShell(cmd2.Cmd):
         except IndexError:
             self.perror('Please provide a record number that has been loaded')
             return
+        return record
+
+    def do_next(self, args) -> None:
+        if self.reader is None:
+            self.perror('First perform an initial search')
+            return
+        assert self.reader.number_of_results is not None
+        assert self.reader.number_fetched is not None
+        if self.shown >= self.reader.number_of_results:
+            self.perror('All records have been shown')
+        else:
+            if self.reader.number_fetched - self.shown < self.RECORDS_PER_PAGE:
+                self.reader.fetch_next()
+            self.shown += self._show_records(self.reader.records,
+                                             self.shown,
+                                             self.RECORDS_PER_PAGE)
+
+    def do_show(self, args) -> None:
+        record = self.get_record_from_argument(args)
+        if record is None:
+            return
         self.poutput(cmd2.ansi.style_success(
             record.get_title(), bold=True
         ))
@@ -68,10 +82,25 @@ class EDPOPXShell(cmd2.Cmd):
             ))
         self.poutput(record.show_record())
 
+    def do_showrdf(self, args) -> None:
+        record = self.get_record_from_argument(args)
+        if record is None:
+            return
+        try:
+            graph = record.graph
+            ttl = graph.serialize()
+            highlighted = highlight(
+                ttl, TurtleLexer(), Terminal256Formatter(style='vim')
+            )
+            self.poutput(highlighted)
+        except APIException as err:
+            self.perror('Cannot generate RDF: {}'.format(err))
+
     def do_hpb(self, args) -> None:
         'CERL\'s Heritage of the Printed Book Database'
         self._query(HPBReader, args)
 
+    '''
     def do_vd16(self, args) -> None:
         """Verzeichnis der im deutschen Sprachbereich erschienenen Drucke
         des 16. Jahrhunderts"""
@@ -126,6 +155,7 @@ class EDPOPXShell(cmd2.Cmd):
     def do_kb(self, args) -> None:
         'Koninklijke Bibliotheek'
         self._query(KBReader, args)
+    '''
 
     def _show_records(self, records: List[APIRecord],
                       start: int,
@@ -137,7 +167,7 @@ class EDPOPXShell(cmd2.Cmd):
         if remaining < 1:
             return 0
         # Determine count (the number of items to show)
-        count = min(remaining, limit)
+        count = int(min(remaining, limit))
         digits = len(str(total))
         for i in range(start, start + count):
             print('{:{digits}} - {}'.format(
