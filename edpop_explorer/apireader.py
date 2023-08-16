@@ -189,8 +189,9 @@ class APIReader(ABC):
     def fetch_next(self):
         raise NotImplementedError('Should be implemented by subclass')
 
-    def to_graph(self) -> Graph:
-        '''Create an RDF representation of this reader.'''
+    def catalog_to_graph(self) -> Graph:
+        '''Create an RDF representation of the catalog that this reader
+        supports as an instance of EDPOPREC:Catalog.'''
         g = Graph()
         if not self.CATALOG_URIREF:
             raise APIException(
@@ -212,11 +213,6 @@ class APIReader(ABC):
         g.bind('edpoprec', EDPOPREC)
 
         return g
-
-    @property
-    def graph(self) -> Graph:
-        # Can be removed
-        return self.to_graph()
 
 
 class APIException(Exception):
