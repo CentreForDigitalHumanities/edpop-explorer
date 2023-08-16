@@ -87,7 +87,7 @@ class EDPOPXShell(cmd2.Cmd):
         if record is None:
             return
         try:
-            graph = record.graph
+            graph = record.to_graph()
             ttl = graph.serialize()
             highlighted = highlight(
                 ttl, TurtleLexer(), Terminal256Formatter(style='vim')

@@ -42,8 +42,7 @@ class APIRecord:
 
     def to_graph(self) -> Graph:
         '''Create an RDF graph for this record and put it in the rdf
-        attribute. Subclasses should override this and first call
-        super.create_rdf().'''
+        attribute.'''
         g = Graph()
         
         # Set basic properties
@@ -115,11 +114,6 @@ class APIRecord:
         g.bind('edpoprec', EDPOPREC)
 
         return g
-
-    @property
-    def graph(self) -> Graph:
-        # Can be removed
-        return self.to_graph()
 
     def __str__(self):
         if self.identifier:
