@@ -15,14 +15,6 @@ The tool can then be run using the `edpopx` command. (On Windows it may
 be that the `edpopx` command does not become available on the path. In that
 case you can also run it using the command `python -m edpop_explorer`.)
 
-For development purposes, clone the repository and use the ``--editable``
-option:
-
-    # pip install --editable .
-
-This way, the source code will be read directly from the original directory
-when running the application and changes will have immediate effect.
-
 ## Usage
 
 (This section documents the commandline tool.)
@@ -49,6 +41,20 @@ particular record:
 To exit, type Ctrl+D or use the `quit` command:
 
     # quit
+
+## Development
+
+For development purposes, clone the repository and use the ``--editable``
+option, and install the optional development dependencies too:
+
+    # pip install --editable '.[dev]'
+
+This way, the source code will be read directly from the original directory
+when running the application and changes will have immediate effect.
+
+Run unit test using `pytest`:
+
+    # pytest
 
 ## Design
 

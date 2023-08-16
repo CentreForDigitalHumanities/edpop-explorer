@@ -21,6 +21,7 @@ dependencies = [
   'rdflib',
   'Pygments',
 ]
+
 description = "Common interface to multiple library catalogues and bibliographical databases"
 readme = "README.md"
 requires-python = ">=3.7"
@@ -31,6 +32,12 @@ classifiers = [
   'License :: OSI Approved :: BSD License',
   'Operating System :: OS Independent',
   'Programming Language :: Python :: 3'
+]
+
+[project.optional-dependencies]
+dev = [
+  'pytest',
+  'sphinx',
 ]
 
 [project.urls]
