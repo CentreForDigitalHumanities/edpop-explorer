@@ -2,10 +2,9 @@ from dataclasses import dataclass, field as dataclass_field
 from typing import Dict, List, Optional
 import csv
 from pathlib import Path
-from rdflib import Graph
 from abc import abstractmethod
 
-from edpop_explorer.apireader import APIRecord, BibliographicalRecord
+from edpop_explorer.apireader import BibliographicalRecord, RawData
 from edpop_explorer.srureader import SRUReader
 from edpop_explorer.fields import Field
 
@@ -49,12 +48,13 @@ class Marc21Field:
 
 
 @dataclass
-class Marc21Data:
+class Marc21Data(RawData):
     """Python representation of the data inside a Marc21 record"""
     # We use a list for the fields and not a dictionary because they may
     # appear more than once
     fields: List[Marc21Field] = dataclass_field(default_factory=list)
     controlfields: Dict[str, str] = dataclass_field(default_factory=dict)
+    raw: dict = dataclass_field(default_factory=dict)
 
     def get_first_field(self, fieldnumber: str) -> Optional[Marc21Field]:
         '''Return the first occurance of a field with a given field number.
@@ -95,6 +95,9 @@ class Marc21Data:
                 returned_subfields.append(field.subfields[subfield])
         return returned_subfields
 
+    def to_dict(self) -> dict:
+        return self.raw
+
 
 class Marc21DataMixin():
     """A mixin that adds a ``data`` attribute to a Record class to contain
@@ -127,6 +130,7 @@ class SRUMarc21Reader(SRUReader):
 
     def _convert_to_marc21data(self, sruthirecord: dict) -> Marc21Data:
         data = Marc21Data()
+        data.raw = sruthirecord
         # marcxml (marc21 in xml) consists of a controlfield and a datafield.
         # The controlfield and the datafield contain multiple fields.
         # The controlfield consists of simple pairs of tags (field numbers)

@@ -1,5 +1,4 @@
-from dataclasses import dataclass, field
-from typing import Optional, List, Type, TypeAlias, Tuple, ClassVar
+from typing import Optional, List, Type, TypeAlias, Tuple, ClassVar, Union
 from rdflib import Graph, RDF, RDFS, URIRef, BNode, Literal
 from rdflib.term import Node
 from abc import ABC, abstractmethod
@@ -10,11 +9,24 @@ from edpop_explorer.fields import Field
 APIReaderClass: TypeAlias = 'Type[APIReader]'
 
 
+class RawData(ABC):
+    """Base class to store raw original data of a record. Only defines
+    an abstract method ``to_dict``.
+    """
+
+    @abstractmethod
+    def to_dict(self) -> dict:
+        """Give a ``dict`` representation of the raw data."""
+        pass
+
+
 class RecordError(Exception):
     pass
 
 
 class APIRecord:
+    #: The raw original data of a record
+    data: Union[None, dict, RawData]
     _fields: List[Tuple[str, URIRef, Type[Field]]]
     _rdf_class: Node = EDPOPREC.Record
     link: Optional[str] = None
@@ -115,6 +127,15 @@ class APIRecord:
 
         return g
 
+    def get_data_dict(self) -> Optional[dict]:
+        """Convenience function to get the record's raw data as a ``dict``,
+        or ``None`` if it is not available."""
+        if isinstance(self.data, RawData):
+            return self.data.to_dict()
+        else:
+            # self.data should be dict or None
+            return self.data
+
     def __str__(self):
         if self.identifier:
             return f'{self.__class__} object ({self.identifier})'
@@ -124,16 +145,16 @@ class APIRecord:
 
 class BibliographicalRecord(APIRecord):
     _rdf_class = EDPOPREC.BibliographicalRecord
-    title: Field
-    alternative_title: Field
-    contributor: Field
-    publisher_or_printer: Field
-    place_of_publication: Field
-    dating: Field
-    language: Field
-    extent: Field
-    size: Field
-    physical_description: Field
+    title: Optional[Field] = None
+    alternative_title: Optional[Field] = None
+    contributor: Optional[Field] = None
+    publisher_or_printer: Optional[Field] = None
+    place_of_publication: Optional[Field] = None
+    dating: Optional[Field] = None
+    languages: Optional[List[Field]] = None
+    extent: Optional[Field] = None
+    size: Optional[Field] = None
+    physical_description: Optional[Field] = None
 
     def __init__(self, from_reader: APIReaderClass):
         super().__init__(from_reader)
@@ -145,7 +166,7 @@ class BibliographicalRecord(APIRecord):
             ('publisher_or_printer', EDPOPREC.publisherOrPrinter, Field),
             ('place_of_publication', EDPOPREC.placeOfPublication, Field),
             ('dating', EDPOPREC.dating, Field),
-            ('language', EDPOPREC.language, Field),
+            ('languages', EDPOPREC.language, Field),
             ('extent', EDPOPREC.extent, Field),
             ('size', EDPOPREC.size, Field),
             ('physical_description', EDPOPREC.physicalDescription, Field),

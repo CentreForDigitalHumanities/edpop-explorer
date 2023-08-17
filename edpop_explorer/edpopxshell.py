@@ -1,8 +1,10 @@
 import cmd2
 import math
+import yaml
 from typing import List, Optional, Type
 from pygments import highlight
 from pygments.lexers import TurtleLexer
+from pygments.lexers.data import YamlLexer
 from pygments.formatters import Terminal256Formatter
 
 from edpop_explorer.apireader import APIReader, APIRecord, APIException
@@ -17,7 +19,7 @@ from edpop_explorer.readers.hpb import HPBReader
 #from edpop_explorer.readers.sbtireader import SBTIReader
 #from edpop_explorer.readers.fbtee import FBTEEReader
 #from edpop_explorer.readers.ustc import USTCReader
-#from edpop_explorer.readers.kb import KBReader
+from edpop_explorer.readers.kb import KBReader
 
 
 class EDPOPXShell(cmd2.Cmd):
@@ -96,6 +98,17 @@ class EDPOPXShell(cmd2.Cmd):
         except APIException as err:
             self.perror('Cannot generate RDF: {}'.format(err))
 
+    def do_showraw(self, args) -> None:
+        record = self.get_record_from_argument(args)
+        if record is None:
+            return
+        data = record.get_data_dict()
+        yaml_data = yaml.dump(data, allow_unicode=True)
+        highlighted = highlight(
+            yaml_data, YamlLexer(), Terminal256Formatter(style='vim')
+        )
+        self.poutput(highlighted)
+
     def do_hpb(self, args) -> None:
         'CERL\'s Heritage of the Printed Book Database'
         self._query(HPBReader, args)
@@ -151,11 +164,10 @@ class EDPOPXShell(cmd2.Cmd):
     def do_ustc(self, args) -> None:
         'Universal Short Title Catalogue'
         self._query(USTCReader, args)
-
+    '''
     def do_kb(self, args) -> None:
         'Koninklijke Bibliotheek'
         self._query(KBReader, args)
-    '''
 
     def _show_records(self, records: List[APIRecord],
                       start: int,
