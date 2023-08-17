@@ -47,8 +47,8 @@ class TestField:
             basic_field.to_graph()
         # Nonexisting datatype defined in class on SUBFIELDS should give
         # exception
-        basic_field.SUBFIELDS = basic_field.SUBFIELDS.copy()
-        basic_field.SUBFIELDS.append(
+        basic_field._subfields = basic_field._subfields.copy()
+        basic_field._subfields.append(
             ('other', EDPOPREC.other, 'othertype')
         )
         basic_field.other = 'text'  # type: ignore
