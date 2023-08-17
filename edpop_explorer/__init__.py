@@ -1,7 +1,3 @@
-from rdflib.namespace import Namespace
+from .rdf import EDPOPREC, RELATORS
 
-EDPOPREC = Namespace('https://dhstatic.hum.uu.nl/edpop-records/latest/')
-"""EDPOP Record Ontology"""
-
-RELATORS = Namespace('http://id.loc.gov/vocabulary/relators/')
-"""Library of Congress relators. See: https://id.loc.gov/vocabulary/relators.html"""
+__all__ = [EDPOPREC, RELATORS]
