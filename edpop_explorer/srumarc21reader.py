@@ -179,6 +179,7 @@ class SRUMarc21BibliographicalReader(SRUMarc21Reader):
     _language_field_subfield = ('041', 'a')
     _place_field_subfield = ('264', 'a')
     _dating_field_subfield = ('264', 'c')
+    records: List[Marc21BibliographicalRecord]
     
     def _convert_record(self, sruthirecord: dict) -> Marc21BibliographicalRecord:
         record = Marc21BibliographicalRecord(from_reader=self.__class__)
