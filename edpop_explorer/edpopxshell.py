@@ -72,19 +72,37 @@ class EDPOPXShell(cmd2.Cmd):
                                              self.RECORDS_PER_PAGE)
 
     def do_show(self, args) -> None:
+        '''Show a normalized version of the record with the given number.'''
         record = self.get_record_from_argument(args)
         if record is None:
             return
         self.poutput(cmd2.ansi.style_success(
-            record.get_title(), bold=True
+            record, bold=True
         ))
+        recordtype = str(record._rdf_class).rsplit('/',1)[1]
+        self.poutput(f'Record type: {recordtype}')
+        self.poutput
+        if record.identifier:
+            self.poutput(f'Identifier: {record.identifier}')
         if record.link:
-            self.poutput(cmd2.ansi.style_success(
-                'URL: ' + str(record.link), bold=True
-            ))
-        self.poutput(record.show_record())
+            self.poutput('URL: ' + str(record.link))
+        self.poutput(cmd2.ansi.style('Fields:', bold=True))
+        for fieldname, _, _ in record._fields:
+            fieldname_human = fieldname.capitalize().replace('_', ' ')
+            # TODO: make a field iterator for Record
+            value = getattr(record, fieldname)
+            if value:
+                if isinstance(value, list):
+                    text = '\n' + '\n'.join([('  - ' + str(x)) for x in value])
+                else:
+                    text = str(value)
+                self.poutput(
+                    cmd2.ansi.style(f'- {fieldname_human}: ', bold=True) + text
+                )
 
     def do_showrdf(self, args) -> None:
+        '''Show an RDF representation of the record with the given number
+        in Turtle format.'''
         record = self.get_record_from_argument(args)
         if record is None:
             return
@@ -99,6 +117,8 @@ class EDPOPXShell(cmd2.Cmd):
             self.perror('Cannot generate RDF: {}'.format(err))
 
     def do_showraw(self, args) -> None:
+        '''Show the raw data of the record with the given number in the
+        source catalog.'''
         record = self.get_record_from_argument(args)
         if record is None:
             return
