@@ -45,7 +45,7 @@ class GallicaReader(SRUReader):
         # and as the link.
         if type(sruthirecord['identifier']) == list:
             identifiers = sruthirecord['identifier']
-        elif type(sruthirecord['identifier']) == str:
+        elif isinstance(sruthirecord['identifier'], str):
             identifiers = [sruthirecord['identifier']]
         else:
             identifiers = []

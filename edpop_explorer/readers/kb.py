@@ -1,6 +1,4 @@
-from dataclasses import dataclass, field as dataclass_field
 from typing import Optional
-import yaml
 from rdflib import URIRef
 from edpop_explorer.srumarc21reader import SRUReader
 from edpop_explorer.apireader import APIReader, BibliographicalRecord
