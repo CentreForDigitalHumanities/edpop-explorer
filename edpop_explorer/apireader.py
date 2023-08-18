@@ -1,12 +1,10 @@
-from typing import Optional, List, Type, TypeAlias, Tuple, ClassVar, Union
+from typing import Optional, List, Type, Tuple, ClassVar, Union
 from rdflib import Graph, RDF, RDFS, URIRef, BNode, Literal
 from rdflib.term import Node
 from abc import ABC, abstractmethod
 
 from edpop_explorer import EDPOPREC
 from edpop_explorer.fields import Field
-
-APIReaderClass: TypeAlias = 'Type[APIReader]'
 
 
 class RawData(ABC):
@@ -33,11 +31,11 @@ class APIRecord:
     '''A user-friendly link where the user can find the record'''
     identifier: Optional[str] = None
     '''Unique identifier used by the source catalog'''
-    from_catalog: Optional[APIReaderClass]
+    from_catalog: Optional[Type["APIReader"]]
     subject_node: Node
     _graph: Optional[Graph] = None
 
-    def __init__(self, from_catalog: APIReaderClass):
+    def __init__(self, from_catalog: Type["APIReader"]):
         self._fields = []
         self.from_catalog = from_catalog
         self.subject_node = BNode()
@@ -156,7 +154,7 @@ class BibliographicalRecord(APIRecord):
     size: Optional[Field] = None
     physical_description: Optional[Field] = None
 
-    def __init__(self, from_reader: APIReaderClass):
+    def __init__(self, from_reader: Type["APIReader"]):
         super().__init__(from_reader)
         assert isinstance(self._fields, list)
         self._fields += [
