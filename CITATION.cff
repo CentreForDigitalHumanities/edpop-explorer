@@ -1,0 +1,36 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: EDPOP Explorer
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - name: 'Centre for Digital Humanities, Utrecht University'
+    website: >-
+      https://cdh.uu.nl/centre-for-digital-humanities/research-software-lab/
+    city: Utrecht
+    country: NL
+    email: cdh@uu.nl
+repository-code: 'https://github.com/UUDigitalHumanitieslab/edpop-explorer'
+abstract: >-
+  EDPOP Explorer is a Python library and commandline
+  application that offers a common interface to multiple
+  library catalogues and bibliographical databases, such as
+  the Heritage of the Printed Book Database (HPB), the
+  Universal Short Title Catalogue (USTC), and the
+  Bibliothèque nationale de France (BnF). It aims to
+  normalize the most important information from the metadata
+  while keeping all original metadata available. The data
+  can be accessed as RDF data or directly from Python
+  objects.
+keywords:
+  - linked data
+  - library catalogues
+  - bibliographic data
+  - biographic data
+license: BSD-3-Clause
+version: 0.4.2
+date-released: '2023-07-06'
