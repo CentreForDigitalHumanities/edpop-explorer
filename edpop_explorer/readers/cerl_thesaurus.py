@@ -23,16 +23,6 @@ class CERLThesaurusRecord(APIRecord):
         if self.link:
             contents = self.link + '\n' + contents
         return contents
-        field_strings = []
-        for key in self.data:
-            value = self.data[key]
-            if type(value) == list:
-                value = '\n' + indent(pd.DataFrame(value).to_string(
-                    index=False,
-                    na_rep='(no data)'
-                ), '  ')
-            field_strings.append('{}: {}'.format(key, value))
-        return '\n'.join(field_strings)
 
 
 class CERLThesaurusReader(SRUReader):

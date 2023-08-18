@@ -121,11 +121,11 @@ class SRUMarc21Reader(SRUReader):
         # a dict, otherwise it uses a list of dicts. Make sure that
         # we always have a list.
         subfielddata = sruthifield[f'{self.marcxchange_prefix}subfield']
-        if type(subfielddata) == dict:
+        if isinstance(subfielddata, dict):
             sruthisubfields = [subfielddata]
         else:
             sruthisubfields = subfielddata
-        assert type(sruthisubfields) == list
+        assert isinstance(sruthisubfields, list)
         return sruthisubfields
 
     def _convert_to_marc21data(self, sruthirecord: dict) -> Marc21Data:

@@ -56,7 +56,7 @@ class KBReader(SRUReader):
     def _get_title(self, data) -> Optional[Field]:
         if 'title' in data:
             title = data['title']
-            if type(title) == list:
+            if isinstance(title, list):
                 # Title contains a list of strings if it consists of multiple
                 # parts
                 return Field(' : '.join(title))
