@@ -2,8 +2,6 @@ from edpop_explorer.srureader import SRUReader
 from edpop_explorer.apireader import APIRecord
 from dataclasses import dataclass, field as dataclass_field
 from typing import Optional
-from textwrap import indent
-import pandas as pd
 import yaml
 
 
