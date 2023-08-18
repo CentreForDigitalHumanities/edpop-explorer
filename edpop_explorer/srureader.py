@@ -1,6 +1,7 @@
 import sruthi
 import requests
-from typing import List, Dict, Optional
+from abc import abstractmethod
+from typing import List, Optional
 
 from edpop_explorer.apireader import APIReader, APIRecord, APIException
 
@@ -8,12 +9,12 @@ RECORDS_PER_PAGE = 10
 
 
 class SRUReader(APIReader):
-    sru_url: str = None
-    sru_version: str = None
-    query: str = None
+    sru_url: str
+    sru_version: str
+    query: Optional[str] = None
     records: List[APIRecord]  # Move to superclass?
     fetching_exhausted: bool = False
-    session: Optional[requests.Session]
+    session: requests.Session
 
     def __init__(self):
         # Set a session to allow reuse of HTTP sessions and to set additional
@@ -21,13 +22,15 @@ class SRUReader(APIReader):
         # see https://github.com/metaodi/sruthi#custom-parameters-and-settings
         self.session = requests.Session()
 
+    @abstractmethod
     def transform_query(self, query: str) -> str:
-        raise NotImplementedError('Should be implemented by subclass')
+        pass
 
+    @abstractmethod
     def _convert_record(self, sruthirecord: dict) -> APIRecord:
-        raise NotImplementedError('Should be implemented by subclass')
+        pass
 
-    def _perform_query(self, start_record: int) -> List[dict]:
+    def _perform_query(self, start_record: int) -> List[APIRecord]:
         try:
             response = sruthi.searchretrieve(
                 self.sru_url,

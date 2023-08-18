@@ -1,35 +1,51 @@
 from unittest.mock import patch
 import json
 from pathlib import Path
+from typing import Optional
 
-from edpop_explorer.srumarc21reader import SRUMarc21Reader
+from edpop_explorer.srumarc21reader import SRUMarc21BibliographicalReader, Marc21Data
 
 
 TESTDATA = json.load(open(Path(__file__).parent / 'TESTDATA', 'r'))
 
 
-class TestSRUReader:
+class MockReader(SRUMarc21BibliographicalReader):
+    def transform_query(self, query: str) -> str:
+        return query
+
+    def _get_link(self, data: Marc21Data) -> Optional[str]:
+        return "https://www.example.com"
+
+    def _get_identifier(self, data: Marc21Data) -> Optional[str]:
+        return 'id'
+
+
+class TestSRUMarc21BibliographicalReader:
     @patch('edpop_explorer.srureader.sruthi')
     def test_fetch(self, mock_sruthi):
         mock_sruthi.searchretrieve.return_value = TESTDATA
-        reader = SRUMarc21Reader()
-        reader.transform_query = lambda x: x
-        reader.get_link = lambda x: x
+        reader = MockReader()
         reader.sru_url = ''
         reader.sru_version = '1.1'
         reader.prepare_query('testquery')
         reader.fetch()
         results = reader.records
         # Field with multiple subfields
-        assert results[0].get_first_field('245').subfields['a'] == \
+        data = results[0].data
+        assert data is not None
+        firstfield = data.get_first_field('245')
+        assert firstfield is not None
+        assert firstfield.subfields['a'] == \
             'Aeschylus: Eumenides.'
         # Field with a single subfield
-        assert results[0].get_first_field('650').subfields['a'] == \
+        firstfield = data.get_first_field('650')
+        assert firstfield is not None
+        assert firstfield.subfields['a'] == \
             'Aeschylus Eumenides.'
         # Field's description
-        assert results[0].get_first_field('650').description == \
+        assert firstfield.description == \
             'Subject Added Entry - Topical Term'
         # Field that occurs multiple times
-        assert len(results[0].get_fields('500')) == 5
+        assert len(data.get_fields('500')) == 5
         # Control field
-        assert results[0].controlfields['007'] == 'tu'
+        assert data.controlfields['007'] == 'tu'

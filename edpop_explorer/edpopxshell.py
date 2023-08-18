@@ -1,19 +1,24 @@
 import cmd2
 import math
+import yaml
 from typing import List, Optional, Type
+from pygments import highlight
+from pygments.lexers import TurtleLexer
+from pygments.lexers.data import YamlLexer
+from pygments.formatters import Terminal256Formatter
 
 from edpop_explorer.apireader import APIReader, APIRecord, APIException
 from edpop_explorer.readers.hpb import HPBReader
-from edpop_explorer.readers.vd import VD16Reader, VD17Reader, VD18Reader, \
-    VDLiedReader
-from edpop_explorer.readers.bnf import BnFReader
-from edpop_explorer.readers.bibliopolis import BibliopolisReader
-from edpop_explorer.readers.cerl_thesaurus import CERLThesaurusReader
-from edpop_explorer.readers.gallica import GallicaReader
-from edpop_explorer.readers.stcn import STCNReader
-from edpop_explorer.readers.sbtireader import SBTIReader
-from edpop_explorer.readers.fbtee import FBTEEReader
-from edpop_explorer.readers.ustc import USTCReader
+#from edpop_explorer.readers.vd import VD16Reader, VD17Reader, VD18Reader, \
+#    VDLiedReader
+#from edpop_explorer.readers.bnf import BnFReader
+#from edpop_explorer.readers.bibliopolis import BibliopolisReader
+#from edpop_explorer.readers.cerl_thesaurus import CERLThesaurusReader
+#from edpop_explorer.readers.gallica import GallicaReader
+#from edpop_explorer.readers.stcn import STCNReader
+#from edpop_explorer.readers.sbtireader import SBTIReader
+#from edpop_explorer.readers.fbtee import FBTEEReader
+#from edpop_explorer.readers.ustc import USTCReader
 from edpop_explorer.readers.kb import KBReader
 
 
@@ -32,19 +37,9 @@ class EDPOPXShell(cmd2.Cmd):
             'exact', bool, 'use exact queries without preprocessing', self
         ))
 
-    def do_next(self, args) -> None:
-        if self.reader is None:
-            self.perror('First perform an initial search')
-        elif self.shown >= self.reader.number_of_results:
-            self.perror('All records have been shown')
-        else:
-            if self.reader.number_fetched - self.shown < self.RECORDS_PER_PAGE:
-                self.reader.fetch_next()
-            self.shown += self._show_records(self.reader.records,
-                                             self.shown,
-                                             self.RECORDS_PER_PAGE)
-
-    def do_show(self, args) -> None:
+    def get_record_from_argument(self, args) -> Optional[APIRecord]:
+        """Get the record requested by the user; show error message
+        and return None if this fails"""
         if self.reader is None:
             self.perror('First perform an initial search')
             return
@@ -59,19 +54,86 @@ class EDPOPXShell(cmd2.Cmd):
         except IndexError:
             self.perror('Please provide a record number that has been loaded')
             return
+        return record
+
+    def do_next(self, args) -> None:
+        if self.reader is None:
+            self.perror('First perform an initial search')
+            return
+        assert self.reader.number_of_results is not None
+        assert self.reader.number_fetched is not None
+        if self.shown >= self.reader.number_of_results:
+            self.perror('All records have been shown')
+        else:
+            if self.reader.number_fetched - self.shown < self.RECORDS_PER_PAGE:
+                self.reader.fetch_next()
+            self.shown += self._show_records(self.reader.records,
+                                             self.shown,
+                                             self.RECORDS_PER_PAGE)
+
+    def do_show(self, args) -> None:
+        '''Show a normalized version of the record with the given number.'''
+        record = self.get_record_from_argument(args)
+        if record is None:
+            return
         self.poutput(cmd2.ansi.style_success(
-            record.get_title(), bold=True
+            record, bold=True
         ))
+        recordtype = str(record._rdf_class).rsplit('/',1)[1]
+        self.poutput(f'Record type: {recordtype}')
+        self.poutput
+        if record.identifier:
+            self.poutput(f'Identifier: {record.identifier}')
         if record.link:
-            self.poutput(cmd2.ansi.style_success(
-                'URL: ' + str(record.link), bold=True
-            ))
-        self.poutput(record.show_record())
+            self.poutput('URL: ' + str(record.link))
+        self.poutput(cmd2.ansi.style('Fields:', bold=True))
+        for fieldname, _, _ in record._fields:
+            fieldname_human = fieldname.capitalize().replace('_', ' ')
+            # TODO: make a field iterator for Record
+            value = getattr(record, fieldname)
+            if value:
+                if isinstance(value, list):
+                    text = '\n' + '\n'.join([('  - ' + str(x)) for x in value])
+                else:
+                    text = str(value)
+                self.poutput(
+                    cmd2.ansi.style(f'- {fieldname_human}: ', bold=True) + text
+                )
+
+    def do_showrdf(self, args) -> None:
+        '''Show an RDF representation of the record with the given number
+        in Turtle format.'''
+        record = self.get_record_from_argument(args)
+        if record is None:
+            return
+        try:
+            graph = record.to_graph()
+            ttl = graph.serialize()
+            highlighted = highlight(
+                ttl, TurtleLexer(), Terminal256Formatter(style='vim')
+            )
+            self.poutput(highlighted)
+        except APIException as err:
+            self.perror('Cannot generate RDF: {}'.format(err))
+
+    def do_showraw(self, args) -> None:
+        '''Show the raw data of the record with the given number in the
+        source catalog.'''
+        record = self.get_record_from_argument(args)
+        if record is None:
+            return
+        data = record.get_data_dict()
+        yaml_data = yaml.dump(data, allow_unicode=True)
+        highlighted = highlight(
+            yaml_data, YamlLexer(), Terminal256Formatter(style='vim')
+        )
+        self.poutput(highlighted)
 
     def do_hpb(self, args) -> None:
         'CERL\'s Heritage of the Printed Book Database'
         self._query(HPBReader, args)
 
+    '''
     def do_vd16(self, args) -> None:
         """Verzeichnis der im deutschen Sprachbereich erschienenen Drucke
         des 16. Jahrhunderts"""
@@ -122,7 +184,7 @@ class EDPOPXShell(cmd2.Cmd):
     def do_ustc(self, args) -> None:
         'Universal Short Title Catalogue'
         self._query(USTCReader, args)
-
+    '''
     def do_kb(self, args) -> None:
         'Koninklijke Bibliotheek'
         self._query(KBReader, args)
@@ -137,7 +199,7 @@ class EDPOPXShell(cmd2.Cmd):
         if remaining < 1:
             return 0
         # Determine count (the number of items to show)
-        count = min(remaining, limit)
+        count = int(min(remaining, limit))
         digits = len(str(total))
         for i in range(start, start + count):
             print('{:{digits}} - {}'.format(

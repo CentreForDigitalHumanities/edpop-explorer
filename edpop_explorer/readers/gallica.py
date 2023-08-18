@@ -20,11 +20,11 @@ class GallicaRecord(APIRecord):
         field_strings = []
         for key in self.data:
             value = self.data[key]
-            if type(value) == dict:
+            if isinstance(value, dict):
                 value = '\n' + pd.DataFrame(value.items()).to_string(
                     index=False, header=False
                 )
-            elif type(value) == list:
+            elif isinstance(value, list):
                 value = ''.join(['\n- ' + x for x in value])
             field_strings.append('{}: {}'.format(key, value))
         return '\n'.join(field_strings)
@@ -43,9 +43,9 @@ class GallicaReader(SRUReader):
         # string from sruthi, in the latter case as a list of strings.
         # Take the first string starting with https:// as the identifier
         # and as the link.
-        if type(sruthirecord['identifier']) == list:
+        if isinstance(sruthirecord['identifier'], list):
             identifiers = sruthirecord['identifier']
-        elif type(sruthirecord['identifier']) == str:
+        elif isinstance(sruthirecord['identifier'], str):
             identifiers = [sruthirecord['identifier']]
         else:
             identifiers = []

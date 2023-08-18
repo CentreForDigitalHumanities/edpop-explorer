@@ -1,10 +1,7 @@
 from edpop_explorer.srureader import SRUReader
 from edpop_explorer.apireader import APIRecord
 from dataclasses import dataclass, field as dataclass_field
-from typing import Optional, Dict, List
-from termcolor import colored
-from textwrap import indent
-import pandas as pd
+from typing import Optional
 import yaml
 
 
@@ -24,16 +21,6 @@ class CERLThesaurusRecord(APIRecord):
         if self.link:
             contents = self.link + '\n' + contents
         return contents
-        field_strings = []
-        for key in self.data:
-            value = self.data[key]
-            if type(value) == list:
-                value = '\n' + indent(pd.DataFrame(value).to_string(
-                    index=False,
-                    na_rep='(no data)'
-                ), '  ')
-            field_strings.append('{}: {}'.format(key, value))
-        return '\n'.join(field_strings)
 
 
 class CERLThesaurusReader(SRUReader):

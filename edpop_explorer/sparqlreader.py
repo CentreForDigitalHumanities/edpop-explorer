@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional
+from typing import List
 from dataclasses import dataclass, field as dataclass_field
 from SPARQLWrapper import SPARQLWrapper, JSON, SPARQLExceptions
 
