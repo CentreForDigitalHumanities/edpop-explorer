@@ -28,14 +28,12 @@ jobs:
           cache: 'pip'
       - name: Install package
         run: |
-          python -m venv .env
-          source .env/bin/activate
           python -m pip install --upgrade pip
           pip install ".[dev]"
       - name: Lint with ruff
         run: |
           pip install ruff
-          ruff --format=github --target-version=py37 .
+          ruff --format=github --target-version=py38 .
       - name: Test with pytest
         run: |
           pytest
