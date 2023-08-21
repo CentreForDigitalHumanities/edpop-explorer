@@ -2,7 +2,7 @@ from pytest import fixture, raises
 from rdflib import Literal, RDF
 from rdflib.term import Node
 
-from edpop_explorer.fields import Field, FieldError
+from edpop_explorer import Field, FieldError
 from edpop_explorer import EDPOPREC
 
 

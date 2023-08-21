@@ -3,16 +3,16 @@ import requests
 from abc import abstractmethod
 from typing import List, Optional
 
-from edpop_explorer.apireader import APIReader, APIRecord, APIException
+from edpop_explorer import Reader, Record, ReaderError
 
 RECORDS_PER_PAGE = 10
 
 
-class SRUReader(APIReader):
+class SRUReader(Reader):
     sru_url: str
     sru_version: str
     query: Optional[str] = None
-    records: List[APIRecord]  # Move to superclass?
+    records: List[Record]  # Move to superclass?
     fetching_exhausted: bool = False
     session: requests.Session
 
@@ -27,10 +27,10 @@ class SRUReader(APIReader):
         pass
 
     @abstractmethod
-    def _convert_record(self, sruthirecord: dict) -> APIRecord:
+    def _convert_record(self, sruthirecord: dict) -> Record:
         pass
 
-    def _perform_query(self, start_record: int) -> List[APIRecord]:
+    def _perform_query(self, start_record: int) -> List[Record]:
         try:
             response = sruthi.searchretrieve(
                 self.sru_url,
@@ -43,11 +43,11 @@ class SRUReader(APIReader):
         except (
             sruthi.errors.SruError
         ) as err:
-            raise APIException('Server returned error: ' + str(err))
+            raise ReaderError('Server returned error: ' + str(err))
 
         self.number_of_results = response.count
 
-        records: List[APIRecord] = []
+        records: List[Record] = []
         for sruthirecord in response[0:RECORDS_PER_PAGE]:
             records.append(self._convert_record(sruthirecord))
 
@@ -59,7 +59,7 @@ class SRUReader(APIReader):
     def fetch(self) -> None:
         self.records = []
         if self.prepared_query is None:
-            raise APIException('First call prepare_query')
+            raise ReaderError('First call prepare_query')
         results = self._perform_query(1)
         self.records.extend(results)
         self.number_fetched = len(self.records)

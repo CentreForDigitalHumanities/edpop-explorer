@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 from typing import Optional
 
-from edpop_explorer.srumarc21reader import SRUMarc21BibliographicalReader, Marc21Data
+from edpop_explorer import SRUMarc21BibliographicalReader, Marc21Data
 
 
 TESTDATA = json.load(open(Path(__file__).parent / 'TESTDATA', 'r'))

@@ -4,9 +4,7 @@ import csv
 from pathlib import Path
 from abc import abstractmethod
 
-from edpop_explorer.apireader import BibliographicalRecord, RawData
-from edpop_explorer.srureader import SRUReader
-from edpop_explorer.fields import Field
+from edpop_explorer import BibliographicalRecord, RawData, SRUReader, Field
 
 
 READABLE_FIELDS_FILE = Path(__file__).parent / 'M21_fields.csv'
@@ -198,8 +196,10 @@ class SRUMarc21BibliographicalReader(SRUMarc21Reader):
         if publisher:
             record.publisher_or_printer = Field(publisher)
         language = data.get_first_subfield(*self._language_field_subfield)
+        # TODO: look up if this field is repeatable - if so support multiple
+        # languages
         if language:
-            record.language = Field(language)
+            record.languages = [Field(language)]
         dating = data.get_first_subfield(*self._dating_field_subfield)
         if dating:
             record.dating = Field(dating)
