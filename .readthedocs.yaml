@@ -5,8 +5,11 @@
 
 version: 2
 
-# Set the OS, Python version and other tools you might need
+formats:
+  - epub
+  - pdf
 
+# Set the OS, Python version and other tools you might need
 build:
   os: ubuntu-22.04
   tools:
@@ -14,9 +17,6 @@ build:
 
 sphinx:
   configuration: docs/conf.py
-  formats:
-    - pdf
-    - epub
 
 
 # Optional but recommended, declare the Python requirements required
