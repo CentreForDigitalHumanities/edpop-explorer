@@ -1,4 +1,4 @@
-[![PyPI Version](https://img.shields.io/pypi/v/edpop-explorer)](https://pypi.org/project/edpop-explorer/)
+[![PyPI Version](https://img.shields.io/pypi/v/edpop-explorer)](https://pypi.org/project/edpop-explorer/) [![Tests](https://github.com/UUDigitalHumanitieslab/edpop-explorer/actions/workflows/test.yml/badge.svg)](https://github.com/UUDigitalHumanitieslab/edpop-explorer/actions/workflows/test.yml)
 
 # edpop-explorer
 Common Python interface to multiple library catalogues and heritage
