@@ -6,7 +6,11 @@ __all__ = [
     'SRUReader',
     'Marc21Data', 'Marc21Field', 'Marc21BibliographicalRecord',
     'Marc21DataMixin', 'SRUMarc21Reader', 'SRUMarc21BibliographicalReader',
+    'BIBLIOGRAPHICAL', 'BIOGRAPHICAL'
 ]
+
+BIBLIOGRAPHICAL = "bibliographical"
+BIOGRAPHICAL = "biographical"
 
 from .rdf import EDPOPREC, RELATORS
 from .fields import Field, FieldError
@@ -21,3 +25,4 @@ from .srumarc21reader import (
     Marc21Data, Marc21Field, Marc21BibliographicalRecord, Marc21DataMixin,
     SRUMarc21Reader, SRUMarc21BibliographicalReader
 )
+

@@ -10,7 +10,12 @@ from pygments.formatters import Terminal256Formatter
 from edpop_explorer import Reader, Record, ReaderError
 from edpop_explorer.readers import (
     HPBReader,
+    VD16Reader,
+    VD17Reader,
+    VD18Reader,
+    VDLiedReader,
     KBReader,
+    USTCReader,
 )
 #from edpop_explorer.readers.vd import VD16Reader, VD17Reader, VD18Reader, \
 #    VDLiedReader
@@ -135,7 +140,6 @@ class EDPOPXShell(cmd2.Cmd):
         'CERL\'s Heritage of the Printed Book Database'
         self._query(HPBReader, args)
 
-    '''
     def do_vd16(self, args) -> None:
         """Verzeichnis der im deutschen Sprachbereich erschienenen Drucke
         des 16. Jahrhunderts"""
@@ -154,7 +158,7 @@ class EDPOPXShell(cmd2.Cmd):
     def do_vdlied(self, args) -> None:
         """Verzeichnis der deutschsprachigen Liedflugschriften"""
         self._query(VDLiedReader, args)
-
+    '''
     def do_bnf(self, args) -> None:
         """Bibliothèque nationale de France"""
         self._query(BnFReader, args)
@@ -182,11 +186,11 @@ class EDPOPXShell(cmd2.Cmd):
     def do_fbtee(self, args) -> None:
         'French Book Trade in Enlightenment Europe'
         self._query(FBTEEReader, args)
-
+    '''
     def do_ustc(self, args) -> None:
         'Universal Short Title Catalogue'
         self._query(USTCReader, args)
-    '''
+    
     def do_kb(self, args) -> None:
         'Koninklijke Bibliotheek'
         self._query(KBReader, args)

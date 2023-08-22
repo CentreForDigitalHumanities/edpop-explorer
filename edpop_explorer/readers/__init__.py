@@ -1,6 +1,11 @@
 __all__ = [
     "HPBReader",
     "KBReader",
+    "USTCReader",
+    "VD16Reader",
+    "VD17Reader",
+    "VD18Reader",
+    "VDLiedReader",
     "ALL_READERS",
 ]
 
@@ -13,8 +18,8 @@ from .hpb import HPBReader
 from .kb import KBReader
 # from .sbtireader import SBTIReader
 # from .stcn import STCNReader
-# from .ustc import USTCReader
-# from .vd import VD16Reader, VD17Reader, VD18Reader
+from .ustc import USTCReader
+from .vd import VD16Reader, VD17Reader, VD18Reader, VDLiedReader
 
 import sys
 from typing import List, Type

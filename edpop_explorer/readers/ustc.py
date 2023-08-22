@@ -2,28 +2,12 @@ from typing import Dict, List
 from dataclasses import dataclass, field as dataclass_field
 from pathlib import Path
 import sqlite3
-import yaml
 from appdirs import AppDirs
 
-from edpop_explorer.apireader import APIReader, APIRecord, APIException
+from edpop_explorer import Reader, BibliographicalRecord, ReaderError
 
 
-@dataclass
-class USTCRecord(APIRecord):
-    data: Dict[str, str] = dataclass_field(default_factory=dict)
-
-    def get_title(self) -> str:
-        return self.data.get('std_title', '(no title provided)')
-
-    def show_record(self) -> str:
-        return_string = yaml.safe_dump(self.data, allow_unicode=True)
-        return return_string
-
-    def __repr__(self):
-        return self.get_title()
-
-
-class USTCReader(APIReader):
+class USTCReader(Reader):
     DATABASE_FILENAME = 'ustc.sqlite3'
     USTC_LINK = 'https://www.ustc.ac.uk/editions/{}'
 
@@ -39,15 +23,15 @@ class USTCReader(APIReader):
             print(f'USTC database not found. Please obtain the file '
                   f'{self.DATABASE_FILENAME} from the project team and add it '
                   f'to the following directory: {db_dir}')
-            raise APIException('Database file not found')
+            raise ReaderError('Database file not found')
         self.con = sqlite3.connect(str(self.database_file))
 
-    def prepare_query(self, query: str):
-        self.prepared_query = '%' + query + '%'
+    def transform_query(self, query: str) -> str:
+        return '%' + query + '%'
 
-    def fetch(self) -> List[USTCRecord]:
+    def fetch(self) -> None:
         if not self.prepared_query:
-            raise APIException('First call prepare_query method')
+            raise ReaderError('First call prepare_query method')
 
         cur = self.con.cursor()
         columns = [x[1] for x in cur.execute('PRAGMA table_info(editions)')]
@@ -70,9 +54,11 @@ class USTCReader(APIReader):
         )
         self.records = []
         for row in res:
-            record = USTCRecord()
+            record = BibliographicalRecord(from_reader=self.__class__)
+            record.data = {}
             for i in range(len(columns)):
                 record.data[columns[i]] = row[i]
+            record.identifier = record.data['sn']
             record.link = self.USTC_LINK.format(record.data['sn'])
             self.records.append(record)
         self.number_of_results = len(self.records)
