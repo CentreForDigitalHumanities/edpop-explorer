@@ -203,5 +203,7 @@ class SRUMarc21BibliographicalReader(SRUMarc21Reader):
         dating = data.get_first_subfield(*self._dating_field_subfield)
         if dating:
             record.dating = Field(dating)
+        # TODO: add remaining fields: alternative title, contributors, extent,
+        # phyisical description and size
 
         return record
