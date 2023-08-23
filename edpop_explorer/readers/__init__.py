@@ -6,6 +6,8 @@ __all__ = [
     "VD17Reader",
     "VD18Reader",
     "VDLiedReader",
+    "STCNReader",
+    "USTCReader",
     "ALL_READERS",
 ]
 
@@ -17,7 +19,7 @@ __all__ = [
 from .hpb import HPBReader
 from .kb import KBReader
 # from .sbtireader import SBTIReader
-# from .stcn import STCNReader
+from .stcn import STCNReader
 from .ustc import USTCReader
 from .vd import VD16Reader, VD17Reader, VD18Reader, VDLiedReader
 

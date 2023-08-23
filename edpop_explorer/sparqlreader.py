@@ -1,9 +1,14 @@
-from typing import List
+from typing import List, Optional, Type, Union
 from dataclasses import dataclass, field as dataclass_field
-from SPARQLWrapper import SPARQLWrapper, JSON, SPARQLExceptions
+from rdflib import Graph
+import json
+from SPARQLWrapper import SPARQLWrapper, SPARQLExceptions, JSON as JSONFormat
+from abc import abstractmethod
 
-from edpop_explorer.apireader import APIReader, APIRecord, APIException
-
+from edpop_explorer import (
+    Reader, Record, BibliographicalRecord, ReaderError, RecordError,
+    LazyRecordMixin
+)
 
 PREFIXES = {
     'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
@@ -50,63 +55,57 @@ def replace_fqu_with_prefixed_uris(inputstring: str) -> str:
     return inputstring
 
 
-@dataclass
-class SparqlRecord(APIRecord):
-    name: str = None
-    identifier: str = None
-    sparql_endpoint: str = None
+class RDFRecordMixin(LazyRecordMixin):
+    '''Mixin that adds lazy RDF fetching functionality to a Record.'''
+    identifier: Optional[str] = None
     fetched: bool = False
-    fields: dict = dataclass_field(default_factory=dict)
+    data: Optional[dict] = None
+    original_graph: Optional[Graph] = None
+    from_reader: Type["SparqlReader"]
 
     def fetch(self) -> None:
+        # TODO: at the moment this mixin only supports fetching RDF data
+        # if the IRI in the identifier attribute is available via HTTP
+        # as data that rdflib can process. We might need to support
+        # IRIs that can only be accessed via an endpoint as well.
+        if not self.identifier:
+            raise RecordError(
+                'identifier (subject IRI) has not been set'
+            )
         if self.fetched:
             return
-        wrapper = SPARQLWrapper(self.sparql_endpoint)
-        wrapper.setReturnFormat(JSON)
-        wrapper.setQuery(prepare_lookup_query(identifier=self.identifier))
         try:
-            response = wrapper.queryAndConvert()
-        except SPARQLExceptions.QueryBadFormed as err:
-            raise APIException(
-                'Malformed SPARQL query: {}'.format(err)
+            self.original_graph = Graph()
+            self.original_graph.parse(self.identifier)
+        except Exception as err:
+            # URLLib does not catch errors of underlying libraries, hence
+            # the use of except Exception
+            raise RecordError(
+                f"Error while loading record's contents from IRI "
+                f"{self.identifier}: {err}"
             )
-        results = response['results']['bindings']
-        for result in results:
-            self.fields[result['p']['value']] = result['o']['value']
+        # Convert to JSON for raw data attribute
+        self.data = json.loads(
+            self.original_graph.serialize(format="json-ld")
+        )
+        # Call Reader's data conversion method to fill the record's Fields
+        assert isinstance(self, Record)
+        self.from_reader._convert_record(self.original_graph, self)
+
         self.fetched = True
 
-    def get_title(self) -> str:
-        return self.name
 
-    def show_record(self) -> str:
-        self.fetch()
-        field_strings = []
-        if self.link:
-            field_strings.append('URL: ' + self.link)
-        for field in self.fields:
-            fieldstring = replace_fqu_with_prefixed_uris(field)
-            field_strings.append(
-                '{}: {}'.format(fieldstring, self.fields[field])
-            )
-        return '\n'.join(field_strings)
-
-    def __repr__(self):
-        return self.get_title()
+class BibliographicalRDFRecord(RDFRecordMixin, BibliographicalRecord):
+    pass
 
 
-class SparqlReader(APIReader):
-    url: str = None
-    filter: str = None
-    wrapper: SPARQLWrapper
-    records: List[SparqlRecord]
-    name_predicate: str = None
+class SparqlReader(Reader):
+    endpoint: str
+    name_predicate: str
+    filter: Optional[str] = None
 
-    def __init__(self):
-        self.wrapper = SPARQLWrapper(self.url)
-        self.wrapper.setReturnFormat(JSON)
-
-    def prepare_query(self, query: str):
-        self.prepared_query = prepare_listing_query(
+    def transform_query(self, query: str):
+        return prepare_listing_query(
             name_predicate=self.name_predicate,
             filter=self.filter,
             query=query
@@ -114,26 +113,44 @@ class SparqlReader(APIReader):
 
     def fetch(self):
         if not self.prepared_query:
-            raise APIException('First call prepare_query method')
-        self.wrapper.setQuery(self.prepared_query)
+            raise ReaderError('First call prepare_query method')
+        wrapper = SPARQLWrapper(self.endpoint)
+        wrapper.setReturnFormat(JSONFormat)
+        wrapper.setQuery(self.prepared_query)
         try:
-            response = self.wrapper.queryAndConvert()
+            response = wrapper.queryAndConvert()
         except SPARQLExceptions.QueryBadFormed as err:
-            raise APIException(
+            raise ReaderError(
                 'Malformed SPARQL query: {}'.format(err)
             )
+        assert isinstance(response, dict)
         results = response['results']['bindings']
         self.records = []
         self.number_of_results = len(results)
         for result in results:
-            record = SparqlRecord(
-                identifier=result['s']['value'],
-                sparql_endpoint=self.url,
-                link=result['s']['value'],
-                name=result['name']['value'],
-            )
-            self.records.append(record)
+            iri = result['s']['value']
+            name = result['name']['value']
+            self.records.append(self._create_lazy_record(iri, name))
         self.number_fetched = self.number_of_results
 
     def fetch_next(self):
+        pass
+
+    @classmethod
+    @abstractmethod
+    def _convert_record(cls, graph: Graph, record: Record) -> None:
+        '''Convert data from an RDF graph to Fields in a Record. The 
+        Record is changed in-place.'''
+        pass
+
+    @classmethod
+    @abstractmethod
+    def _create_lazy_record(cls, iri: str, name: str) -> Record:
+        """Create a Record/LazyRecordMixin record object.
+
+        This is the lazy record that is created after running the SPARQL
+        query. The record initially only gets the IRI attached as well
+        as a single property (``name``, used for quick identification), while
+        the rest will be loaded when Record.fetch() is called.
+        """
         pass

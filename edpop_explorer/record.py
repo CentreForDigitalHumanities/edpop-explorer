@@ -26,15 +26,18 @@ class RecordError(Exception):
 
 class Record:
     #: The raw original data of a record
-    data: Union[None, dict, RawData]
+    data: Union[None, dict, RawData] = None
     _fields: List[Tuple[str, URIRef, Type[Field]]]
     _rdf_class: Node = EDPOPREC.Record
     link: Optional[str] = None
     '''A user-friendly link where the user can find the record'''
     identifier: Optional[str] = None
     '''Unique identifier used by the source catalog'''
-    from_reader: Optional[Type["Reader"]]
+    from_reader: Type["Reader"]
+    '''The Reader class that created the record'''
     subject_node: Node
+    '''The subject node, which will be used to convert the record to 
+    RDF. This is a blank node by default.'''
     _graph: Optional[Graph] = None
 
     def __init__(self, from_reader: Type["Reader"]):
@@ -42,19 +45,10 @@ class Record:
         self.from_reader = from_reader
         self.subject_node = BNode()
 
-    def get_title(self) -> Optional[str]:
-        '''Convenience method to retrieve the title of a record in a standard
-        way'''
-        # Stays here for now for compatibility
-        return self.__str__()
-
-    def show_record(self) -> str:
-        '''Give a multiline string representation of the record's contents'''
-        raise NotImplementedError('Should be implemented by subclass')
-
     def to_graph(self) -> Graph:
         '''Create an RDF graph for this record and put it in the rdf
         attribute.'''
+        self.fetch()
         g = Graph()
         
         # Set basic properties
@@ -130,6 +124,7 @@ class Record:
     def get_data_dict(self) -> Optional[dict]:
         """Convenience function to get the record's raw data as a ``dict``,
         or ``None`` if it is not available."""
+        self.fetch()
         if isinstance(self.data, RawData):
             return self.data.to_dict()
         else:
@@ -141,6 +136,13 @@ class Record:
             return f'{self.__class__} object ({self.identifier})'
         else:
             return f'{self.__class__} object'
+
+    def fetch(self) -> None:
+        '''Fetch the full contents of the record if this record works with
+        lazy loading (i.e., if the record's class derives from
+        ``RDFRecordMixin``). If the record is not lazy, this method does
+        nothing.'''
+        pass
 
 
 class BibliographicalRecord(Record):
@@ -177,3 +179,16 @@ class BibliographicalRecord(Record):
             return str(self.title)
         else:
             return super().__str__()
+
+
+class LazyRecordMixin(ABC):
+    '''Abstract mixin that adds an interface for lazy loading to a Record.
+
+    To use, implement the ``fetch()`` method and make sure that it fills
+    the record's ``data`` attributes and its Fields and that the 
+    ``fetched`` attribute is set to ``True``.'''
+    fetched: bool = False
+    
+    @abstractmethod
+    def fetch(self) -> None:
+        pass

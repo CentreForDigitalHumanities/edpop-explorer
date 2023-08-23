@@ -15,18 +15,9 @@ from edpop_explorer.readers import (
     VD18Reader,
     VDLiedReader,
     KBReader,
+    STCNReader,
     USTCReader,
 )
-#from edpop_explorer.readers.vd import VD16Reader, VD17Reader, VD18Reader, \
-#    VDLiedReader
-#from edpop_explorer.readers.bnf import BnFReader
-#from edpop_explorer.readers.bibliopolis import BibliopolisReader
-#from edpop_explorer.readers.cerl_thesaurus import CERLThesaurusReader
-#from edpop_explorer.readers.gallica import GallicaReader
-#from edpop_explorer.readers.stcn import STCNReader
-#from edpop_explorer.readers.sbtireader import SBTIReader
-#from edpop_explorer.readers.fbtee import FBTEEReader
-#from edpop_explorer.readers.ustc import USTCReader
 
 
 class EDPOPXShell(cmd2.Cmd):
@@ -83,6 +74,7 @@ class EDPOPXShell(cmd2.Cmd):
         record = self.get_record_from_argument(args)
         if record is None:
             return
+        record.fetch()  # Necessary in case this is a lazy record
         self.poutput(cmd2.ansi.style_success(
             record, bold=True
         ))
@@ -174,11 +166,11 @@ class EDPOPXShell(cmd2.Cmd):
     def do_ct(self, args) -> None:
         'CERL Thesaurus'
         self._query(CERLThesaurusReader, args)
-
+    '''
     def do_stcn(self, args) -> None:
         'Short Title Catalogue Netherlands'
         self._query(STCNReader, args)
-
+    '''
     def do_sbti(self, args) -> None:
         'Scottish Book Trade Index'
         self._query(SBTIReader, args)
@@ -209,7 +201,7 @@ class EDPOPXShell(cmd2.Cmd):
         digits = len(str(total))
         for i in range(start, start + count):
             print('{:{digits}} - {}'.format(
-                i + 1, records[i].get_title(), digits=digits
+                i + 1, str(records[i]), digits=digits
             ))
         return count
 
