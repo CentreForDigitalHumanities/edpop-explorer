@@ -9,6 +9,7 @@ from pygments.formatters import Terminal256Formatter
 
 from edpop_explorer import Reader, Record, ReaderError
 from edpop_explorer.readers import (
+    GallicaReader,
     HPBReader,
     VD16Reader,
     VD17Reader,
@@ -155,11 +156,11 @@ class EDPOPXShell(cmd2.Cmd):
     def do_bnf(self, args) -> None:
         """Bibliothèque nationale de France"""
         self._query(BnFReader, args)
-    '''
+    
     def do_gallica(self, args) -> None:
         'Gallica'
         self._query(GallicaReader, args)
-
+    '''
     def do_bibliopolis(self, args) -> None:
         'Bibliopolis Personendatabase'
         self._query(BibliopolisReader, args)

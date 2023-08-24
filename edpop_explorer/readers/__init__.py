@@ -1,5 +1,6 @@
 __all__ = [
     "BnFReader",
+    "GallicaReader",
     "HPBReader",
     "KBReader",
     "USTCReader",
@@ -16,7 +17,7 @@ __all__ = [
 from .bnf import BnFReader
 # from .cerl_thesaurus import CERLThesaurusReader
 # from .fbtee import FBTEEReader
-# from .gallica import GallicaReader
+from .gallica import GallicaReader
 from .hpb import HPBReader
 from .kb import KBReader
 # from .sbtireader import SBTIReader

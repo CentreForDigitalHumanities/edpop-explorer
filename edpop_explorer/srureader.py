@@ -26,8 +26,9 @@ class SRUReader(Reader):
     def transform_query(self, query: str) -> str:
         pass
 
+    @classmethod
     @abstractmethod
-    def _convert_record(self, sruthirecord: dict) -> Record:
+    def _convert_record(cls, sruthirecord: dict) -> Record:
         pass
 
     def _perform_query(self, start_record: int) -> List[Record]:
