@@ -4,7 +4,9 @@ import csv
 from pathlib import Path
 from abc import abstractmethod
 
-from edpop_explorer import BibliographicalRecord, RawData, SRUReader, Field
+from edpop_explorer import (
+    BibliographicalRecord, RawData, SRUReader, Field, BIBLIOGRAPHICAL
+)
 
 
 READABLE_FIELDS_FILE = Path(__file__).parent / 'M21_fields.csv'
@@ -112,6 +114,15 @@ class Marc21DataMixin():
         return '\n'.join(field_strings)
 
 class SRUMarc21Reader(SRUReader):
+    '''Subclass of ``SRUReader`` that adds Marc21 functionality.
+
+    This class is still abstract and to create concrete readers
+    the ``_get_link()``, ``_get_identifier()`` 
+    and ``_convert_record`` methods should be implemented.
+
+    .. automethod:: _convert_record
+    .. automethod:: _get_link
+    .. automethod:: _get_identifier'''
     marcxchange_prefix: str = ''
 
     @classmethod
@@ -167,19 +178,31 @@ class SRUMarc21Reader(SRUReader):
     @classmethod
     @abstractmethod
     def _get_link(cls, data: Marc21Data) -> Optional[str]:
+        '''Get a public URL according to the Marc21 data or ``None`` if it
+        is not available.'''
         pass
 
     @classmethod
     @abstractmethod
     def _get_identifier(cls, data: Marc21Data) -> Optional[str]:
+        '''Get the unique identifier from the Marc21 data or ``None`` if it
+        is not available.'''
         pass
 
 
 class Marc21BibliographicalRecord(Marc21DataMixin, BibliographicalRecord):
+    '''A combination of ``BibliographicalRecord`` and ``Marc21DataMixin``.'''
     pass
 
 
 class SRUMarc21BibliographicalReader(SRUMarc21Reader):
+    '''Subclass of ``SRUMarc21Reader`` that adds functionality to create
+    instances of ``BibliographicRecord``.
+
+    This subclass assumes that the Marc21 data is according to the standard
+    format of Marc21 for bibliographical data. See:
+    https://www.loc.gov/marc/bibliographic/
+    '''
     _title_field_subfield = ('245', 'a')
     _alternative_title_field_subfield = ('246', 'a')
     _publisher_field_subfield = ('264', 'b')
@@ -191,6 +214,7 @@ class SRUMarc21BibliographicalReader(SRUMarc21Reader):
     _size_field_subfield = ('300', 'c')
 
     records: List[Marc21BibliographicalRecord]
+    READERTYPE = BIBLIOGRAPHICAL
     
     @classmethod
     def _convert_record(cls, sruthirecord: dict) -> Marc21BibliographicalRecord:

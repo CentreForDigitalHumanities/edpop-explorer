@@ -13,10 +13,12 @@ class MockReader(SRUMarc21BibliographicalReader):
     def transform_query(self, query: str) -> str:
         return query
 
-    def _get_link(self, data: Marc21Data) -> Optional[str]:
+    @classmethod
+    def _get_link(cls, data: Marc21Data) -> Optional[str]:
         return "https://www.example.com"
 
-    def _get_identifier(self, data: Marc21Data) -> Optional[str]:
+    @classmethod
+    def _get_identifier(cls, data: Marc21Data) -> Optional[str]:
         return 'id'
 
 

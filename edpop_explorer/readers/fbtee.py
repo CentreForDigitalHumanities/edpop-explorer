@@ -72,8 +72,9 @@ class FBTEEReader(Reader):
     def _add_fields(cls, record: BibliographicalRecord) -> None:
         assert isinstance(record.data, dict)
         record.title = Field(record.data['full_book_title'])
-        languages = record.data['languages'].split(sep=', ')
-        record.languages = [Field(x) for x in languages]
+        if record.data['languages']:
+            languages = record.data['languages'].split(sep=', ')
+            record.languages = [Field(x) for x in languages]
         pages = record.data['pages']
         if pages:
             record.extent = Field(pages)

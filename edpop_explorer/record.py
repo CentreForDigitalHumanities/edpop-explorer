@@ -25,16 +25,41 @@ class RecordError(Exception):
 
 
 class Record:
-    #: The raw original data of a record
+    """Python representation of edpoprec:Record.
+
+    This base class provides some basic attributes, an infrastructure
+    to define fields and a method to convert the record to RDF.
+    While this is a non-abstract base class, no fields are
+    defined here -- these should be added in subclasses. ``Record``
+    and its subclasses should be created by calling the constructor
+    with the ``Reader`` class as the ``from_reader`` argument
+    and by setting the ``data``, ``link``, ``identifier`` and
+    ``subject_node`` attributes (all are optional but recommended),
+    as well as the fields that are defined by the subclass.
+    fields are set using the attribute with the same name:
+    set them to an instance of ``Field`` or to ``None``. The
+    basic attributes and the fields are ``None`` by default.
+
+    Subclasses should override the ``_rdf_class`` attribute to
+    the corresponding RDF class. They should define additional 
+    fields by adding additional public attributes defaulting
+    to ``None`` and by registring them in the ``_fields`` attribute.
+    For registring, a constructor ``__init__`` should be defined
+    that first calls the parent's constructor and then adds the
+    fields by adding tuples to ``_fields`` in the form
+    ``('<attribute-name>', EDPOPREC.<rdf-property-name>,
+    <Field class name>)``.
+    """
+    #: The raw original data of a record.
     data: Union[None, dict, RawData] = None
     _fields: List[Tuple[str, URIRef, Type[Field]]]
     _rdf_class: Node = EDPOPREC.Record
     link: Optional[str] = None
-    '''A user-friendly link where the user can find the record'''
+    '''A user-friendly link where the user can find the record.'''
     identifier: Optional[str] = None
-    '''Unique identifier used by the source catalog'''
+    '''Unique identifier used by the source catalog.'''
     from_reader: Type["Reader"]
-    '''The Reader class that created the record'''
+    '''The Reader class that created the record.'''
     subject_node: Node
     '''The subject node, which will be used to convert the record to 
     RDF. This is a blank node by default.'''
@@ -46,8 +71,7 @@ class Record:
         self.subject_node = BNode()
 
     def to_graph(self) -> Graph:
-        '''Create an RDF graph for this record and put it in the rdf
-        attribute.'''
+        '''Return an RDF graph for this record.'''
         self.fetch()
         g = Graph()
         
@@ -146,6 +170,11 @@ class Record:
 
 
 class BibliographicalRecord(Record):
+    '''Python representation of edpoprec:BibliographicalRecord.
+
+    This subclass adds fields that are specific for bibliographical
+    records.
+    '''
     _rdf_class = EDPOPREC.BibliographicalRecord
     title: Optional[Field] = None
     alternative_title: Optional[Field] = None

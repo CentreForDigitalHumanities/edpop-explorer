@@ -9,6 +9,14 @@ RECORDS_PER_PAGE = 10
 
 
 class SRUReader(Reader):
+    '''Subclass of ``Reader`` that adds basic SRU functionality
+    using the ``sruthi`` library.
+
+    This class is still abstract and subclasses should implement
+    the ``transform_query()`` and ``_convert_record()`` methods,
+    and set the attributes ``sru_url`` and ``sru_version``.
+
+    .. automethod:: _convert_record'''
     sru_url: str
     sru_version: str
     query: Optional[str] = None
@@ -28,6 +36,8 @@ class SRUReader(Reader):
     @classmethod
     @abstractmethod
     def _convert_record(cls, sruthirecord: dict) -> Record:
+        '''Convert the output of ``sruthi`` into an instance of
+        (a subclass of) ``Record``.'''
         pass
 
     def _perform_query(self, start_record: int) -> List[Record]:
