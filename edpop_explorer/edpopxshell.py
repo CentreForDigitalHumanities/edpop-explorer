@@ -17,6 +17,7 @@ from edpop_explorer.readers import (
     KBReader,
     STCNReader,
     USTCReader,
+    BnFReader,
 )
 
 
@@ -150,11 +151,11 @@ class EDPOPXShell(cmd2.Cmd):
     def do_vdlied(self, args) -> None:
         """Verzeichnis der deutschsprachigen Liedflugschriften"""
         self._query(VDLiedReader, args)
-    '''
+    
     def do_bnf(self, args) -> None:
         """Bibliothèque nationale de France"""
         self._query(BnFReader, args)
-
+    '''
     def do_gallica(self, args) -> None:
         'Gallica'
         self._query(GallicaReader, args)

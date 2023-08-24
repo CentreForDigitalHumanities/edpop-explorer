@@ -1,4 +1,5 @@
 __all__ = [
+    "BnFReader",
     "HPBReader",
     "KBReader",
     "USTCReader",
@@ -12,7 +13,7 @@ __all__ = [
 ]
 
 # from .bibliopolis import BibliopolisReader
-# from .bnf import BnFReader
+from .bnf import BnFReader
 # from .cerl_thesaurus import CERLThesaurusReader
 # from .fbtee import FBTEEReader
 # from .gallica import GallicaReader

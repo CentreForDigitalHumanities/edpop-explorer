@@ -13,6 +13,7 @@ class VD16Reader(SRUMarc21BibliographicalReader):
         # queried
         return 'VD16 and ({})'.format(query)
 
+    @classmethod
     def _get_identifier(self, data: Marc21Data) -> Optional[str]:
         field024 = data.get_first_field('024')
         if field024:
@@ -20,6 +21,7 @@ class VD16Reader(SRUMarc21BibliographicalReader):
         else:
             return None
 
+    @classmethod
     def _get_link(self, record: Marc21Data) -> Optional[str]:
         identifier = self._get_identifier(record)
         if identifier:
@@ -32,17 +34,20 @@ class VD17Reader(SRUMarc21BibliographicalReader):
     VD17_LINK = \
         'https://kxp.k10plus.de/DB=1.28/CMD?ACT=SRCHA&IKT=8079&TRM=%27{}%27'
 
-    def _get_identifier(self, data: Marc21Data) -> Optional[str]:
+    @classmethod
+    def _get_identifier(cls, data: Marc21Data) -> Optional[str]:
         field024 = data.get_first_field('024')
         if field024:
             return field024.subfields.get('a', None)
         else:
             return None
 
-    def _get_link(self, record: Marc21Data) -> Optional[str]:
-        identifier = self._get_identifier(record)
+    @classmethod
+    def _get_link(cls, record: Marc21Data) -> Optional[str]:
+        identifier = cls._get_identifier(record)
         if identifier:
-            return self.VD17_LINK.format(identifier).replace(' ', '+')
+            return cls.VD17_LINK.format(identifier).replace(' ', '+')
+
     def transform_query(self, query: str) -> str:
         return query
 
@@ -57,7 +62,8 @@ class VD18Reader(SRUMarc21BibliographicalReader):
     def transform_query(self, query: str) -> str:
         return query
 
-    def _get_identifier(self, record: Marc21Data):
+    @classmethod
+    def _get_identifier(cls, record: Marc21Data):
         # The record id is in field 024 for which subfield 2 is vd18. There
         # may be more than one occurance of field 024.
         fields024 = record.get_fields('024')
@@ -68,10 +74,11 @@ class VD18Reader(SRUMarc21BibliographicalReader):
                 return field.subfields['a'][5:]
         return None
 
-    def _get_link(self, record: Marc21Data):
-        identifier = self._get_identifier(record)
+    @classmethod
+    def _get_link(cls, record: Marc21Data):
+        identifier = cls._get_identifier(record)
         if identifier:
-            return self.VD18_LINK.format(identifier)
+            return cls.VD18_LINK.format(identifier)
 
 
 class VDLiedReader(SRUMarc21BibliographicalReader):
@@ -82,10 +89,12 @@ class VDLiedReader(SRUMarc21BibliographicalReader):
     def transform_query(self, query: str) -> str:
         return query
 
-    def _get_identifier(self, record: Marc21Data) -> Optional[str]:
+    @classmethod
+    def _get_identifier(cls, record: Marc21Data) -> Optional[str]:
         return record.controlfields.get("001", None)
 
-    def _get_link(self, record: Marc21Data) -> Optional[str]:
-        identifier = self._get_identifier(record)
+    @classmethod
+    def _get_link(cls, record: Marc21Data) -> Optional[str]:
+        identifier = cls._get_identifier(record)
         if identifier:
-            return self.VDLIED_LINK.format(identifier)
+            return cls.VDLIED_LINK.format(identifier)
