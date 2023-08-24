@@ -72,6 +72,10 @@ class Field:
     _rdf_class: Node = EDPOPREC.Field
     
     def __init__(self, original_text: str) -> None:
+        if not isinstance(original_text, str):
+            raise FieldError(
+                f'original_text should be str, not {type(original_text)}'
+            )
         self.subject_node = BNode()
         self.original_text = original_text
         self._subfields = [

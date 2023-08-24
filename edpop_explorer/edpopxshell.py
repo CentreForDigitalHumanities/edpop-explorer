@@ -9,6 +9,7 @@ from pygments.formatters import Terminal256Formatter
 
 from edpop_explorer import Reader, Record, ReaderError
 from edpop_explorer.readers import (
+    FBTEEReader,
     GallicaReader,
     HPBReader,
     VD16Reader,
@@ -176,11 +177,11 @@ class EDPOPXShell(cmd2.Cmd):
     def do_sbti(self, args) -> None:
         'Scottish Book Trade Index'
         self._query(SBTIReader, args)
-
+    '''
     def do_fbtee(self, args) -> None:
         'French Book Trade in Enlightenment Europe'
         self._query(FBTEEReader, args)
-    '''
+    
     def do_ustc(self, args) -> None:
         'Universal Short Title Catalogue'
         self._query(USTCReader, args)
