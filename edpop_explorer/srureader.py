@@ -13,7 +13,6 @@ class SRUReader(Reader):
     sru_version: str
     query: Optional[str] = None
     records: List[Record]  # Move to superclass?
-    fetching_exhausted: bool = False
     session: requests.Session
 
     def __init__(self):
@@ -64,16 +63,12 @@ class SRUReader(Reader):
         results = self._perform_query(1)
         self.records.extend(results)
         self.number_fetched = len(self.records)
-        if self.number_fetched == self.number_of_results:
-            self.fetching_exhausted = True
 
     def fetch_next(self) -> None:
         # TODO: can be merged with fetch method
-        if self.fetching_exhausted:
+        if self.number_of_results == self.number_fetched:
             return
         start_record = len(self.records) + 1
         results = self._perform_query(start_record)
         self.records.extend(results)
         self.number_fetched = len(self.records)
-        if self.number_fetched == self.number_of_results:
-            self.fetching_exhausted = True
