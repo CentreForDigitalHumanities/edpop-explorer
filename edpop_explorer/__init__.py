@@ -10,6 +10,8 @@ __all__ = [
     'BIBLIOGRAPHICAL', 'BIOGRAPHICAL'
 ]
 
+# Define here to avoid circular imports
+# ruff: noqa
 BIBLIOGRAPHICAL = "bibliographical"
 BIOGRAPHICAL = "biographical"
 

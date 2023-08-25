@@ -18,10 +18,13 @@ class SRUReader(Reader):
 
     .. automethod:: _convert_record'''
     sru_url: str
+    '''URL of the SRU API.'''
     sru_version: str
+    '''Version of the SRU protocol. Can be '1.1' or '1.2'.'''
     query: Optional[str] = None
     records: List[Record]  # Move to superclass?
     session: requests.Session
+    '''The ``Session`` object of the ``requests`` library.'''
 
     def __init__(self):
         # Set a session to allow reuse of HTTP sessions and to set additional

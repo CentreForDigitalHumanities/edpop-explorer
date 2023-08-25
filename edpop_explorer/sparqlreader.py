@@ -1,5 +1,4 @@
-from typing import List, Optional, Type, Union
-from dataclasses import dataclass, field as dataclass_field
+from typing import Optional, Type
 from rdflib import Graph
 import json
 from SPARQLWrapper import SPARQLWrapper, SPARQLExceptions, JSON as JSONFormat

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import Optional, List, Type, Tuple, ClassVar, Union
-from rdflib import Graph, RDF, RDFS, URIRef, BNode, Literal
+from typing import Optional, List, ClassVar
+from rdflib import Graph, RDF, RDFS, URIRef
 
 from edpop_explorer import EDPOPREC
 from .record import Record

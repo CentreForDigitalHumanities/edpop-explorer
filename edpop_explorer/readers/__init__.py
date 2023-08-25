@@ -1,3 +1,5 @@
+'''This package contains concrete subclasses of ``Reader``.'''
+
 __all__ = [
     "BnFReader",
     "FBTEEReader",
