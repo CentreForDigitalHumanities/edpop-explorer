@@ -3,7 +3,9 @@ from typing import Type, Tuple, Union, Optional, List, TYPE_CHECKING
 from rdflib.term import Node
 from rdflib import URIRef, Graph, BNode, RDF, RDFS, Literal
 
-from edpop_explorer import EDPOPREC, Field, BIBLIOGRAPHICAL, BIOGRAPHICAL
+from edpop_explorer import (
+    EDPOPREC, Field, BIBLIOGRAPHICAL, BIOGRAPHICAL, bind_common_namespaces
+)
 
 if TYPE_CHECKING:
     from edpop_explorer import Reader
@@ -139,9 +141,7 @@ class Record:
                 g += partial_graph
 
         # Set namespace prefixes
-        g.bind('rdf', RDF)
-        g.bind('rdfs', RDFS)
-        g.bind('edpoprec', EDPOPREC)
+        bind_common_namespaces(g)
 
         return g
 
