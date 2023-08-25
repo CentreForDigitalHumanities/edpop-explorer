@@ -1,6 +1,6 @@
 from typing import Optional
 from rdflib import URIRef
-from edpop_explorer import SRUReader, Reader, BibliographicalRecord
+from edpop_explorer import SRUReader, BibliographicalRecord, BIBLIOGRAPHICAL
 from edpop_explorer import Field
 
 
@@ -11,7 +11,7 @@ class KBReader(SRUReader):
     CATALOG_URIREF = URIRef(
         'https://dhstatic.hum.uu.nl/edpop-explorer/catalogs/kb'
     )
-    READERTYPE = Reader.BIBLIOGRAPHICAL
+    READERTYPE = BIBLIOGRAPHICAL
 
     def __init__(self):
         super().__init__()

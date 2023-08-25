@@ -1,8 +1,10 @@
 from abc import ABC, abstractmethod
-from typing import Optional, List, ClassVar
-from rdflib import Graph, RDF, RDFS, URIRef
+from typing import Optional, List
+from rdflib import Graph, RDF, URIRef
 
-from edpop_explorer import EDPOPREC
+from edpop_explorer import (
+    EDPOPREC, BIBLIOGRAPHICAL, BIOGRAPHICAL, bind_common_namespaces
+)
 from .record import Record
 
 
@@ -42,9 +44,6 @@ class Reader(ABC):
     CATALOG_URIREF: Optional[URIRef] = None
     _graph: Optional[Graph] = None
 
-    BIOGRAPHICAL: ClassVar[str] = 'biographical'
-    BIBLIOGRAPHICAL: ClassVar[str] = 'bibliographical'
-
     @abstractmethod
     def transform_query(self, query: str) -> str:
         '''Return a version of the query that is prepared for use in the
@@ -73,11 +72,12 @@ class Reader(ABC):
         '''Perform a subsequental query.'''
         pass
 
-    def catalog_to_graph(self) -> Graph:
+    @classmethod
+    def catalog_to_graph(cls) -> Graph:
         '''Create an RDF representation of the catalog that this reader
         supports as an instance of EDPOPREC:Catalog.'''
         g = Graph()
-        if not self.CATALOG_URIREF:
+        if not cls.CATALOG_URIREF:
             raise ReaderError(
                 'Cannot create graph because catalog IRI has not been set. '
                 'This should have been done on class level.'
@@ -85,17 +85,15 @@ class Reader(ABC):
 
         # Set reader class
         rdfclass = EDPOPREC.Catalog
-        if self.READERTYPE == self.BIOGRAPHICAL:
+        if cls.READERTYPE == BIOGRAPHICAL:
             rdfclass = EDPOPREC.BiographicalCatalog
-        elif self.READERTYPE == self.BIBLIOGRAPHICAL:
+        elif cls.READERTYPE == BIBLIOGRAPHICAL:
             rdfclass = EDPOPREC.BibliographicalCatalog
-        g.add((self.CATALOG_URIREF, RDF.type, rdfclass))
+        g.add((cls.CATALOG_URIREF, RDF.type, rdfclass))
 
         # Set namespace prefixes
-        g.bind('rdf', RDF)
-        g.bind('rdfs', RDFS)
-        g.bind('edpoprec', EDPOPREC)
-
+        bind_common_namespaces(g)
+        
         return g
 
 

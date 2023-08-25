@@ -2,7 +2,7 @@ from rdflib import URIRef
 from typing import Optional
 
 from edpop_explorer import (
-    Reader, SRUMarc21BibliographicalReader, Marc21Data
+    SRUMarc21BibliographicalReader, Marc21Data, BIBLIOGRAPHICAL
 )
 
 
@@ -13,7 +13,7 @@ class HPBReader(SRUMarc21BibliographicalReader):
     CATALOG_URIREF = URIRef(
         'https://dhstatic.hum.uu.nl/edpop-explorer/catalogs/hpb'
     )
-    READERTYPE = Reader.BIBLIOGRAPHICAL
+    READERTYPE = BIBLIOGRAPHICAL
 
     def transform_query(self, query: str) -> str:
         return query
