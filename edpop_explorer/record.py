@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Type, Tuple, Union, Optional, List, TYPE_CHECKING
 from rdflib.term import Node
-from rdflib import URIRef, Graph, BNode, RDF, RDFS, Literal
+from rdflib import URIRef, Graph, BNode, RDF, Literal
 
 from edpop_explorer import (
     EDPOPREC, Field, BIBLIOGRAPHICAL, BIOGRAPHICAL, bind_common_namespaces

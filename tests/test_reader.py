@@ -1,8 +1,6 @@
-from pytest import raises
-from rdflib import Literal, URIRef, RDF
-from typing import Optional, List
+from rdflib import URIRef, RDF
 
-from edpop_explorer import Record, Reader, Field, RecordError
+from edpop_explorer import Record, Reader
 from edpop_explorer import EDPOPREC
 
 
