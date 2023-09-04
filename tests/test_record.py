@@ -1,4 +1,4 @@
-from pytest import raises
+import pytest
 from rdflib import Literal, URIRef
 from typing import Optional, List
 
@@ -23,43 +23,56 @@ class SimpleRecord(Record):
         ])
 
 
-class TestRecord:
-    def test_to_graph(self):
-        record = Record(SimpleReader)
-        # Test if it works with an empty record
-        g = record.to_graph()
-        assert (
-            record.subject_node, EDPOPREC.fromCatalog, SimpleReader.CATALOG_URIREF
-        ) in g
-        # Add basic attributes
-        record.link = 'http://example.com'
-        record.identifier = '123'
-        g = record.to_graph()
-        assert (
-            record.subject_node, EDPOPREC.publicURL, Literal(record.link)
-        ) in g
-        assert (
-            record.subject_node, EDPOPREC.identifier, Literal(record.identifier)
-        ) in g
-        # Now test a record with a field
-        record = SimpleRecord(SimpleReader)
-        # If testfield is None, it should be absent from the graph
-        g = record.to_graph()
-        assert (record.subject_node, EDPOPREC.testField, None) not in g
-        # Now with a value for testfield
-        record.testfield = Field('test')
-        g = record.to_graph()
-        assert (record.subject_node, EDPOPREC.testField, None) in g
-        # Now try to assign a string to testfield instead of a Field
-        record.testfield = 'test'  # type: ignore
-        with raises(RecordError):
-            g = record.to_graph()
-        # Try a field that accepts multiple values
-        record.testfield = None
-        record.multiplefield = [
-            Field('v1'), Field('v2')
-        ]
-        g = record.to_graph()
-        assert len(list(
-            g.objects(record.subject_node, EDPOPREC.multipleField)
-        )) == 2
+@pytest.fixture
+def basic_record():
+    record = SimpleRecord(SimpleReader)
+    record.link = 'http://example.com'
+    record.identifier = '123'
+    return record
+
+
+def test_to_graph_empty():
+    # Test if it works with an empty record
+    record = Record(SimpleReader)
+    g = record.to_graph()
+    assert (
+        record.subject_node, EDPOPREC.fromCatalog, SimpleReader.CATALOG_URIREF
+    ) in g
+    
+
+def test_to_graph_basic_attributes(basic_record):
+    g = basic_record.to_graph()
+    assert (
+        basic_record.subject_node, EDPOPREC.publicURL, Literal(basic_record.link)
+    ) in g
+    assert (
+        basic_record.subject_node, EDPOPREC.identifier, Literal(basic_record.identifier)
+    ) in g
+
+
+def test_to_graph_empty_field(basic_record):
+    # If testfield is None (the default), it should be absent from the graph
+    g = basic_record.to_graph()
+    assert (basic_record.subject_node, EDPOPREC.testField, None) not in g
+
+
+def test_to_graph_field_normal_value(basic_record):
+    basic_record.testfield = Field('test')
+    g = basic_record.to_graph()
+    assert (basic_record.subject_node, EDPOPREC.testField, None) in g
+    
+
+def test_to_graph_string_in_field(basic_record):
+    basic_record.testfield = 'test'  # type: ignore
+    with pytest.raises(RecordError):
+        g = basic_record.to_graph()
+    
+def test_to_graph_field_multiple_values(basic_record):
+    # Try a field that accepts multiple values
+    basic_record.multiplefield = [
+        Field('v1'), Field('v2')
+    ]
+    g = basic_record.to_graph()
+    assert len(list(
+        g.objects(basic_record.subject_node, EDPOPREC.multipleField)
+    )) == 2

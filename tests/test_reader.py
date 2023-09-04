@@ -19,8 +19,7 @@ class SimpleReader(Reader):
         return query.capitalize()
 
 
-class TestReader:
-    def test_catalog_to_graph(self):
-        reader = SimpleReader()
-        g = reader.catalog_to_graph()
-        assert (reader.CATALOG_URIREF, RDF.type, EDPOPREC.Catalog) in g
+def test_catalog_to_graph():
+    reader = SimpleReader()
+    g = reader.catalog_to_graph()
+    assert (reader.CATALOG_URIREF, RDF.type, EDPOPREC.Catalog) in g
