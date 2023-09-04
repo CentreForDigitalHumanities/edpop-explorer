@@ -15,7 +15,6 @@ dependencies = [
   "SPARQLWrapper",
   'pyreadline3 ; platform_system == "Windows"',
   'colorama ; platform_system == "Windows"',
-  'pandas',
   'cmd2',
   'pyyaml',
   'rdflib>=7.0.0,<8',
