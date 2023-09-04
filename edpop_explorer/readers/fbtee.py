@@ -9,27 +9,6 @@ from edpop_explorer import (
 )
 
 
-'''
-@dataclass
-class FBTEERecord(APIRecord):
-    data: Dict[str, str] = dataclass_field(default_factory=dict)
-    authors: List[Tuple[str, str]] = dataclass_field(default_factory=list)
-
-    def get_title(self) -> str:
-        return self.data.get('full_book_title', '(no title provided)')
-
-    def show_record(self) -> str:
-        return_string = yaml.safe_dump(self.data, allow_unicode=True)
-        if self.authors:
-            authorstrings = [x[0] + ' - ' + x[1] for x in self.authors]
-            return_string += '\nAuthors:\n' + '\n'.join(authorstrings)
-        return return_string
-
-    def __repr__(self):
-        return self.get_title()
-'''
-
-
 class FBTEEReader(Reader):
     DATABASE_URL = 'https://dhstatic.hum.uu.nl/edpop/cl.sqlite3'
     DATABASE_LICENSE = 'https://dhstatic.hum.uu.nl/edpop/LICENSE.txt'
