@@ -65,7 +65,7 @@ def test_to_graph_field_normal_value(basic_record):
 def test_to_graph_string_in_field(basic_record):
     basic_record.testfield = 'test'  # type: ignore
     with pytest.raises(RecordError):
-        g = basic_record.to_graph()
+        basic_record.to_graph()
     
 def test_to_graph_field_multiple_values(basic_record):
     # Try a field that accepts multiple values
