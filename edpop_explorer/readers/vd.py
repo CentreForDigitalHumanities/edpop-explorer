@@ -3,36 +3,8 @@ from typing import Optional
 from edpop_explorer import SRUMarc21BibliographicalReader, Marc21Data
 
 
-class VD16Reader(SRUMarc21BibliographicalReader):
-    sru_url = 'http://bvbr.bib-bvb.de:5661/bvb01sru'
-    sru_version = '1.1'
-    VD16_LINK = 'http://gateway-bayern.de/{}'  # Spaces should be replaced by +
-
-    def transform_query(self, query: str) -> str:
-        # This SRU URL combines multiple databases, so make sure only VD16 is
-        # queried
-        return 'VD16 and ({})'.format(query)
-
-    @classmethod
-    def _get_identifier(self, data: Marc21Data) -> Optional[str]:
-        field024 = data.get_first_field('024')
-        if field024:
-            return field024.subfields.get('a', None)
-        else:
-            return None
-
-    @classmethod
-    def _get_link(self, record: Marc21Data) -> Optional[str]:
-        identifier = self._get_identifier(record)
-        if identifier:
-            return self.VD16_LINK.format(identifier).replace(' ', '+')
-
-
-class VD17Reader(SRUMarc21BibliographicalReader):
-    sru_url = 'http://sru.k10plus.de/vd17'
-    sru_version = '1.1'
-    VD17_LINK = \
-        'https://kxp.k10plus.de/DB=1.28/CMD?ACT=SRCHA&IKT=8079&TRM=%27{}%27'
+class VDCommonMixin():
+    LINK_FORMAT: str
 
     @classmethod
     def _get_identifier(cls, data: Marc21Data) -> Optional[str]:
@@ -46,16 +18,36 @@ class VD17Reader(SRUMarc21BibliographicalReader):
     def _get_link(cls, record: Marc21Data) -> Optional[str]:
         identifier = cls._get_identifier(record)
         if identifier:
-            return cls.VD17_LINK.format(identifier).replace(' ', '+')
+            return cls.LINK_FORMAT.format(identifier).replace(' ', '+')
+
+
+
+class VD16Reader(VDCommonMixin, SRUMarc21BibliographicalReader):
+    sru_url = 'http://bvbr.bib-bvb.de:5661/bvb01sru'
+    sru_version = '1.1'
+    LINK_FORMAT = 'http://gateway-bayern.de/{}'  # Spaces should be replaced by +
+
+    def transform_query(self, query: str) -> str:
+        # This SRU URL combines multiple databases, so make sure only VD16 is
+        # queried
+        return 'VD16 and ({})'.format(query)
+
+
+
+class VD17Reader(VDCommonMixin, SRUMarc21BibliographicalReader):
+    sru_url = 'http://sru.k10plus.de/vd17'
+    sru_version = '1.1'
+    LINK_FORMAT = \
+        'https://kxp.k10plus.de/DB=1.28/CMD?ACT=SRCHA&IKT=8079&TRM=%27{}%27'
 
     def transform_query(self, query: str) -> str:
         return query
 
 
-class VD18Reader(SRUMarc21BibliographicalReader):
+class VD18Reader(VDCommonMixin, SRUMarc21BibliographicalReader):
     sru_url = 'http://sru.k10plus.de/vd18'
     sru_version = '1.1'
-    VD18_LINK = 'https://kxp.k10plus.de/DB=1.65/SET=1/TTL=1/CMD?ACT=SRCHA&' \
+    LINK_FORMAT = 'https://kxp.k10plus.de/DB=1.65/SET=1/TTL=1/CMD?ACT=SRCHA&' \
         'IKT=1016&SRT=YOP&TRM={}&ADI_MAT=B&MATCFILTER=Y&MATCSET=Y&ADI_MAT=T&' \
         'REC=*'
 
@@ -74,17 +66,11 @@ class VD18Reader(SRUMarc21BibliographicalReader):
                 return field.subfields['a'][5:]
         return None
 
-    @classmethod
-    def _get_link(cls, record: Marc21Data):
-        identifier = cls._get_identifier(record)
-        if identifier:
-            return cls.VD18_LINK.format(identifier)
 
-
-class VDLiedReader(SRUMarc21BibliographicalReader):
+class VDLiedReader(VDCommonMixin, SRUMarc21BibliographicalReader):
     sru_url = 'http://sru.k10plus.de/vdlied'
     sru_version = '1.1'
-    VDLIED_LINK = 'https://gso.gbv.de/DB=1.60/PPNSET?PPN={}'
+    LINK_FORMAT = 'https://gso.gbv.de/DB=1.60/PPNSET?PPN={}'
 
     def transform_query(self, query: str) -> str:
         return query
@@ -92,9 +78,3 @@ class VDLiedReader(SRUMarc21BibliographicalReader):
     @classmethod
     def _get_identifier(cls, record: Marc21Data) -> Optional[str]:
         return record.controlfields.get("001", None)
-
-    @classmethod
-    def _get_link(cls, record: Marc21Data) -> Optional[str]:
-        identifier = cls._get_identifier(record)
-        if identifier:
-            return cls.VDLIED_LINK.format(identifier)
