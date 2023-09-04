@@ -80,10 +80,14 @@ results. To load more results, use the ``next`` command: ::
 
 The results are numbered. Use the ``show`` command to see the contents of a
 particular record (use ``showrdf`` to see RDF and ``showraw`` to see the original
-record data converted to YAML): ::
+record data converted to YAML): [#]_ ::
 
     $ show 8
 
 To exit, type Ctrl+D or use the ``quit`` command: ::
 
     $ quit
+
+.. [#] Internally, this data is stored as a Python ``dict`` or as a Python 
+   object that can be serialized as a Python ``dict``. The conversion to
+   YAML is done to produce output in a form that is easily readable.
