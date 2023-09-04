@@ -1,38 +1,21 @@
-from typing import Dict, List, Tuple
-from dataclasses import dataclass, field as dataclass_field
 from pathlib import Path
 import sqlite3
-import yaml
 import requests
 from appdirs import AppDirs
+from typing import List
 
-from edpop_explorer.apireader import APIReader, APIRecord, APIException
-
-
-@dataclass
-class FBTEERecord(APIRecord):
-    data: Dict[str, str] = dataclass_field(default_factory=dict)
-    authors: List[Tuple[str, str]] = dataclass_field(default_factory=list)
-
-    def get_title(self) -> str:
-        return self.data.get('full_book_title', '(no title provided)')
-
-    def show_record(self) -> str:
-        return_string = yaml.safe_dump(self.data, allow_unicode=True)
-        if self.authors:
-            authorstrings = [x[0] + ' - ' + x[1] for x in self.authors]
-            return_string += '\nAuthors:\n' + '\n'.join(authorstrings)
-        return return_string
-
-    def __repr__(self):
-        return self.get_title()
+from edpop_explorer import (
+    Reader, BibliographicalRecord, ReaderError, Field, BIBLIOGRAPHICAL
+)
 
 
-class FBTEEReader(APIReader):
+class FBTEEReader(Reader):
     DATABASE_URL = 'https://dhstatic.hum.uu.nl/edpop/cl.sqlite3'
     DATABASE_LICENSE = 'https://dhstatic.hum.uu.nl/edpop/LICENSE.txt'
     FBTEE_LINK = 'http://fbtee.uws.edu.au/stn/interface/browse.php?t=book&' \
         'id={}'
+    records: List[BibliographicalRecord]
+    READERTYPE = BIBLIOGRAPHICAL
 
     def __init__(self):
         self.database_file = Path(
@@ -51,22 +34,47 @@ class FBTEEReader(APIReader):
                 with open(self.database_file, 'wb') as f:
                     f.write(response.content)
             except OSError as err:
-                raise APIException(
+                raise ReaderError(
                     f'Error writing database file to disk: {err}'
                 )
         else:
-            raise APIException(
+            raise ReaderError(
                 f'Error downloading database file from {self.DATABASE_URL}'
             )
         print(f'Successfully saved database to {self.database_file}.')
         print(f'See license: {self.DATABASE_LICENSE}')
 
-    def prepare_query(self, query: str):
-        self.prepared_query = '%' + query + '%'
+    def transform_query(self, query: str) -> str:
+        return '%' + query + '%'
 
-    def fetch(self) -> List[FBTEERecord]:
+    @classmethod
+    def _add_fields(cls, record: BibliographicalRecord) -> None:
+        assert isinstance(record.data, dict)
+        record.title = Field(record.data['full_book_title'])
+        if record.data['languages']:
+            languages = record.data['languages'].split(sep=', ')
+            record.languages = [Field(x) for x in languages]
+        pages = record.data['pages']
+        if pages:
+            record.extent = Field(pages)
+        place = record.data['stated_publication_places']
+        if place:
+            record.place_of_publication = Field(place)
+        year = record.data['stated_publication_years']
+        if year:
+            record.dating = Field(year)
+        publisher = record.data['stated_publishers']
+        if publisher:
+            record.publisher_or_printer = Field(publisher)
+        record.contributors = []
+        for author in record.data['authors']:
+            # author is tuple of author code and author name
+            record.contributors.append(Field(author[1]))
+
+
+    def fetch(self) -> None:
         if not self.prepared_query:
-            raise APIException('First call prepare_query method')
+            raise ReaderError('First call prepare_query method')
 
         cur = self.con.cursor()
         columns = [x[1] for x in cur.execute('PRAGMA table_info(books)')]
@@ -85,18 +93,23 @@ class FBTEEReader(APIReader):
             # so check if this is a new item
             book_code: str = row[columns.index('book_code')]
             if last_book_code != book_code:
-                record = FBTEERecord()
+                record = BibliographicalRecord(self.__class__)
                 record.data = {}
                 for i in range(len(columns)):
                     record.data[columns[i]] = row[i]
+                record.identifier = book_code
                 record.link = self.FBTEE_LINK.format(book_code)
+                record.data['authors'] = []
                 self.records.append(record)
                 last_book_code = book_code
             # Add author_code and author_name to the last record
             assert len(self.records) > 0
             author_code = row[len(columns)]
             author_name = row[len(columns) + 1]
-            self.records[-1].authors.append((author_code, author_name))
+            assert isinstance(self.records[-1].data, dict)
+            self.records[-1].data['authors'].append((author_code, author_name))
+        for record in self.records:
+            self._add_fields(record)
         self.number_of_results = len(self.records)
         self.number_fetched = self.number_of_results
         self.fetching_exhausted = True

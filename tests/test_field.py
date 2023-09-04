@@ -2,7 +2,7 @@ from pytest import fixture, raises
 from rdflib import Literal, RDF
 from rdflib.term import Node
 
-from edpop_explorer.fields import Field, FieldError
+from edpop_explorer import Field, FieldError
 from edpop_explorer import EDPOPREC
 
 
@@ -54,8 +54,7 @@ class TestField:
         basic_field.other = 'text'  # type: ignore
         with raises(FieldError):
             basic_field.to_graph()
-        
-    
+
     def test_normalized_text(self, basic_field: Field):
         # If nothing is set, this should be None
         assert basic_field.normalized_text is None
@@ -64,6 +63,7 @@ class TestField:
         basic_field.set_normalized_text(text)
         assert basic_field.normalized_text == text
         # Now test a class with automatic normalized text creation
+
         class ComplexField(Field):
             def _create_normalized_text(self):
                 return self.original_text.capitalize()

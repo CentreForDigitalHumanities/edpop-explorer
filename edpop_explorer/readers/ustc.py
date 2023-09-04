@@ -1,31 +1,20 @@
-from typing import Dict, List
-from dataclasses import dataclass, field as dataclass_field
 from pathlib import Path
 import sqlite3
-import yaml
 from appdirs import AppDirs
+from rdflib import URIRef
 
-from edpop_explorer.apireader import APIReader, APIRecord, APIException
-
-
-@dataclass
-class USTCRecord(APIRecord):
-    data: Dict[str, str] = dataclass_field(default_factory=dict)
-
-    def get_title(self) -> str:
-        return self.data.get('std_title', '(no title provided)')
-
-    def show_record(self) -> str:
-        return_string = yaml.safe_dump(self.data, allow_unicode=True)
-        return return_string
-
-    def __repr__(self):
-        return self.get_title()
+from edpop_explorer import (
+    Reader, BibliographicalRecord, ReaderError, Field, BIBLIOGRAPHICAL
+)
 
 
-class USTCReader(APIReader):
+class USTCReader(Reader):
     DATABASE_FILENAME = 'ustc.sqlite3'
     USTC_LINK = 'https://www.ustc.ac.uk/editions/{}'
+    READERTYPE = BIBLIOGRAPHICAL
+    CATALOG_URIREF = URIRef(
+        'https://dhstatic.hum.uu.nl/edpop-explorer/catalogs/ustc'
+    )
 
     def __init__(self):
         self.database_file = Path(
@@ -39,15 +28,18 @@ class USTCReader(APIReader):
             print(f'USTC database not found. Please obtain the file '
                   f'{self.DATABASE_FILENAME} from the project team and add it '
                   f'to the following directory: {db_dir}')
-            raise APIException('Database file not found')
+            raise ReaderError('Database file not found')
         self.con = sqlite3.connect(str(self.database_file))
 
-    def prepare_query(self, query: str):
-        self.prepared_query = '%' + query + '%'
+    def transform_query(self, query: str) -> str:
+        return '%' + query + '%'
 
-    def fetch(self) -> List[USTCRecord]:
+    def fetch(self) -> None:
+        # This method fetches all records immediately, because the data is
+        # locally stored.
+
         if not self.prepared_query:
-            raise APIException('First call prepare_query method')
+            raise ReaderError('No query has been set')
 
         cur = self.con.cursor()
         columns = [x[1] for x in cur.execute('PRAGMA table_info(editions)')]
@@ -70,10 +62,10 @@ class USTCReader(APIReader):
         )
         self.records = []
         for row in res:
-            record = USTCRecord()
+            data = {}
             for i in range(len(columns)):
-                record.data[columns[i]] = row[i]
-            record.link = self.USTC_LINK.format(record.data['sn'])
+                data[columns[i]] = row[i]
+            record = self._convert_record(data)
             self.records.append(record)
         self.number_of_results = len(self.records)
         self.number_fetched = self.number_of_results
@@ -81,3 +73,31 @@ class USTCReader(APIReader):
 
     def fetch_next(self):
         pass
+
+    def _convert_record(self, data: dict) -> BibliographicalRecord:
+        record = BibliographicalRecord(from_reader=self.__class__)
+        record.data = data
+        record.identifier = data['sn']
+        record.link = self.USTC_LINK.format(data['sn'])
+        record.title = Field(data['std_title'])
+        record.contributors = []
+        for i in range(8):
+            fieldname = f'author_name_{i + 1}'
+            if data[fieldname]:
+                record.contributors.append(Field(data[fieldname]))
+        if data['printer_name_1']:
+            # TODO: support for multiple printers
+            record.publisher_or_printer = Field(data['printer_name_1'])
+        if data['place']:
+            record.place_of_publication = Field(data['place'])
+        if data['year']:
+            record.dating = Field(data['year'])
+        record.languages = []
+        for i in range(4):
+            fieldname = f'language_{i + 1}'
+            if data[fieldname]:
+                record.languages.append(Field(data[fieldname]))
+        if data['pagination']:
+            record.extent = Field(data['pagination'])
+        return record
+

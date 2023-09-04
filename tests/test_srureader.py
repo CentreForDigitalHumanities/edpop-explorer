@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 from typing import Optional
 
-from edpop_explorer.srumarc21reader import SRUMarc21BibliographicalReader, Marc21Data
+from edpop_explorer import SRUMarc21BibliographicalReader, Marc21Data
 
 
 TESTDATA = json.load(open(Path(__file__).parent / 'TESTDATA', 'r'))
@@ -13,10 +13,12 @@ class MockReader(SRUMarc21BibliographicalReader):
     def transform_query(self, query: str) -> str:
         return query
 
-    def _get_link(self, data: Marc21Data) -> Optional[str]:
+    @classmethod
+    def _get_link(cls, data: Marc21Data) -> Optional[str]:
         return "https://www.example.com"
 
-    def _get_identifier(self, data: Marc21Data) -> Optional[str]:
+    @classmethod
+    def _get_identifier(cls, data: Marc21Data) -> Optional[str]:
         return 'id'
 
 

@@ -9,22 +9,21 @@ authors = [
   {name="Utrecht University, Centre for Digital Humanities - Research Software Lab", email="cdh@uu.nl"}
 ]
 dependencies = [
-  "sruthi>=2.0.0",
+  "sruthi>=2.0.0,<3",
   "termcolor",
   "appdirs",
   "SPARQLWrapper",
   'pyreadline3 ; platform_system == "Windows"',
   'colorama ; platform_system == "Windows"',
-  'pandas',
   'cmd2',
   'pyyaml',
-  'rdflib',
+  'rdflib>=7.0.0,<8',
   'Pygments',
 ]
 
 description = "Common interface to multiple library catalogues and bibliographical databases"
 readme = "README.md"
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 classifiers = [
   'Development Status :: 2 - Pre-Alpha',
   'Environment :: Console',
@@ -38,6 +37,7 @@ classifiers = [
 dev = [
   'pytest',
   'sphinx',
+  'ruff',
 ]
 
 [project.urls]

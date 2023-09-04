@@ -4,9 +4,9 @@ import csv
 from pathlib import Path
 from abc import abstractmethod
 
-from edpop_explorer.apireader import BibliographicalRecord, RawData
-from edpop_explorer.srureader import SRUReader
-from edpop_explorer.fields import Field
+from edpop_explorer import (
+    BibliographicalRecord, RawData, SRUReader, Field, BIBLIOGRAPHICAL
+)
 
 
 READABLE_FIELDS_FILE = Path(__file__).parent / 'M21_fields.csv'
@@ -114,13 +114,23 @@ class Marc21DataMixin():
         return '\n'.join(field_strings)
 
 class SRUMarc21Reader(SRUReader):
+    '''Subclass of ``SRUReader`` that adds Marc21 functionality.
+
+    This class is still abstract and to create concrete readers
+    the ``_get_link()``, ``_get_identifier()`` 
+    and ``_convert_record`` methods should be implemented.
+
+    .. automethod:: _convert_record
+    .. automethod:: _get_link
+    .. automethod:: _get_identifier'''
     marcxchange_prefix: str = ''
 
-    def _get_subfields(self, sruthifield) -> list:
+    @classmethod
+    def _get_subfields(cls, sruthifield) -> list:
         # If there is only one subfield, sruthi puts it directly in
         # a dict, otherwise it uses a list of dicts. Make sure that
         # we always have a list.
-        subfielddata = sruthifield[f'{self.marcxchange_prefix}subfield']
+        subfielddata = sruthifield[f'{cls.marcxchange_prefix}subfield']
         if isinstance(subfielddata, dict):
             sruthisubfields = [subfielddata]
         else:
@@ -128,7 +138,8 @@ class SRUMarc21Reader(SRUReader):
         assert isinstance(sruthisubfields, list)
         return sruthisubfields
 
-    def _convert_to_marc21data(self, sruthirecord: dict) -> Marc21Data:
+    @classmethod
+    def _convert_to_marc21data(cls, sruthirecord: dict) -> Marc21Data:
         data = Marc21Data()
         data.raw = sruthirecord
         # marcxml (marc21 in xml) consists of a controlfield and a datafield.
@@ -136,14 +147,14 @@ class SRUMarc21Reader(SRUReader):
         # The controlfield consists of simple pairs of tags (field numbers)
         # and texts (field values).
         for sruthicontrolfield in \
-                sruthirecord[f'{self.marcxchange_prefix}controlfield']:
+                sruthirecord[f'{cls.marcxchange_prefix}controlfield']:
             tag = sruthicontrolfield['tag']
             text = sruthicontrolfield['text']
             data.controlfields[tag] = text
         # The datafield is more complex; these fields also have two indicators,
         # one-digit numbers that carry special meanings, and multiple subfields
         # that each have a one-character code.
-        for sruthifield in sruthirecord[f'{self.marcxchange_prefix}datafield']:
+        for sruthifield in sruthirecord[f'{cls.marcxchange_prefix}datafield']:
             fieldnumber = sruthifield['tag']
             field = Marc21Field(
                 fieldnumber=fieldnumber,
@@ -156,7 +167,7 @@ class SRUMarc21Reader(SRUReader):
             # easily understand the record.
             if fieldnumber in translation_dictionary:
                 field.description = translation_dictionary[fieldnumber]
-            sruthisubfields = self._get_subfields(sruthifield)
+            sruthisubfields = cls._get_subfields(sruthifield)
 
             for sruthisubfield in sruthisubfields:
                 field.subfields[sruthisubfield['code']] = \
@@ -164,44 +175,103 @@ class SRUMarc21Reader(SRUReader):
             data.fields.append(field)
         return data
     
+    @classmethod
     @abstractmethod
-    def _get_link(self, data: Marc21Data) -> Optional[str]:
+    def _get_link(cls, data: Marc21Data) -> Optional[str]:
+        '''Get a public URL according to the Marc21 data or ``None`` if it
+        is not available.'''
         pass
 
+    @classmethod
     @abstractmethod
-    def _get_identifier(self, data: Marc21Data) -> Optional[str]:
+    def _get_identifier(cls, data: Marc21Data) -> Optional[str]:
+        '''Get the unique identifier from the Marc21 data or ``None`` if it
+        is not available.'''
         pass
 
 
 class Marc21BibliographicalRecord(Marc21DataMixin, BibliographicalRecord):
+    '''A combination of ``BibliographicalRecord`` and ``Marc21DataMixin``.'''
     pass
 
 
 class SRUMarc21BibliographicalReader(SRUMarc21Reader):
+    '''Subclass of ``SRUMarc21Reader`` that adds functionality to create
+    instances of ``BibliographicRecord``.
+
+    This subclass assumes that the Marc21 data is according to the standard
+    format of Marc21 for bibliographical data. See:
+    https://www.loc.gov/marc/bibliographic/
+    '''
     _title_field_subfield = ('245', 'a')
+    _alternative_title_field_subfield = ('246', 'a')
     _publisher_field_subfield = ('264', 'b')
     _language_field_subfield = ('041', 'a')
     _place_field_subfield = ('264', 'a')
     _dating_field_subfield = ('264', 'c')
+    _extent_field_subfield = ('300', 'a')
+    _physical_description_field_subfield = ('300', 'b')
+    _size_field_subfield = ('300', 'c')
+
     records: List[Marc21BibliographicalRecord]
+    READERTYPE = BIBLIOGRAPHICAL
     
-    def _convert_record(self, sruthirecord: dict) -> Marc21BibliographicalRecord:
-        record = Marc21BibliographicalRecord(from_reader=self.__class__)
-        data = self._convert_to_marc21data(sruthirecord)
+    @classmethod
+    def _convert_record(cls, sruthirecord: dict) -> Marc21BibliographicalRecord:
+        record = Marc21BibliographicalRecord(from_reader=cls)
+        data = cls._convert_to_marc21data(sruthirecord)
         record.data = data
-        record.link = self._get_link(data)
-        record.identifier = self._get_identifier(data)
-        title = data.get_first_subfield(*self._title_field_subfield)
+        record.link = cls._get_link(data)
+        record.identifier = cls._get_identifier(data)
+        # NOTE: it is probably better to outfactor the following logic to
+        # other class methods, to offer more flexibility and because this
+        # will become more complex as we add normalization.
+        title = data.get_first_subfield(*cls._title_field_subfield)
         if title:
             record.title = Field(title)
-        publisher = data.get_first_subfield(*self._publisher_field_subfield)
+        alternative_title = data.get_first_subfield(
+            *cls._alternative_title_field_subfield
+        )
+        if alternative_title:
+            record.alternative_title = Field(alternative_title)
+        publisher = data.get_first_subfield(*cls._publisher_field_subfield)
         if publisher:
             record.publisher_or_printer = Field(publisher)
-        language = data.get_first_subfield(*self._language_field_subfield)
+        place = data.get_first_subfield(*cls._place_field_subfield)
+        if place:
+            record.place_of_publication = Field(place)
+        language = data.get_first_subfield(*cls._language_field_subfield)
+        # TODO: look up if this field is repeatable - if so support multiple
+        # languages
         if language:
-            record.language = Field(language)
-        dating = data.get_first_subfield(*self._dating_field_subfield)
+            record.languages = [Field(language)]
+        dating = data.get_first_subfield(*cls._dating_field_subfield)
         if dating:
             record.dating = Field(dating)
+        extent = data.get_first_subfield(*cls._extent_field_subfield)
+        if extent:
+            record.extent = Field(extent)
+        physical_description = data.get_first_subfield(
+            *cls._physical_description_field_subfield
+        )
+        if physical_description:
+            record.physical_description = Field(physical_description)
+        size = data.get_first_subfield(*cls._size_field_subfield)
+        if size:
+            record.size = Field(size)
+
+        # Add the contributors
+        record.contributors = cls._get_contributors(data)
 
         return record
+
+    @classmethod
+    def _get_contributors(cls, data: Marc21Data) -> List[Field]:
+        contributors: List[Field] = []
+        contributor_fields = data.get_fields('100')
+        for field in contributor_fields:
+            name = field.subfields.get('a')
+            if name:
+                contributors.append(Field(name))
+        return contributors
+

@@ -1,7 +1,6 @@
 from typing import Optional
 from rdflib import URIRef
-from edpop_explorer.srumarc21reader import SRUReader
-from edpop_explorer.apireader import APIReader, BibliographicalRecord
+from edpop_explorer import SRUReader, BibliographicalRecord, BIBLIOGRAPHICAL
 from edpop_explorer import Field
 
 
@@ -12,7 +11,7 @@ class KBReader(SRUReader):
     CATALOG_URIREF = URIRef(
         'https://dhstatic.hum.uu.nl/edpop-explorer/catalogs/kb'
     )
-    READERTYPE = APIReader.BIBLIOGRAPHICAL
+    READERTYPE = BIBLIOGRAPHICAL
 
     def __init__(self):
         super().__init__()

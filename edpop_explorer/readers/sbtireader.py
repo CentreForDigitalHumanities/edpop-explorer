@@ -1,44 +1,18 @@
 import requests
-from dataclasses import dataclass, field as dataclass_field
 from typing import List, Dict, Optional
-import yaml
 
-from edpop_explorer.apireader import APIReader, APIRecord, APIException
+from edpop_explorer import Reader, Record, ReaderError
 
 RECORDS_PER_PAGE = 10
 
 
-@dataclass
-class SBTIRecord(APIRecord):
-    data: Optional[Dict] = dataclass_field(default_factory=dict)
-    identifier: Optional[str] = None
-
-    def show_record(self) -> str:
-        contents = yaml.safe_dump(self.data)
-        return contents
-
-    def get_title(self) -> str:
-        try:
-            heading = self.data['heading'][0]
-            name = '{} {} ({})'.format(
-                heading.get('firstname', ''),
-                heading['name'],
-                heading['headingOf'][0]
-            ).strip()
-        except (KeyError, IndexError, TypeError):
-            name = '(unknown title)'
-        return name
-
-
-class SBTIReader(APIReader):
+class SBTIReader(Reader):
     api_url = 'https://data.cerl.org/sbti/_search'
     link_base_url = 'https://data.cerl.org/sbti/'
-    query: str = None
-    records: List[APIRecord]  # Move to superclass?
     fetching_exhausted: bool = False
     additional_params: Optional[Dict[str, str]] = None
 
-    def _perform_query(self, start_record: int) -> List[dict]:
+    def _perform_query(self, start_record: int) -> List[Record]:
         try:
             response = requests.get(
                 self.api_url,
@@ -56,7 +30,7 @@ class SBTIReader(APIReader):
         except (
             requests.exceptions.RequestException
         ) as err:
-            raise APIException('Error during server request: ' + str(err))
+            raise ReaderError('Error during server request: ' + str(err))
 
         # TODO: check for error responses
         try:
@@ -65,15 +39,15 @@ class SBTIReader(APIReader):
             else:
                 self.number_of_results = response['hits']['value']
         except KeyError:
-            raise APIException('Number of hits not given in server response')
+            raise ReaderError('Number of hits not given in server response')
 
         if 'rows' not in response:
             # There are no rows in the response, so stop here
             return []
 
-        records: List[APIRecord] = []
+        records: List[Record] = []
         for rawrecord in response['rows']:
-            record = SBTIRecord()
+            record = Record(from_reader=self.__class__)
             record.data = rawrecord
             record.identifier = rawrecord['id']
             record.link = self.link_base_url + record.identifier
@@ -81,14 +55,14 @@ class SBTIReader(APIReader):
 
         return records
 
-    def prepare_query(self, query) -> None:
+    def transform_query(self, query) -> str:
         # No transformation needed
-        self.prepared_query = query
+        return query
 
     def fetch(self) -> None:
         self.records = []
         if self.prepared_query is None:
-            raise APIException('First call prepare_query')
+            raise ReaderError('First call prepare_query')
         results = self._perform_query(0)
         self.records.extend(results)
         self.number_fetched = len(self.records)

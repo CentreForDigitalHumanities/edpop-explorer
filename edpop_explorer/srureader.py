@@ -3,18 +3,28 @@ import requests
 from abc import abstractmethod
 from typing import List, Optional
 
-from edpop_explorer.apireader import APIReader, APIRecord, APIException
+from edpop_explorer import Reader, Record, ReaderError
 
 RECORDS_PER_PAGE = 10
 
 
-class SRUReader(APIReader):
+class SRUReader(Reader):
+    '''Subclass of ``Reader`` that adds basic SRU functionality
+    using the ``sruthi`` library.
+
+    This class is still abstract and subclasses should implement
+    the ``transform_query()`` and ``_convert_record()`` methods,
+    and set the attributes ``sru_url`` and ``sru_version``.
+
+    .. automethod:: _convert_record'''
     sru_url: str
+    '''URL of the SRU API.'''
     sru_version: str
+    '''Version of the SRU protocol. Can be '1.1' or '1.2'.'''
     query: Optional[str] = None
-    records: List[APIRecord]  # Move to superclass?
-    fetching_exhausted: bool = False
+    records: List[Record]  # Move to superclass?
     session: requests.Session
+    '''The ``Session`` object of the ``requests`` library.'''
 
     def __init__(self):
         # Set a session to allow reuse of HTTP sessions and to set additional
@@ -26,11 +36,14 @@ class SRUReader(APIReader):
     def transform_query(self, query: str) -> str:
         pass
 
+    @classmethod
     @abstractmethod
-    def _convert_record(self, sruthirecord: dict) -> APIRecord:
+    def _convert_record(cls, sruthirecord: dict) -> Record:
+        '''Convert the output of ``sruthi`` into an instance of
+        (a subclass of) ``Record``.'''
         pass
 
-    def _perform_query(self, start_record: int) -> List[APIRecord]:
+    def _perform_query(self, start_record: int) -> List[Record]:
         try:
             response = sruthi.searchretrieve(
                 self.sru_url,
@@ -43,11 +56,11 @@ class SRUReader(APIReader):
         except (
             sruthi.errors.SruError
         ) as err:
-            raise APIException('Server returned error: ' + str(err))
+            raise ReaderError('Server returned error: ' + str(err))
 
         self.number_of_results = response.count
 
-        records: List[APIRecord] = []
+        records: List[Record] = []
         for sruthirecord in response[0:RECORDS_PER_PAGE]:
             records.append(self._convert_record(sruthirecord))
 
@@ -59,20 +72,16 @@ class SRUReader(APIReader):
     def fetch(self) -> None:
         self.records = []
         if self.prepared_query is None:
-            raise APIException('First call prepare_query')
+            raise ReaderError('First call prepare_query')
         results = self._perform_query(1)
         self.records.extend(results)
         self.number_fetched = len(self.records)
-        if self.number_fetched == self.number_of_results:
-            self.fetching_exhausted = True
 
     def fetch_next(self) -> None:
         # TODO: can be merged with fetch method
-        if self.fetching_exhausted:
+        if self.number_of_results == self.number_fetched:
             return
         start_record = len(self.records) + 1
         results = self._perform_query(start_record)
         self.records.extend(results)
         self.number_fetched = len(self.records)
-        if self.number_fetched == self.number_of_results:
-            self.fetching_exhausted = True

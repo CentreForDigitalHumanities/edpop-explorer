@@ -90,8 +90,8 @@ results. To load more results, use the `next` command:
     # next
 
 The results are numbered. Use the `show` command to see the contents of a
-particular record (use `showrdf` to see RDF and `showdata` to see the original
-record data converted to YAML:
+particular record (use `showrdf` to see RDF and `showraw` to see the original
+record data converted to YAML):
 
     # show 8
 

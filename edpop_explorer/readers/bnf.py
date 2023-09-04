@@ -1,25 +1,30 @@
 from typing import Optional
 
-from edpop_explorer.srumarc21reader import SRUMarc21Reader, Marc21Record
+from edpop_explorer import SRUMarc21BibliographicalReader, Marc21Data
 
 
-class BnFReader(SRUMarc21Reader):
+class BnFReader(SRUMarc21BibliographicalReader):
     sru_url = 'http://catalogue.bnf.fr/api/SRU'
     sru_version = '1.2'
     HPB_LINK = 'http://hpb.cerl.org/record/{}'
     marcxchange_prefix = 'info:lc/xmlns/marcxchange-v2:'
+    _title_field_subfield = ('200', 'a')
+    _alternative_title_field_subfield = ('500', 'a')
+    _publisher_field_subfield = ('201', 'c')
+    _place_field_subfield = ('210', 'a')
+    _dating_field_subfield = ('210', 'd')
+    _language_field_subfield = ('101', 'a')
+    # TODO: add format etc
 
     def transform_query(self, query: str) -> str:
         return 'bib.anywhere all ({})'.format(query)
 
-    def _convert_record(self, sruthirecord: dict) -> Marc21Record:
-        # Call inherited method, but change the title field
-        record = super()._convert_record(sruthirecord)
-        # For some reason BnF holds the main title in field 200, which
-        # normally does not exist in marc21.
-        record.title_field_subfield = ['200', 'a']
-        return record
-
-    def get_link(self, record: Marc21Record) -> Optional[str]:
+    @classmethod
+    def _get_link(cls, data: Marc21Data) -> Optional[str]:
         # The link can be found in control field 003
-        return record.controlfields.get('003', None)
+        return data.controlfields.get('003', None)
+
+    @classmethod
+    def _get_identifier(cls, data: Marc21Data) -> Optional[str]:
+        # TODO
+        return None

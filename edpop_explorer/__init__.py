@@ -1,20 +1,31 @@
 __all__ = [
-    'EDPOPREC', 'RELATORS',
+    'EDPOPREC', 'RELATORS', 'bind_common_namespaces',
     'Field', 'FieldError',
-    'APIReader', 'APIRecord', 'RawData', 'APIException',
-    'BibliographicalRecord',
+    'Reader', 'ReaderError',
+    'Record', 'RawData', 'RecordError', 'BibliographicalRecord',
+    'LazyRecordMixin',
     'SRUReader',
     'Marc21Data', 'Marc21Field', 'Marc21BibliographicalRecord',
     'Marc21DataMixin', 'SRUMarc21Reader', 'SRUMarc21BibliographicalReader',
+    'BIBLIOGRAPHICAL', 'BIOGRAPHICAL'
 ]
 
-from .rdf import EDPOPREC, RELATORS
+# Define here to avoid circular imports
+# ruff: noqa
+BIBLIOGRAPHICAL = "bibliographical"
+BIOGRAPHICAL = "biographical"
+
+from .rdf import EDPOPREC, RELATORS, bind_common_namespaces
 from .fields import Field, FieldError
-from .apireader import (
-    APIReader, APIRecord, RawData, APIException, BibliographicalRecord
+from .reader import (
+    Reader, ReaderError
+)
+from .record import (
+    Record, RawData, RecordError, BibliographicalRecord, LazyRecordMixin
 )
 from .srureader import SRUReader
 from .srumarc21reader import (
     Marc21Data, Marc21Field, Marc21BibliographicalRecord, Marc21DataMixin,
     SRUMarc21Reader, SRUMarc21BibliographicalReader
 )
+

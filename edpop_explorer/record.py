@@ -1,10 +1,14 @@
-from typing import Optional, List, Type, Tuple, ClassVar, Union
-from rdflib import Graph, RDF, RDFS, URIRef, BNode, Literal
-from rdflib.term import Node
 from abc import ABC, abstractmethod
+from typing import Type, Tuple, Union, Optional, List, TYPE_CHECKING
+from rdflib.term import Node
+from rdflib import URIRef, Graph, BNode, RDF, Literal
 
-from edpop_explorer import EDPOPREC
-from edpop_explorer.fields import Field
+from edpop_explorer import (
+    EDPOPREC, Field, BIBLIOGRAPHICAL, BIOGRAPHICAL, bind_common_namespaces
+)
+
+if TYPE_CHECKING:
+    from edpop_explorer import Reader
 
 
 class RawData(ABC):
@@ -22,57 +26,75 @@ class RecordError(Exception):
     pass
 
 
-class APIRecord:
-    #: The raw original data of a record
-    data: Union[None, dict, RawData]
+class Record:
+    """Python representation of edpoprec:Record.
+
+    This base class provides some basic attributes, an infrastructure
+    to define fields and a method to convert the record to RDF.
+    While this is a non-abstract base class, no fields are
+    defined here -- these should be added in subclasses. ``Record``
+    and its subclasses should be created by calling the constructor
+    with the ``Reader`` class as the ``from_reader`` argument
+    and by setting the ``data``, ``link``, ``identifier`` and
+    ``subject_node`` attributes (all are optional but recommended),
+    as well as the fields that are defined by the subclass.
+    fields are set using the attribute with the same name:
+    set them to an instance of ``Field`` or to ``None``. The
+    basic attributes and the fields are ``None`` by default.
+
+    Subclasses should override the ``_rdf_class`` attribute to
+    the corresponding RDF class. They should define additional 
+    fields by adding additional public attributes defaulting
+    to ``None`` and by registring them in the ``_fields`` attribute.
+    For registring, a constructor ``__init__`` should be defined
+    that first calls the parent's constructor and then adds the
+    fields by adding tuples to ``_fields`` in the form
+    ``('<attribute-name>', EDPOPREC.<rdf-property-name>,
+    <Field class name>)``.
+    """
+    #: The raw original data of a record.
+    data: Union[None, dict, RawData] = None
     _fields: List[Tuple[str, URIRef, Type[Field]]]
     _rdf_class: Node = EDPOPREC.Record
     link: Optional[str] = None
-    '''A user-friendly link where the user can find the record'''
+    '''A user-friendly link where the user can find the record.'''
     identifier: Optional[str] = None
-    '''Unique identifier used by the source catalog'''
-    from_catalog: Optional[Type["APIReader"]]
+    '''Unique identifier used by the source catalog.'''
+    from_reader: Type["Reader"]
+    '''The Reader class that created the record.'''
     subject_node: Node
+    '''The subject node, which will be used to convert the record to 
+    RDF. This is a blank node by default.'''
     _graph: Optional[Graph] = None
 
-    def __init__(self, from_catalog: Type["APIReader"]):
+    def __init__(self, from_reader: Type["Reader"]):
         self._fields = []
-        self.from_catalog = from_catalog
+        self.from_reader = from_reader
         self.subject_node = BNode()
 
-    def get_title(self) -> Optional[str]:
-        '''Convenience method to retrieve the title of a record in a standard
-        way'''
-        # Stays here for now for compatibility
-        return self.__str__()
-
-    def show_record(self) -> str:
-        '''Give a multiline string representation of the record's contents'''
-        raise NotImplementedError('Should be implemented by subclass')
-
     def to_graph(self) -> Graph:
-        '''Create an RDF graph for this record and put it in the rdf
-        attribute.'''
+        '''Return an RDF graph for this record.'''
+        self.fetch()
         g = Graph()
         
         # Set basic properties
         rdfclass = EDPOPREC.Record
-        if self.from_catalog:
-            if self.from_catalog.READERTYPE == APIReader.BIOGRAPHICAL:
+        if self.from_reader:
+            if self.from_reader.READERTYPE == BIOGRAPHICAL:
                 rdfclass = EDPOPREC.BiographicalRecord
-            elif self.from_catalog.READERTYPE == APIReader.BIBLIOGRAPHICAL:
+            elif self.from_reader.READERTYPE == BIBLIOGRAPHICAL:
                 rdfclass = EDPOPREC.BibliographicalRecord
         g.add((
             self.subject_node,
             RDF.type,
             rdfclass
         ))
-        if self.from_catalog is not None and \
-                self.from_catalog.CATALOG_URIREF is not None:
+        if self.from_reader is not None and \
+                self.from_reader.CATALOG_URIREF is not None:
             g.add((
                 self.subject_node,
                 EDPOPREC.fromCatalog,
-                self.from_catalog.CATALOG_URIREF
+                self.from_reader.CATALOG_URIREF
             ))
         if self.identifier:
             g.add((
@@ -119,15 +141,14 @@ class APIRecord:
                 g += partial_graph
 
         # Set namespace prefixes
-        g.bind('rdf', RDF)
-        g.bind('rdfs', RDFS)
-        g.bind('edpoprec', EDPOPREC)
+        bind_common_namespaces(g)
 
         return g
 
     def get_data_dict(self) -> Optional[dict]:
         """Convenience function to get the record's raw data as a ``dict``,
         or ``None`` if it is not available."""
+        self.fetch()
         if isinstance(self.data, RawData):
             return self.data.to_dict()
         else:
@@ -140,12 +161,24 @@ class APIRecord:
         else:
             return f'{self.__class__} object'
 
+    def fetch(self) -> None:
+        '''Fetch the full contents of the record if this record works with
+        lazy loading (i.e., if the record's class derives from
+        ``RDFRecordMixin``). If the record is not lazy, this method does
+        nothing.'''
+        pass
 
-class BibliographicalRecord(APIRecord):
+
+class BibliographicalRecord(Record):
+    '''Python representation of edpoprec:BibliographicalRecord.
+
+    This subclass adds fields that are specific for bibliographical
+    records.
+    '''
     _rdf_class = EDPOPREC.BibliographicalRecord
     title: Optional[Field] = None
     alternative_title: Optional[Field] = None
-    contributor: Optional[Field] = None
+    contributors: Optional[List[Field]] = None
     publisher_or_printer: Optional[Field] = None
     place_of_publication: Optional[Field] = None
     dating: Optional[Field] = None
@@ -154,13 +187,13 @@ class BibliographicalRecord(APIRecord):
     size: Optional[Field] = None
     physical_description: Optional[Field] = None
 
-    def __init__(self, from_reader: Type["APIReader"]):
+    def __init__(self, from_reader: Type["Reader"]):
         super().__init__(from_reader)
         assert isinstance(self._fields, list)
         self._fields += [
             ('title', EDPOPREC.title, Field),
             ('alternative_title', EDPOPREC.alternativeTitle, Field),
-            ('contributor', EDPOPREC.contributor, Field),
+            ('contributors', EDPOPREC.contributor, Field),
             ('publisher_or_printer', EDPOPREC.publisherOrPrinter, Field),
             ('place_of_publication', EDPOPREC.placeOfPublication, Field),
             ('dating', EDPOPREC.dating, Field),
@@ -177,62 +210,14 @@ class BibliographicalRecord(APIRecord):
             return super().__str__()
 
 
-class APIReader(ABC):
-    number_of_results: Optional[int] = None
-    number_fetched: Optional[int] = None
-    records: List[APIRecord]
-    prepared_query: Optional[str] = None
-    READERTYPE: Optional[str] = None
-    CATALOG_URIREF: Optional[URIRef] = None
-    _graph: Optional[Graph] = None
+class LazyRecordMixin(ABC):
+    '''Abstract mixin that adds an interface for lazy loading to a Record.
 
-    BIOGRAPHICAL: ClassVar[str] = 'biographical'
-    BIBLIOGRAPHICAL: ClassVar[str] = 'bibliographical'
-
+    To use, implement the ``fetch()`` method and make sure that it fills
+    the record's ``data`` attributes and its Fields and that the 
+    ``fetched`` attribute is set to ``True``.'''
+    fetched: bool = False
+    
     @abstractmethod
-    def transform_query(self, query: str) -> str:
+    def fetch(self) -> None:
         pass
-
-    def prepare_query(self, query: str) -> None:
-        self.prepared_query = self.transform_query(query)
-
-    def set_query(self, query: str) -> None:
-        '''Set an exact query'''
-        self.prepared_query = query
-
-    @abstractmethod
-    def fetch(self):
-        raise NotImplementedError('Should be implemented by subclass')
-
-    @abstractmethod
-    def fetch_next(self):
-        raise NotImplementedError('Should be implemented by subclass')
-
-    def catalog_to_graph(self) -> Graph:
-        '''Create an RDF representation of the catalog that this reader
-        supports as an instance of EDPOPREC:Catalog.'''
-        g = Graph()
-        if not self.CATALOG_URIREF:
-            raise APIException(
-                'Cannot create graph because catalog IRI has not been set. '
-                'This should have been done on class level.'
-            )
-
-        # Set reader class
-        rdfclass = EDPOPREC.Catalog
-        if self.READERTYPE == self.BIOGRAPHICAL:
-            rdfclass = EDPOPREC.BiographicalCatalog
-        elif self.READERTYPE == self.BIBLIOGRAPHICAL:
-            rdfclass = EDPOPREC.BibliographicalCatalog
-        g.add((self.CATALOG_URIREF, RDF.type, rdfclass))
-
-        # Set namespace prefixes
-        g.bind('rdf', RDF)
-        g.bind('rdfs', RDFS)
-        g.bind('edpoprec', EDPOPREC)
-
-        return g
-
-
-class APIException(Exception):
-    pass
