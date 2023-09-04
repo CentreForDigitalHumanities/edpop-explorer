@@ -1,11 +1,14 @@
 '''This package contains concrete subclasses of ``Reader``.'''
 
 __all__ = [
+    "BibliopolisReader",
     "BnFReader",
+    "CERLThesaurusReader",
     "FBTEEReader",
     "GallicaReader",
     "HPBReader",
     "KBReader",
+    "SBTIReader",
     "USTCReader",
     "VD16Reader",
     "VD17Reader",
@@ -16,14 +19,14 @@ __all__ = [
     "ALL_READERS",
 ]
 
-# from .bibliopolis import BibliopolisReader
+from .bibliopolis import BibliopolisReader
 from .bnf import BnFReader
-# from .cerl_thesaurus import CERLThesaurusReader
+from .cerl_thesaurus import CERLThesaurusReader
 from .fbtee import FBTEEReader
 from .gallica import GallicaReader
 from .hpb import HPBReader
 from .kb import KBReader
-# from .sbtireader import SBTIReader
+from .sbtireader import SBTIReader
 from .stcn import STCNReader
 from .ustc import USTCReader
 from .vd import VD16Reader, VD17Reader, VD18Reader, VDLiedReader

@@ -11,6 +11,8 @@ from edpop_explorer import Reader, Record, ReaderError
 from edpop_explorer.readers import (
     FBTEEReader,
     GallicaReader,
+    BibliopolisReader,
+    CERLThesaurusReader,
     HPBReader,
     VD16Reader,
     VD17Reader,
@@ -18,6 +20,7 @@ from edpop_explorer.readers import (
     VDLiedReader,
     KBReader,
     STCNReader,
+    SBTIReader,
     USTCReader,
     BnFReader,
 )
@@ -161,7 +164,7 @@ class EDPOPXShell(cmd2.Cmd):
     def do_gallica(self, args) -> None:
         'Gallica'
         self._query(GallicaReader, args)
-    '''
+    
     def do_bibliopolis(self, args) -> None:
         'Bibliopolis Personendatabase'
         self._query(BibliopolisReader, args)
@@ -169,15 +172,15 @@ class EDPOPXShell(cmd2.Cmd):
     def do_ct(self, args) -> None:
         'CERL Thesaurus'
         self._query(CERLThesaurusReader, args)
-    '''
+    
     def do_stcn(self, args) -> None:
         'Short Title Catalogue Netherlands'
         self._query(STCNReader, args)
-    '''
+    
     def do_sbti(self, args) -> None:
         'Scottish Book Trade Index'
         self._query(SBTIReader, args)
-    '''
+    
     def do_fbtee(self, args) -> None:
         'French Book Trade in Enlightenment Europe'
         self._query(FBTEEReader, args)
