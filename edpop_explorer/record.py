@@ -210,6 +210,15 @@ class BibliographicalRecord(Record):
             return super().__str__()
 
 
+class BiographicalRecord(Record):
+    '''Python representation of edpoprec:BiographicalRecord.
+
+    This subclass adds fields that are specific for biographical records.
+    '''
+    _rdf_class = EDPOPREC.BiographicalRecord
+    name: Optional[Field] = None
+
+
 class LazyRecordMixin(ABC):
     '''Abstract mixin that adds an interface for lazy loading to a Record.
 
