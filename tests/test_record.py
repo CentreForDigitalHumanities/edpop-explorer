@@ -4,6 +4,7 @@ from typing import Optional, List
 
 from edpop_explorer import Record, Reader, Field, RecordError
 from edpop_explorer import EDPOPREC
+from edpop_explorer.record import BiographicalRecord
 
 
 class SimpleReader(Reader):
@@ -76,3 +77,15 @@ def test_to_graph_field_multiple_values(basic_record):
     assert len(list(
         g.objects(basic_record.subject_node, EDPOPREC.multipleField)
     )) == 2
+
+def test_biographicalrecord():
+    # Basic test to check if class definition is sane; the logic should be
+    # handled by super class
+    record = BiographicalRecord(SimpleReader)
+    record.to_graph()
+
+def test_biographicalrecord_str():
+    record = BiographicalRecord(SimpleReader)
+    personname = "Person"
+    record.name = Field(personname)
+    assert str(record) == personname

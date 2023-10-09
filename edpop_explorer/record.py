@@ -217,6 +217,31 @@ class BiographicalRecord(Record):
     '''
     _rdf_class = EDPOPREC.BiographicalRecord
     name: Optional[Field] = None
+    variant_names: Optional[List[Field]] = None
+    place_of_birth: Optional[Field] = None
+    place_of_death: Optional[Field] = None
+    places_of_activity: Optional[List[Field]] = None
+    date_of_birth: Optional[Field] = None
+    date_of_death: Optional[Field] = None
+
+    def __init__(self, from_reader: Type["Reader"]):
+        super().__init__(from_reader)
+        assert isinstance(self._fields, list)
+        self._fields += [
+            ('name', EDPOPREC.title, Field),
+            ('variant_names', EDPOPREC.variantName, Field),
+            ('place_of_birth', EDPOPREC.placeOfBirth, Field),
+            ('place_of_death', EDPOPREC.placeOfDeath, Field),
+            ('places_of_activity', EDPOPREC.placeOfActivity, Field),
+            ('date_of_birth', EDPOPREC.dateOfBirth, Field),
+            ('date_of_death', EDPOPREC.dateOfDeath, Field),
+        ]
+
+    def __str__(self) -> str:
+        if self.name:
+            return str(self.name)
+        else:
+            return super().__str__()
 
 
 class LazyRecordMixin(ABC):
