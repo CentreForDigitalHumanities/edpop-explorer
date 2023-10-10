@@ -3,7 +3,7 @@ __all__ = [
     'Field', 'FieldError',
     'Reader', 'ReaderError',
     'Record', 'RawData', 'RecordError', 'BibliographicalRecord',
-    'LazyRecordMixin',
+    'BiographicalRecord', 'LazyRecordMixin',
     'SRUReader',
     'Marc21Data', 'Marc21Field', 'Marc21BibliographicalRecord',
     'Marc21DataMixin', 'SRUMarc21Reader', 'SRUMarc21BibliographicalReader',
@@ -21,7 +21,8 @@ from .reader import (
     Reader, ReaderError
 )
 from .record import (
-    Record, RawData, RecordError, BibliographicalRecord, LazyRecordMixin
+    Record, RawData, RecordError, BibliographicalRecord, BiographicalRecord,
+    LazyRecordMixin
 )
 from .srureader import SRUReader
 from .srumarc21reader import (
