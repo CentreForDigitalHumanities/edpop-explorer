@@ -1,7 +1,7 @@
 import requests
 from typing import List, Dict, Optional
 
-from edpop_explorer import Reader, Record, ReaderError
+from edpop_explorer import Reader, Record, ReaderError, BiographicalRecord
 
 RECORDS_PER_PAGE = 10
 
@@ -11,6 +11,14 @@ class SBTIReader(Reader):
     link_base_url = 'https://data.cerl.org/sbti/'
     fetching_exhausted: bool = False
     additional_params: Optional[Dict[str, str]] = None
+
+    @classmethod
+    def _convert_record(cls, rawrecord: dict) -> BiographicalRecord:
+        record = BiographicalRecord(from_reader=cls)
+        record.data = rawrecord
+        record.identifier = rawrecord['id']
+        record.link = cls.link_base_url + record.identifier
+        return record
 
     def _perform_query(self, start_record: int) -> List[Record]:
         try:
@@ -47,10 +55,7 @@ class SBTIReader(Reader):
 
         records: List[Record] = []
         for rawrecord in response['rows']:
-            record = Record(from_reader=self.__class__)
-            record.data = rawrecord
-            record.identifier = rawrecord['id']
-            record.link = self.link_base_url + record.identifier
+            record = self._convert_record(rawrecord)
             records.append(record)
 
         return records
