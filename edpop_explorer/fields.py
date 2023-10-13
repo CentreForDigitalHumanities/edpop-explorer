@@ -68,6 +68,8 @@ class Field:
     #: Subfield -- indicates whether the value of this field is explicitly
     #: marked as unknown in the original record.
     unknown: Optional[bool] = None
+    #: Subfield -- may contain the URI of an authority record
+    authority_record: Optional[str] = None
     _create_normalized_text: Optional[Callable] = None
     _rdf_class: Node = EDPOPREC.Field
     
@@ -82,6 +84,7 @@ class Field:
             ('original_text', EDPOPREC.originalText, 'string'),
             ('normalized_text', EDPOPREC.normalizedText, 'string'),
             ('unknown', EDPOPREC.unknown, 'boolean'),
+            ('authority_record', EDPOPREC.authorityRecord, 'string'),
         ]
 
     def set_normalized_text(self, text: Optional[str]):
