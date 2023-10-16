@@ -221,8 +221,7 @@ class BiographicalRecord(Record):
     place_of_birth: Optional[Field] = None
     place_of_death: Optional[Field] = None
     places_of_activity: Optional[List[Field]] = None
-    date_of_birth: Optional[Field] = None
-    date_of_death: Optional[Field] = None
+    timespan: Optional[Field] = None
     activities: Optional[List[Field]] = None
 
     def __init__(self, from_reader: Type["Reader"]):
@@ -234,8 +233,7 @@ class BiographicalRecord(Record):
             ('place_of_birth', EDPOPREC.placeOfBirth, Field),
             ('place_of_death', EDPOPREC.placeOfDeath, Field),
             ('places_of_activity', EDPOPREC.placeOfActivity, Field),
-            ('date_of_birth', EDPOPREC.dateOfBirth, Field),
-            ('date_of_death', EDPOPREC.dateOfDeath, Field),
+            ('timespan', EDPOPREC.timespan, Field),
             ('activities', EDPOPREC.activity, Field),
         ]
 
