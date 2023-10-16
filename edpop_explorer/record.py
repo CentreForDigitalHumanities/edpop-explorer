@@ -223,6 +223,7 @@ class BiographicalRecord(Record):
     places_of_activity: Optional[List[Field]] = None
     date_of_birth: Optional[Field] = None
     date_of_death: Optional[Field] = None
+    activities: Optional[List[Field]] = None
 
     def __init__(self, from_reader: Type["Reader"]):
         super().__init__(from_reader)
@@ -235,6 +236,7 @@ class BiographicalRecord(Record):
             ('places_of_activity', EDPOPREC.placeOfActivity, Field),
             ('date_of_birth', EDPOPREC.dateOfBirth, Field),
             ('date_of_death', EDPOPREC.dateOfDeath, Field),
+            ('activities', EDPOPREC.activity, Field),
         ]
 
     def __str__(self) -> str:
