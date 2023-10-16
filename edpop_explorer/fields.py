@@ -24,7 +24,11 @@ DATATYPES = {
                 x, datatype=URIRef("http://id.loc.gov/datatypes/edtf")
             )
         )
-    }
+    },
+    'uriref': {
+        'input_type': URIRef,
+        'converter': lambda x: x,
+    },
 }
 
 
@@ -158,4 +162,17 @@ class Field:
             return self.normalized_text
         else:
             return self.original_text
+
+
+class LocationField(Field):
+    _rdf_class: Node = EDPOPREC.LocationField
+    location_type: Optional[URIRef] = None
+    LOCALITY = EDPOPREC.locality
+    COUNTRY = EDPOPREC.country
+
+    def __init__(self, original_text: str) -> None:
+        super().__init__(original_text)
+        self._subfields.append(
+            ('location_type', EDPOPREC.locationType, 'uriref')
+        )
 

@@ -1,6 +1,6 @@
 __all__ = [
     'EDPOPREC', 'RELATORS', 'bind_common_namespaces',
-    'Field', 'FieldError',
+    'Field', 'FieldError', 'LocationField',
     'Reader', 'ReaderError',
     'Record', 'RawData', 'RecordError', 'BibliographicalRecord',
     'BiographicalRecord', 'LazyRecordMixin',
@@ -16,7 +16,7 @@ BIBLIOGRAPHICAL = "bibliographical"
 BIOGRAPHICAL = "biographical"
 
 from .rdf import EDPOPREC, RELATORS, bind_common_namespaces
-from .fields import Field, FieldError
+from .fields import Field, FieldError, LocationField
 from .reader import (
     Reader, ReaderError
 )
