@@ -54,6 +54,11 @@ class CERLThesaurusReader(SRUReader):
         activitynote = sruthirecord.get(PREFIX + 'activityNote')
         if activitynote:
             record.activities = [Field(activitynote)]
+        # Add biographicalData, which appears to be in all cases the years
+        # that somebody was alive or that an entity existed
+        biographicaldata = sruthirecord.get(PREFIX + 'biographicalData')
+        if biographicaldata:
+            record.timespan = Field(biographicaldata)
 
         return record
 
