@@ -1,5 +1,6 @@
 from typing import Dict, List
 from edpop_explorer import SRUReader, Record, BiographicalRecord, Field
+from edpop_explorer.fields import LocationField
 
 
 class CERLThesaurusReader(SRUReader):
@@ -59,6 +60,13 @@ class CERLThesaurusReader(SRUReader):
         biographicaldata = sruthirecord.get(PREFIX + 'biographicalData')
         if biographicaldata:
             record.timespan = Field(biographicaldata)
+        # Add geographicalNote, which appears to be a country in all cases.
+        # Add it to places of activity.
+        geographicalnote = sruthirecord.get(PREFIX + 'geographicalNote')
+        if geographicalnote:
+            field = LocationField(geographicalnote)
+            field.location_type = LocationField.COUNTRY
+            record.places_of_activity = [field]
 
         return record
 
