@@ -43,11 +43,17 @@ class CERLThesaurusReader(SRUReader):
             display = sruthirecord.get(PREFIX + 'display', None)
             if display:
                 record.name = Field(display)
-
         variantform = sruthirecord.get(PREFIX + 'variantForm', None)
         if variantform and isinstance(variantform, list):
             names = cls._get_acceptable_names(variantform)
             record.variant_names = [Field(x) for x in names]
+
+        # Add activityNote. This field can have only one value in CT.
+        # NB: this data is very inconsistent and often includes other information
+        # than somebody's activity - consider ignoring
+        activitynote = sruthirecord.get(PREFIX + 'activityNote')
+        if activitynote:
+            record.activities = [Field(activitynote)]
 
         return record
 
