@@ -1,9 +1,9 @@
 __all__ = [
     'EDPOPREC', 'RELATORS', 'bind_common_namespaces',
-    'Field', 'FieldError',
+    'Field', 'FieldError', 'LocationField',
     'Reader', 'ReaderError',
     'Record', 'RawData', 'RecordError', 'BibliographicalRecord',
-    'LazyRecordMixin',
+    'BiographicalRecord', 'LazyRecordMixin',
     'SRUReader',
     'Marc21Data', 'Marc21Field', 'Marc21BibliographicalRecord',
     'Marc21DataMixin', 'SRUMarc21Reader', 'SRUMarc21BibliographicalReader',
@@ -16,12 +16,13 @@ BIBLIOGRAPHICAL = "bibliographical"
 BIOGRAPHICAL = "biographical"
 
 from .rdf import EDPOPREC, RELATORS, bind_common_namespaces
-from .fields import Field, FieldError
+from .fields import Field, FieldError, LocationField
 from .reader import (
     Reader, ReaderError
 )
 from .record import (
-    Record, RawData, RecordError, BibliographicalRecord, LazyRecordMixin
+    Record, RawData, RecordError, BibliographicalRecord, BiographicalRecord,
+    LazyRecordMixin
 )
 from .srureader import SRUReader
 from .srumarc21reader import (

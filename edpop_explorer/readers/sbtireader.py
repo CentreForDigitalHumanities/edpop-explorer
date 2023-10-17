@@ -1,7 +1,9 @@
 import requests
 from typing import List, Dict, Optional
 
-from edpop_explorer import Reader, Record, ReaderError
+from edpop_explorer import (
+    Reader, Record, ReaderError, BiographicalRecord, Field
+)
 
 RECORDS_PER_PAGE = 10
 
@@ -11,6 +13,48 @@ class SBTIReader(Reader):
     link_base_url = 'https://data.cerl.org/sbti/'
     fetching_exhausted: bool = False
     additional_params: Optional[Dict[str, str]] = None
+
+    @classmethod
+    def _get_name_field(cls, data: dict) -> Optional[Field]:
+        field = None
+        firstname = data.get("firstname", None)
+        name = data.get("name", None)
+        if firstname and name:
+            field = Field(f"{firstname} {name}")
+        elif name:
+            field = Field(f"{name}")
+        return field
+
+
+    @classmethod
+    def _convert_record(cls, rawrecord: dict) -> BiographicalRecord:
+        record = BiographicalRecord(from_reader=cls)
+        record.data = rawrecord
+        record.identifier = rawrecord['id']
+        record.link = cls.link_base_url + record.identifier
+
+        # Add fields
+        heading = rawrecord.get("heading", None)
+        if heading:
+            name_field = cls._get_name_field(heading[0])
+            record.name = name_field
+        variant_name = rawrecord.get("variantName", None)
+        if isinstance(variant_name, list):
+            record.variant_names = []
+            for name in variant_name:
+                field = cls._get_name_field(name)
+                if field:
+                    record.variant_names.append(field)
+        place_of_activity = rawrecord.get("placeOfActitivty", None)  # sic.
+        if isinstance(place_of_activity, list):
+            record.places_of_activity = []
+            for place in place_of_activity:
+                name = place.get("name", None)
+                if name:
+                    field = Field(name)
+                    record.places_of_activity.append(field)
+
+        return record
 
     def _perform_query(self, start_record: int) -> List[Record]:
         try:
@@ -47,10 +91,7 @@ class SBTIReader(Reader):
 
         records: List[Record] = []
         for rawrecord in response['rows']:
-            record = Record(from_reader=self.__class__)
-            record.data = rawrecord
-            record.identifier = rawrecord['id']
-            record.link = self.link_base_url + record.identifier
+            record = self._convert_record(rawrecord)
             records.append(record)
 
         return records

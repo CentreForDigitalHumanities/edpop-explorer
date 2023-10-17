@@ -2,13 +2,19 @@ from pytest import fixture, raises
 from rdflib import Literal, RDF
 from rdflib.term import Node
 
-from edpop_explorer import Field, FieldError
+from edpop_explorer import Field, FieldError, LocationField
 from edpop_explorer import EDPOPREC
 
 
 @fixture
 def basic_field() -> Field:
     return Field('Dit is een boektitel')
+
+
+@fixture
+def basic_location_field() -> LocationField:
+    field = LocationField('Voorschoten')
+    return field
 
 
 class TestField:
@@ -73,3 +79,24 @@ class TestField:
         # A manual normalized text should override this
         complex_field.set_normalized_text(text)
         assert complex_field.normalized_text == text
+
+
+class TestLocationField:
+    def test_basic_form(self, basic_location_field: LocationField):
+        field = basic_location_field
+        graph = field.to_graph()
+        assert (
+            field.subject_node,
+            EDPOPREC.locationType,
+            None
+        ) not in graph
+
+    def test_location_type(self, basic_location_field: LocationField):
+        field = basic_location_field
+        field.location_type = LocationField.LOCALITY
+        graph = field.to_graph()
+        assert (
+            field.subject_node,
+            EDPOPREC.locationType,
+            EDPOPREC.locality
+        ) in graph
