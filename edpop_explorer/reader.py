@@ -73,6 +73,12 @@ class Reader(ABC):
         pass
 
     @classmethod
+    def get_by_id(cls, identifier: str) -> Record:
+        '''Get a single record by its identifier.'''
+        # Not yet implemented, but implementation should be here
+        raise NotImplementedError
+
+    @classmethod
     def catalog_to_graph(cls) -> Graph:
         '''Create an RDF representation of the catalog that this reader
         supports as an instance of EDPOPREC:Catalog.'''
