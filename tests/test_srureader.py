@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 from typing import Optional
 
-from edpop_explorer import SRUMarc21BibliographicalReader, Marc21Data
+from edpop_explorer import SRUMarc21BibliographicalReader, Marc21Data, Record
 
 
 TESTDATA = json.load(open(Path(__file__).parent / 'TESTDATA', 'r'))
@@ -20,6 +20,11 @@ class MockReader(SRUMarc21BibliographicalReader):
     @classmethod
     def _get_identifier(cls, data: Marc21Data) -> Optional[str]:
         return 'id'
+
+    @classmethod
+    def get_by_id(cls, identifier: str) -> Record:
+        # Placeholder, remove when implemented for SRU readers
+        return Record(cls)
 
 
 class TestSRUMarc21BibliographicalReader:

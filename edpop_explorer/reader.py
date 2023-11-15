@@ -8,7 +8,6 @@ from edpop_explorer import (
 from .record import Record
 
 
-
 class Reader(ABC):
     '''Base reader class (abstract).
 
@@ -42,6 +41,11 @@ class Reader(ABC):
     '''The type of the reader, out of ``BIOGRAPHICAL`` and
     ``BIBLIOGRAPHICAL`` (defined in the ``edpop_explorer`` package).'''
     CATALOG_URIREF: Optional[URIRef] = None
+    IRI_PREFIX: Optional[str] = None
+    '''The prefix to use to create an IRI out of a record identifier.
+    If an IRI cannot be created with a simple prefix, the 
+    `identifier_to_iri` and `iri_to_identifier` methods have to be
+    overridden.'''
     _graph: Optional[Graph] = None
 
     @abstractmethod
@@ -73,10 +77,39 @@ class Reader(ABC):
         pass
 
     @classmethod
+    @abstractmethod
     def get_by_id(cls, identifier: str) -> Record:
         '''Get a single record by its identifier.'''
-        # Not yet implemented, but implementation should be here
-        raise NotImplementedError
+
+    @classmethod
+    def get_by_iri(cls, iri: str) -> Record:
+        '''Get a single records by its IRI.'''
+        identifier = cls.iri_to_identifier(iri)
+        return cls.get_by_id(identifier)
+
+    @classmethod
+    def identifier_to_iri(cls, identifier: str) -> str:
+        if not isinstance(cls.IRI_PREFIX, str):
+            raise ReaderError(
+                f"Cannot convert identifier to IRI: {__class__}.IRI_PREFIX "
+                "not a string."
+            )
+        return cls.IRI_PREFIX + identifier
+
+    @classmethod
+    def iri_to_identifier(cls, iri: str) -> str:
+        if not isinstance(cls.IRI_PREFIX, str):
+            raise ReaderError(
+                f"Cannot convert IRI to identifier: {__class__}.IRI_PREFIX "
+                "not a string."
+            )
+        if iri.startswith(cls.IRI_PREFIX):
+            return iri[len(cls.IRI_PREFIX):]
+        else:
+            raise ReaderError(
+                f"Cannot convert IRI {iri} to identifier: IRI does not start "
+                "with {cls.IRI_PREFIX}."
+            )
 
     @classmethod
     def catalog_to_graph(cls) -> Graph:
