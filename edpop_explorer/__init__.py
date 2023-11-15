@@ -2,6 +2,7 @@ __all__ = [
     'EDPOPREC', 'RELATORS', 'bind_common_namespaces',
     'Field', 'FieldError', 'LocationField',
     'Reader', 'ReaderError',
+    'GetByIdBasedOnQueryMixin',
     'Record', 'RawData', 'RecordError', 'BibliographicalRecord',
     'BiographicalRecord', 'LazyRecordMixin',
     'SRUReader',
@@ -18,7 +19,7 @@ BIOGRAPHICAL = "biographical"
 from .rdf import EDPOPREC, RELATORS, bind_common_namespaces
 from .fields import Field, FieldError, LocationField
 from .reader import (
-    Reader, ReaderError
+    Reader, ReaderError, GetByIdBasedOnQueryMixin
 )
 from .record import (
     Record, RawData, RecordError, BibliographicalRecord, BiographicalRecord,

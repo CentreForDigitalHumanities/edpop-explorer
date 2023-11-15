@@ -70,6 +70,7 @@ class Reader(ABC):
     @abstractmethod
     def fetch(self):
         '''Perform an initial query.'''
+        pass
 
     @abstractmethod
     def fetch_next(self):
@@ -80,6 +81,7 @@ class Reader(ABC):
     @abstractmethod
     def get_by_id(cls, identifier: str) -> Record:
         '''Get a single record by its identifier.'''
+        pass
 
     @classmethod
     def get_by_iri(cls, iri: str) -> Record:
@@ -134,6 +136,29 @@ class Reader(ABC):
         bind_common_namespaces(g)
         
         return g
+
+
+class GetByIdBasedOnQueryMixin(ABC):
+    @classmethod
+    def get_by_id(cls, identifier: str) -> Record:
+        reader = cls()
+        assert isinstance(reader, Reader), \
+            "GetByIdBasedOnQueryMixin should be used on Reader subclass"
+        reader.set_query(cls._prepare_get_by_id_query(identifier))
+        reader.fetch()
+        if reader.number_of_results == 1:
+            return reader.records[0]
+        elif reader.number_of_results == 0:
+            raise ReaderError("No results returned")
+        else:
+            raise ReaderError(
+                f"Multiple ({reader.number_of_results}) results returned."
+            )
+
+    @classmethod
+    @abstractmethod
+    def _prepare_get_by_id_query(cls, identifier: str) -> str:
+        pass
 
 
 class ReaderError(Exception):

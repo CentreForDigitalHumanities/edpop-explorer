@@ -9,6 +9,7 @@ from edpop_explorer.record import BiographicalRecord
 
 class SimpleReader(Reader):
     CATALOG_URIREF = URIRef('http://example.com/reader')
+    IRI_PREFIX = "http://example.com/records/reader/"
 
 
 class SimpleRecord(Record):
@@ -30,6 +31,20 @@ def basic_record():
     record.link = 'http://example.com'
     record.identifier = '123'
     return record
+
+
+def test_iri(basic_record: SimpleRecord):
+    assert basic_record.iri == "http://example.com/records/reader/123"
+
+
+def test_iri_empty(basic_record: SimpleRecord):
+    basic_record.identifier = None
+    assert basic_record.iri is None
+
+
+def test_subject_node(basic_record: SimpleRecord):
+    assert basic_record.subject_node == \
+            URIRef("http://example.com/records/reader/123")
 
 
 def test_to_graph_empty():
