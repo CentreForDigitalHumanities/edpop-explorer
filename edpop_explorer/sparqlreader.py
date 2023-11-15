@@ -110,6 +110,10 @@ class SparqlReader(Reader):
             query=query
         )
 
+    @classmethod
+    def get_by_id(cls, identifier: str) -> Record:
+        return cls._create_lazy_record(identifier)
+
     def fetch(self):
         if not self.prepared_query:
             raise ReaderError('First call prepare_query method')
@@ -144,7 +148,7 @@ class SparqlReader(Reader):
 
     @classmethod
     @abstractmethod
-    def _create_lazy_record(cls, iri: str, name: str) -> Record:
+    def _create_lazy_record(cls, iri: str, name: Optional[str]=None) -> Record:
         """Create a Record/LazyRecordMixin record object.
 
         This is the lazy record that is created after running the SPARQL
