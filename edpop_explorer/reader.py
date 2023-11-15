@@ -48,8 +48,9 @@ class Reader(ABC):
     overridden.'''
     _graph: Optional[Graph] = None
 
+    @classmethod
     @abstractmethod
-    def transform_query(self, query: str) -> str:
+    def transform_query(cls, query: str) -> str:
         '''Return a version of the query that is prepared for use in the
         API.
 

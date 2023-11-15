@@ -19,7 +19,8 @@ class SimpleReader(Reader):
     def fetch_next(self):
         pass
 
-    def transform_query(self, query):
+    @classmethod
+    def transform_query(cls, query):
         return query.capitalize()
 
     def get_by_id(self, identifier: str) -> Record:
