@@ -1,11 +1,20 @@
 from abc import ABC, abstractmethod
-from typing import Optional, List
+from dataclasses import dataclass
+from typing import Optional, List, Union
 from rdflib import Graph, RDF, URIRef
 
 from edpop_explorer import (
     EDPOPREC, BIBLIOGRAPHICAL, BIOGRAPHICAL, bind_common_namespaces
 )
 from .record import Record
+
+
+@dataclass
+class PreparedQuery:
+    pass
+
+
+PreparedQueryType = Union[str, PreparedQuery]
 
 
 class Reader(ABC):
@@ -34,7 +43,7 @@ class Reader(ABC):
     records: List[Record]
     '''The records that have been fetched as instances of
     (a subclass of) ``Record``.'''
-    prepared_query: Optional[str] = None
+    prepared_query: Optional[PreparedQueryType] = None
     '''A transformed version of the query, available after
     calling ``prepare_query()`` or ``set_query``.'''
     READERTYPE: Optional[str] = None
@@ -50,7 +59,7 @@ class Reader(ABC):
 
     @classmethod
     @abstractmethod
-    def transform_query(cls, query: str) -> str:
+    def transform_query(cls, query: str) -> PreparedQueryType:
         '''Return a version of the query that is prepared for use in the
         API.
 
@@ -63,7 +72,7 @@ class Reader(ABC):
         ``prepared_query`` attribute.'''
         self.prepared_query = self.transform_query(query)
 
-    def set_query(self, query: str) -> None:
+    def set_query(self, query: PreparedQueryType) -> None:
         '''Set an exact query. Updates the ``prepared_query``
         attribute.'''
         self.prepared_query = query
@@ -158,7 +167,7 @@ class GetByIdBasedOnQueryMixin(ABC):
 
     @classmethod
     @abstractmethod
-    def _prepare_get_by_id_query(cls, identifier: str) -> str:
+    def _prepare_get_by_id_query(cls, identifier: str) -> PreparedQueryType:
         pass
 
 
