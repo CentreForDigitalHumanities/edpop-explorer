@@ -1,7 +1,6 @@
 '''This package contains concrete subclasses of ``Reader``.'''
 
 __all__ = [
-    "BibliopolisReader",
     "BnFReader",
     "CERLThesaurusReader",
     "FBTEEReader",
@@ -9,7 +8,6 @@ __all__ = [
     "HPBReader",
     "KBReader",
     "SBTIReader",
-    "USTCReader",
     "VD16Reader",
     "VD17Reader",
     "VD18Reader",
@@ -21,7 +19,6 @@ __all__ = [
 
 from edpop_explorer import Reader
 
-from .bibliopolis import BibliopolisReader
 from .bnf import BnFReader
 from .cerl_thesaurus import CERLThesaurusReader
 from .fbtee import FBTEEReader

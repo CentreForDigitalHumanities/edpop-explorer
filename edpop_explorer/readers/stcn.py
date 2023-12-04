@@ -26,6 +26,10 @@ class STCNReader(SparqlReader):
     filter = '?s schema:mainEntityOfPage/schema:isPartOf ' \
         '<http://data.bibliotheken.nl/id/dataset/stcn> .'
     name_predicate = '<http://schema.org/name>'
+    CATALOG_URIREF = URIRef(
+        'https://edpop.hum.uu.nl/readers/stcn'
+    )
+    IRI_PREFIX = "https://edpop.hum.uu.nl/readers/stcn/"
 
     def __init__(self):
         super().__init__()
