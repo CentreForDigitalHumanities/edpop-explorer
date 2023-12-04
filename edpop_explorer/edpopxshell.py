@@ -11,7 +11,6 @@ from edpop_explorer import Reader, Record, ReaderError
 from edpop_explorer.readers import (
     FBTEEReader,
     GallicaReader,
-    BibliopolisReader,
     CERLThesaurusReader,
     HPBReader,
     VD16Reader,
@@ -27,7 +26,12 @@ from edpop_explorer.readers import (
 
 
 class EDPOPXShell(cmd2.Cmd):
-    intro = 'Welcome to the EDPOP explorer! Type ‘help’ for help.\n'
+    intro = (
+        'Welcome to the EDPOP explorer!\n'
+        'Type <reader> <query> to perform a query.\n'
+        'Type <reader> identifier <identifier> to retrieve a specific record.\n'
+        'Type ‘help’ for all commands.\n'
+    )
     prompt = '[edpop-explorer] # '
     reader: Optional[Reader] = None
     shown: int = 0
@@ -78,8 +82,10 @@ class EDPOPXShell(cmd2.Cmd):
     def do_show(self, args) -> None:
         '''Show a normalized version of the record with the given number.'''
         record = self.get_record_from_argument(args)
-        if record is None:
-            return
+        if record is not None:
+            self.show_record(record)
+
+    def show_record(self, record: Record) -> None:
         record.fetch()  # Necessary in case this is a lazy record
         self.poutput(cmd2.ansi.style_success(
             record, bold=True
@@ -165,10 +171,6 @@ class EDPOPXShell(cmd2.Cmd):
         'Gallica'
         self._query(GallicaReader, args)
     
-    def do_bibliopolis(self, args) -> None:
-        'Bibliopolis Personendatabase'
-        self._query(BibliopolisReader, args)
-
     def do_ct(self, args) -> None:
         'CERL Thesaurus'
         self._query(CERLThesaurusReader, args)
@@ -212,6 +214,16 @@ class EDPOPXShell(cmd2.Cmd):
         return count
 
     def _query(self, readerclass: Type[Reader], query: str):
+        IDENTIFIER_PREFIX = "identifier "
+        if query.startswith(IDENTIFIER_PREFIX):
+            identifier = query[len(IDENTIFIER_PREFIX):]
+            try:
+                record = readerclass.get_by_id(identifier)
+            except ReaderError as err:
+                self.perror(err)
+            else:
+                self.show_record(record)
+            return
         self.reader = readerclass()
         self.shown = 0
         try:
