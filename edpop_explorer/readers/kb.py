@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 from rdflib import URIRef
 from edpop_explorer import SRUReader, BibliographicalRecord, BIBLIOGRAPHICAL
 from edpop_explorer import Field
@@ -66,7 +66,7 @@ class KBReader(SRUReader):
         else:
             return None
 
-    def _get_languages(self, data) -> Optional[list[Field]]:
+    def _get_languages(self, data) -> Optional[List[Field]]:
         # The 'language' field contains a list of languages, where every
         # language is repeated multiple times in different languages.
         # One of them is always a three-letter language code, so only
