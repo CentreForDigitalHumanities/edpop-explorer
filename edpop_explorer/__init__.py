@@ -1,7 +1,7 @@
 __all__ = [
     'EDPOPREC', 'RELATORS', 'bind_common_namespaces',
     'Field', 'FieldError', 'LocationField',
-    'Reader', 'ReaderError',
+    'Reader', 'ReaderError', 'NotFoundError',
     'GetByIdBasedOnQueryMixin', 'PreparedQuery', 'PreparedQueryType',
     'Record', 'RawData', 'RecordError', 'BibliographicalRecord',
     'BiographicalRecord', 'LazyRecordMixin',
@@ -20,7 +20,7 @@ from .rdf import EDPOPREC, RELATORS, bind_common_namespaces
 from .fields import Field, FieldError, LocationField
 from .reader import (
     Reader, ReaderError, GetByIdBasedOnQueryMixin, PreparedQuery,
-    PreparedQueryType
+    PreparedQueryType, NotFoundError
 )
 from .record import (
     Record, RawData, RecordError, BibliographicalRecord, BiographicalRecord,

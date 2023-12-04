@@ -156,14 +156,17 @@ class GetByIdBasedOnQueryMixin(ABC):
             "GetByIdBasedOnQueryMixin should be used on Reader subclass"
         reader.set_query(cls._prepare_get_by_id_query(identifier))
         reader.fetch()
-        if reader.number_of_results == 1:
-            return reader.records[0]
-        elif reader.number_of_results == 0:
+        if reader.number_of_results == 0:
             raise ReaderError("No results returned")
-        else:
-            raise ReaderError(
-                f"Multiple ({reader.number_of_results}) results returned."
-            )
+        for record in reader.records:
+            if record.identifier == identifier:
+                return record
+        # Record with correct ID was not returned in first fetch -
+        # give up.
+        raise ReaderError(
+            f"Record with identifier {identifier} not present among "
+            f"{reader.number_of_results} returned results."
+        )
 
     @classmethod
     @abstractmethod
@@ -172,4 +175,8 @@ class GetByIdBasedOnQueryMixin(ABC):
 
 
 class ReaderError(Exception):
+    pass
+
+
+class NotFoundError(ReaderError):
     pass
