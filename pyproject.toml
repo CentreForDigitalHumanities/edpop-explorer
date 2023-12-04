@@ -50,6 +50,7 @@ edpopx = "edpop_explorer.__main__:main"
 pythonpath = [
   "edpop_explorer"
 ]
+markers = ["requests: mark a test as performing real API requests"]
 
 [tool.setuptools.packages.find]
 where = ["."]

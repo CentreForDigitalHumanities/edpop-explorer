@@ -2,7 +2,10 @@
 access the internet or manipulate files.'''
 
 import pytest
+import warnings
 from typing import Type
+
+from rdflib import Graph
 
 from edpop_explorer import Reader, ReaderError
 from edpop_explorer.readers import ALL_READERS
@@ -35,3 +38,34 @@ def test_iri_to_identifier(readercls: Type[Reader]):
         readercls.iri_to_identifier("http://example.com/record/1")
     except ReaderError:
         pass
+
+
+@pytest.mark.parametrize("readercls", ALL_READERS)
+def test_catalog_to_graph(readercls: Type[Reader]):
+    assert isinstance(readercls.catalog_to_graph(), Graph)
+
+
+@pytest.mark.parametrize("readercls", ALL_READERS)
+@pytest.mark.requests
+def test_realrequest(readercls: Type[Reader]):
+    reader = readercls()
+    reader.prepare_query("gruninger")
+    reader.fetch()
+    assert reader.number_fetched is not None
+    assert reader.number_of_results is not None
+    assert reader.number_fetched == len(reader.records)
+    assert reader.number_of_results >= reader.number_fetched
+    if reader.number_fetched > 0:
+        record = reader.records[0]
+        record.fetch()
+        assert isinstance(record.to_graph(), Graph)
+        # Take the IRI and check if searching by IRI gives
+        # the same result
+        iri = record.iri
+        if iri is not None:
+            samerecord = reader.get_by_iri(iri)
+            assert samerecord.iri == iri
+        else:
+            warnings.warn(
+                UserWarning(f"Record {record} has empty IRI")
+            )
