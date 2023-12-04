@@ -102,11 +102,13 @@ class SparqlReader(Reader):
     endpoint: str
     name_predicate: str
     filter: Optional[str] = None
+    prepared_query: Optional[str]
 
-    def transform_query(self, query: str):
+    @classmethod
+    def transform_query(cls, query: str):
         return prepare_listing_query(
-            name_predicate=self.name_predicate,
-            filter=self.filter,
+            name_predicate=cls.name_predicate,
+            filter=cls.filter,
             query=query
         )
 
