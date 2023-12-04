@@ -25,6 +25,8 @@ class USTCReader(GetByIdBasedOnQueryMixin, Reader):
         self.database_file = Path(
             AppDirs('edpop-explorer', 'cdh').user_data_dir
         ) / self.DATABASE_FILENAME
+
+    def prepare_data(self):
         if not self.database_file.exists():
             # Find database dir with .resolve() because on Windows it is
             # some sort of hidden symlink if Python was installed using
@@ -65,6 +67,8 @@ class USTCReader(GetByIdBasedOnQueryMixin, Reader):
         )
 
     def fetch(self) -> None:
+        self.prepare_data()
+
         # This method fetches all records immediately, because the data is
         # locally stored.
 

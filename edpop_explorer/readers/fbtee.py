@@ -29,6 +29,8 @@ class FBTEEReader(GetByIdBasedOnQueryMixin, Reader):
         self.database_file = Path(
             AppDirs('edpop-explorer', 'cdh').user_data_dir
         ) / 'cl.sqlite3'
+
+    def prepare_data(self):
         if not self.database_file.exists():
             self._download_database()
         self.con = sqlite3.connect(str(self.database_file))
@@ -91,6 +93,7 @@ class FBTEEReader(GetByIdBasedOnQueryMixin, Reader):
             record.contributors.append(Field(author[1]))
 
     def fetch(self) -> None:
+        self.prepare_data()
         if not self.prepared_query:
             raise ReaderError('First call prepare_query method')
 
