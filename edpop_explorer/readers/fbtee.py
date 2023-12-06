@@ -1,26 +1,36 @@
 from pathlib import Path
 import sqlite3
+from rdflib import URIRef
 import requests
 from appdirs import AppDirs
-from typing import List
+from typing import List, Optional
 
 from edpop_explorer import (
     Reader, BibliographicalRecord, ReaderError, Field, BIBLIOGRAPHICAL
 )
+from edpop_explorer.reader import GetByIdBasedOnQueryMixin
+from edpop_explorer.sql import SQLPreparedQuery
 
 
-class FBTEEReader(Reader):
+class FBTEEReader(GetByIdBasedOnQueryMixin, Reader):
     DATABASE_URL = 'https://dhstatic.hum.uu.nl/edpop/cl.sqlite3'
     DATABASE_LICENSE = 'https://dhstatic.hum.uu.nl/edpop/LICENSE.txt'
     FBTEE_LINK = 'http://fbtee.uws.edu.au/stn/interface/browse.php?t=book&' \
         'id={}'
     records: List[BibliographicalRecord]
     READERTYPE = BIBLIOGRAPHICAL
+    CATALOG_URIREF = URIRef(
+        'https://edpop.hum.uu.nl/readers/fbtee'
+    )
+    IRI_PREFIX = "https://edpop.hum.uu.nl/readers/fbtee/"
+    prepared_query: Optional[SQLPreparedQuery] = None
 
     def __init__(self):
         self.database_file = Path(
             AppDirs('edpop-explorer', 'cdh').user_data_dir
         ) / 'cl.sqlite3'
+
+    def prepare_data(self):
         if not self.database_file.exists():
             self._download_database()
         self.con = sqlite3.connect(str(self.database_file))
@@ -44,8 +54,19 @@ class FBTEEReader(Reader):
         print(f'Successfully saved database to {self.database_file}.')
         print(f'See license: {self.DATABASE_LICENSE}')
 
-    def transform_query(self, query: str) -> str:
-        return '%' + query + '%'
+    @classmethod
+    def _prepare_get_by_id_query(cls, identifier: str) -> SQLPreparedQuery:
+        return SQLPreparedQuery(
+            where_statement="WHERE book_code = ?",
+            arguments=[identifier]
+        )
+
+    @classmethod
+    def transform_query(cls, query: str) -> SQLPreparedQuery:
+        return SQLPreparedQuery(
+            where_statement='WHERE full_book_title LIKE ?',
+            arguments=[f'%{query}%']
+        )
 
     @classmethod
     def _add_fields(cls, record: BibliographicalRecord) -> None:
@@ -71,8 +92,8 @@ class FBTEEReader(Reader):
             # author is tuple of author code and author name
             record.contributors.append(Field(author[1]))
 
-
     def fetch(self) -> None:
+        self.prepare_data()
         if not self.prepared_query:
             raise ReaderError('First call prepare_query method')
 
@@ -82,9 +103,9 @@ class FBTEEReader(Reader):
             'SELECT B.*, BA.author_code, A.author_name FROM books B '
             'LEFT OUTER JOIN books_authors BA on B.book_code=BA.book_code '
             'JOIN authors A on BA.author_code=A.author_code '
-            'WHERE full_book_title LIKE ? '
+            f'{self.prepared_query.where_statement} '
             'ORDER BY B.book_code',
-            (self.prepared_query,)
+            self.prepared_query.arguments
         )
         self.records = []
         last_book_code = ''

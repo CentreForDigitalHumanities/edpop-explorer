@@ -61,16 +61,14 @@ class Record:
     identifier: Optional[str] = None
     '''Unique identifier used by the source catalog.'''
     from_reader: Type["Reader"]
-    '''The Reader class that created the record.'''
-    subject_node: Node
     '''The subject node, which will be used to convert the record to 
     RDF. This is a blank node by default.'''
     _graph: Optional[Graph] = None
+    _bnode: Optional[BNode] = None
 
     def __init__(self, from_reader: Type["Reader"]):
         self._fields = []
         self.from_reader = from_reader
-        self.subject_node = BNode()
 
     def to_graph(self) -> Graph:
         '''Return an RDF graph for this record.'''
@@ -167,6 +165,28 @@ class Record:
         ``RDFRecordMixin``). If the record is not lazy, this method does
         nothing.'''
         pass
+
+    @property
+    def iri(self) -> Optional[str]:
+        '''A stable IRI based on the `identifier` attribute. `None` if
+        the `identifier` attribute is not set.'''
+        if self.identifier:
+            return self.from_reader.identifier_to_iri(self.identifier)
+        else:
+            return None
+
+    @property
+    def subject_node(self) -> Node:
+        '''A subject node based on the `identifier` attribute. If the 
+        `identifier` attribute is not set, a blank node.'''
+        iri = self.iri
+        if iri is not None:
+            return URIRef(iri)
+        else:
+            # IRI is not available; return a consistent blank node
+            if not self._bnode:
+                self._bnode = BNode()
+            return self._bnode
 
 
 class BibliographicalRecord(Record):

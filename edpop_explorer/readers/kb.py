@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 from rdflib import URIRef
 from edpop_explorer import SRUReader, BibliographicalRecord, BIBLIOGRAPHICAL
 from edpop_explorer import Field
@@ -9,9 +9,10 @@ class KBReader(SRUReader):
     sru_version = '1.2'
     KB_LINK = 'https://webggc.oclc.org/cbs/DB=2.37/PPN?PPN={}'
     CATALOG_URIREF = URIRef(
-        'https://dhstatic.hum.uu.nl/edpop-explorer/catalogs/kb'
+        'https://edpop.hum.uu.nl/readers/kb'
     )
     READERTYPE = BIBLIOGRAPHICAL
+    IRI_PREFIX = "https://edpop.hum.uu.nl/readers/kb/"
 
     def __init__(self):
         super().__init__()
@@ -20,7 +21,8 @@ class KBReader(SRUReader):
             'x-collection': 'GGC'
         }
 
-    def transform_query(self, query: str) -> str:
+    @classmethod
+    def transform_query(cls, query: str) -> str:
         return query
 
     def _find_ppn(self, data: dict):
@@ -64,7 +66,7 @@ class KBReader(SRUReader):
         else:
             return None
 
-    def _get_languages(self, data) -> Optional[list[Field]]:
+    def _get_languages(self, data) -> Optional[List[Field]]:
         # The 'language' field contains a list of languages, where every
         # language is repeated multiple times in different languages.
         # One of them is always a three-letter language code, so only

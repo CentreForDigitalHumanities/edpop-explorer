@@ -1,4 +1,6 @@
 from typing import Dict, List
+
+from rdflib import URIRef
 from edpop_explorer import SRUReader, Record, BiographicalRecord, Field
 from edpop_explorer.fields import LocationField
 
@@ -8,6 +10,10 @@ class CERLThesaurusReader(SRUReader):
     sru_version = '1.2'
     CERL_LINK = 'https://data.cerl.org/thesaurus/{}'
     CTAS_PREFIX = 'http://sru.cerl.org/ctas/dtd/1.1:'
+    CATALOG_URIREF = URIRef(
+        'https://edpop.hum.uu.nl/readers/cerlthesaurus'
+    )
+    IRI_PREFIX = "https://edpop.hum.uu.nl/readers/cerlthesaurus/"
 
     @classmethod
     def _get_acceptable_names(
@@ -70,5 +76,6 @@ class CERLThesaurusReader(SRUReader):
 
         return record
 
-    def transform_query(self, query: str) -> str:
+    @classmethod
+    def transform_query(cls, query: str) -> str:
         return query

@@ -1,5 +1,7 @@
 from typing import Optional
 
+from rdflib import URIRef
+
 from edpop_explorer import SRUMarc21BibliographicalReader, Marc21Data
 
 
@@ -8,6 +10,10 @@ class BnFReader(SRUMarc21BibliographicalReader):
     sru_version = '1.2'
     HPB_LINK = 'http://hpb.cerl.org/record/{}'
     marcxchange_prefix = 'info:lc/xmlns/marcxchange-v2:'
+    CATALOG_URIREF = URIRef(
+        'https://edpop.hum.uu.nl/readers/bnf'
+    )
+    IRI_PREFIX = "https://edpop.hum.uu.nl/readers/bnf/"
     _title_field_subfield = ('200', 'a')
     _alternative_title_field_subfield = ('500', 'a')
     _publisher_field_subfield = ('201', 'c')
@@ -16,7 +22,8 @@ class BnFReader(SRUMarc21BibliographicalReader):
     _language_field_subfield = ('101', 'a')
     # TODO: add format etc
 
-    def transform_query(self, query: str) -> str:
+    @classmethod
+    def transform_query(cls, query: str) -> str:
         return 'bib.anywhere all ({})'.format(query)
 
     @classmethod
@@ -25,6 +32,9 @@ class BnFReader(SRUMarc21BibliographicalReader):
         return data.controlfields.get('003', None)
 
     @classmethod
+    def _prepare_get_by_id_query(cls, identifier: str) -> str:
+        return f'bib.anywhere all ("{identifier}")'
+
+    @classmethod
     def _get_identifier(cls, data: Marc21Data) -> Optional[str]:
-        # TODO
-        return None
+        return data.raw["id"]

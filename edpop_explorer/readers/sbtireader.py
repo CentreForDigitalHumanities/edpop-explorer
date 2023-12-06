@@ -1,3 +1,4 @@
+from rdflib import URIRef
 import requests
 from typing import List, Dict, Optional
 
@@ -10,9 +11,14 @@ RECORDS_PER_PAGE = 10
 
 class SBTIReader(Reader):
     api_url = 'https://data.cerl.org/sbti/_search'
+    api_by_id_base_url = 'https://data.cerl.org/sbti/'
     link_base_url = 'https://data.cerl.org/sbti/'
     fetching_exhausted: bool = False
     additional_params: Optional[Dict[str, str]] = None
+    CATALOG_URIREF = URIRef(
+        'https://edpop.hum.uu.nl/readers/sbti'
+    )
+    IRI_PREFIX = "https://edpop.hum.uu.nl/readers/sbti/"
 
     @classmethod
     def _get_name_field(cls, data: dict) -> Optional[Field]:
@@ -25,13 +31,31 @@ class SBTIReader(Reader):
             field = Field(f"{name}")
         return field
 
+    @classmethod
+    def get_by_id(cls, identifier: str) -> BiographicalRecord:
+        try:
+            response = requests.get(
+                cls.api_by_id_base_url + identifier,
+                headers={
+                    'Accept': 'application/json'
+                },
+            ).json()
+        except requests.exceptions.JSONDecodeError:
+            raise ReaderError(f"Item with id {identifier} does not exist.")
+        except requests.exceptions.RequestException as err:
+            raise ReaderError(f"Error during server request: {err}")
+        return cls._convert_record(response)
+
 
     @classmethod
     def _convert_record(cls, rawrecord: dict) -> BiographicalRecord:
         record = BiographicalRecord(from_reader=cls)
         record.data = rawrecord
-        record.identifier = rawrecord['id']
-        record.link = cls.link_base_url + record.identifier
+        record.identifier = rawrecord.get('id', None)
+        if not record.identifier:
+            record.identifier = rawrecord.get('_id', None)
+        if record.identifier:
+            record.link = cls.link_base_url + record.identifier
 
         # Add fields
         heading = rawrecord.get("heading", None)
@@ -96,7 +120,8 @@ class SBTIReader(Reader):
 
         return records
 
-    def transform_query(self, query) -> str:
+    @classmethod
+    def transform_query(cls, query) -> str:
         # No transformation needed
         return query
 

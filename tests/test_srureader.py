@@ -10,7 +10,8 @@ TESTDATA = json.load(open(Path(__file__).parent / 'TESTDATA', 'r'))
 
 
 class MockReader(SRUMarc21BibliographicalReader):
-    def transform_query(self, query: str) -> str:
+    @classmethod
+    def transform_query(cls, query: str) -> str:
         return query
 
     @classmethod

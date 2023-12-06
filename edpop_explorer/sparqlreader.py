@@ -102,13 +102,19 @@ class SparqlReader(Reader):
     endpoint: str
     name_predicate: str
     filter: Optional[str] = None
+    prepared_query: Optional[str]
 
-    def transform_query(self, query: str):
+    @classmethod
+    def transform_query(cls, query: str):
         return prepare_listing_query(
-            name_predicate=self.name_predicate,
-            filter=self.filter,
+            name_predicate=cls.name_predicate,
+            filter=cls.filter,
             query=query
         )
+
+    @classmethod
+    def get_by_id(cls, identifier: str) -> Record:
+        return cls._create_lazy_record(identifier)
 
     def fetch(self):
         if not self.prepared_query:
@@ -144,7 +150,7 @@ class SparqlReader(Reader):
 
     @classmethod
     @abstractmethod
-    def _create_lazy_record(cls, iri: str, name: str) -> Record:
+    def _create_lazy_record(cls, iri: str, name: Optional[str]=None) -> Record:
         """Create a Record/LazyRecordMixin record object.
 
         This is the lazy record that is created after running the SPARQL
