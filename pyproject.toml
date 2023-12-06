@@ -19,6 +19,7 @@ dependencies = [
   'pyyaml',
   'rdflib>=7.0.0,<8',
   'Pygments',
+  'xmltodict>=0.13.0',
 ]
 
 description = "Common interface to multiple library catalogues and bibliographical databases"
@@ -50,6 +51,7 @@ edpopx = "edpop_explorer.__main__:main"
 pythonpath = [
   "edpop_explorer"
 ]
+markers = ["requests: mark a test as performing real API requests"]
 
 [tool.setuptools.packages.find]
 where = ["."]

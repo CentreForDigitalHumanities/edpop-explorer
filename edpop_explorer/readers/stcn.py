@@ -1,6 +1,6 @@
 from rdflib import Graph, Namespace, URIRef
 from rdflib.term import Node
-from typing import List
+from typing import List, Optional, Tuple
 
 from edpop_explorer import Field
 from edpop_explorer.sparqlreader import (
@@ -8,7 +8,8 @@ from edpop_explorer.sparqlreader import (
 )
 
 
-def _get_properties_from_iri(iri: str, properties: List[Node]) -> (List[Node], Graph):
+def _get_properties_from_iri(iri: str, properties: List[Node]) -> \
+        Tuple[List[Node], Graph]:
     '''Get the first objects of the requested properties of a certain IRI
     as strings.'''
     subject_graph = Graph()
@@ -25,6 +26,10 @@ class STCNReader(SparqlReader):
     filter = '?s schema:mainEntityOfPage/schema:isPartOf ' \
         '<http://data.bibliotheken.nl/id/dataset/stcn> .'
     name_predicate = '<http://schema.org/name>'
+    CATALOG_URIREF = URIRef(
+        'https://edpop.hum.uu.nl/readers/stcn'
+    )
+    IRI_PREFIX = "https://edpop.hum.uu.nl/readers/stcn/"
 
     def __init__(self):
         super().__init__()
@@ -84,10 +89,10 @@ class STCNReader(SparqlReader):
 
     @classmethod
     def _create_lazy_record(
-        cls, iri: str, name: str
+        cls, iri: str, name: Optional[str]=None
     ) -> BibliographicalRDFRecord:
         record = BibliographicalRDFRecord(cls)
         record.identifier = iri
         record.link = iri
-        record.title = Field(name)
+        record.title = Field(name) if name else None
         return record

@@ -1,25 +1,32 @@
 from pathlib import Path
 import sqlite3
+from typing import List, Optional, Union
 from appdirs import AppDirs
 from rdflib import URIRef
 
 from edpop_explorer import (
-    Reader, BibliographicalRecord, ReaderError, Field, BIBLIOGRAPHICAL
+    Reader, BibliographicalRecord, ReaderError, Field, BIBLIOGRAPHICAL,
+    GetByIdBasedOnQueryMixin
 )
+from edpop_explorer.sql import SQLPreparedQuery
 
 
-class USTCReader(Reader):
+class USTCReader(GetByIdBasedOnQueryMixin, Reader):
     DATABASE_FILENAME = 'ustc.sqlite3'
     USTC_LINK = 'https://www.ustc.ac.uk/editions/{}'
     READERTYPE = BIBLIOGRAPHICAL
     CATALOG_URIREF = URIRef(
-        'https://dhstatic.hum.uu.nl/edpop-explorer/catalogs/ustc'
+        'https://edpop.hum.uu.nl/readers/ustc'
     )
+    IRI_PREFIX = "https://edpop.hum.uu.nl/readers/ustc/"
+    prepared_query: Optional[SQLPreparedQuery] = None
 
     def __init__(self):
         self.database_file = Path(
             AppDirs('edpop-explorer', 'cdh').user_data_dir
         ) / self.DATABASE_FILENAME
+
+    def prepare_data(self):
         if not self.database_file.exists():
             # Find database dir with .resolve() because on Windows it is
             # some sort of hidden symlink if Python was installed using
@@ -31,10 +38,37 @@ class USTCReader(Reader):
             raise ReaderError('Database file not found')
         self.con = sqlite3.connect(str(self.database_file))
 
-    def transform_query(self, query: str) -> str:
-        return '%' + query + '%'
+    @classmethod
+    def transform_query(cls, query: str) -> SQLPreparedQuery:
+        where_statement = ( 
+            'WHERE E.std_title LIKE ? '
+            'OR E.author_name_1 LIKE ? '
+            'OR E.author_name_2 LIKE ? '
+            'OR E.author_name_3 LIKE ? '
+            'OR E.author_name_4 LIKE ? '
+            'OR E.author_name_5 LIKE ? '
+            'OR E.author_name_6 LIKE ? '
+            'OR E.author_name_7 LIKE ? '
+            'OR E.author_name_8 LIKE ? '
+        )
+        like_argument = '%' + query + '%'
+        arguments: List[Union[str, int]] = [like_argument for _ in range(9)]
+        return SQLPreparedQuery(where_statement, arguments)
+
+    @classmethod
+    def _prepare_get_by_id_query(cls, identifier: str) -> SQLPreparedQuery:
+        try:
+            identifier_int = int(identifier)
+        except ValueError:
+            raise ReaderError(f"Identifier {identifier} is not an integer")
+        return SQLPreparedQuery(
+            where_statement="WHERE E.sn = ?",
+            arguments=[identifier_int]
+        )
 
     def fetch(self) -> None:
+        self.prepare_data()
+
         # This method fetches all records immediately, because the data is
         # locally stored.
 
@@ -48,17 +82,9 @@ class USTCReader(Reader):
         # for our current goal (i.e. getting insight in the data structures)
         res = cur.execute(
             'SELECT E.* FROM editions E '
-            'WHERE E.std_title LIKE ? '
-            'OR E.author_name_1 LIKE ? '
-            'OR E.author_name_2 LIKE ? '
-            'OR E.author_name_3 LIKE ? '
-            'OR E.author_name_4 LIKE ? '
-            'OR E.author_name_5 LIKE ? '
-            'OR E.author_name_6 LIKE ? '
-            'OR E.author_name_7 LIKE ? '
-            'OR E.author_name_8 LIKE ? '
-            'ORDER BY E.id',
-            [self.prepared_query for _ in range(9)],
+            + self.prepared_query.where_statement
+            + ' ORDER BY E.id',
+            self.prepared_query.arguments,
         )
         self.records = []
         for row in res:

@@ -11,12 +11,18 @@ class HPBReader(SRUMarc21BibliographicalReader):
     sru_version = '1.1'
     HPB_LINK = 'http://hpb.cerl.org/record/{}'
     CATALOG_URIREF = URIRef(
-        'https://dhstatic.hum.uu.nl/edpop-explorer/catalogs/hpb'
+        'https://edpop.hum.uu.nl/readers/hpb'
     )
     READERTYPE = BIBLIOGRAPHICAL
+    IRI_PREFIX = "https://edpop.hum.uu.nl/readers/hpb/"
 
-    def transform_query(self, query: str) -> str:
+    @classmethod
+    def transform_query(cls, query: str) -> str:
         return query
+
+    @classmethod
+    def _prepare_get_by_id_query(cls, identifier: str) -> str:
+        return f"pica.cid={identifier}"
 
     @classmethod
     def _get_identifier(cls, data:Marc21Data) -> Optional[str]:

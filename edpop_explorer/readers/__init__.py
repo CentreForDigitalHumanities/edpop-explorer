@@ -1,7 +1,6 @@
 '''This package contains concrete subclasses of ``Reader``.'''
 
 __all__ = [
-    "BibliopolisReader",
     "BnFReader",
     "CERLThesaurusReader",
     "FBTEEReader",
@@ -9,7 +8,6 @@ __all__ = [
     "HPBReader",
     "KBReader",
     "SBTIReader",
-    "USTCReader",
     "VD16Reader",
     "VD17Reader",
     "VD18Reader",
@@ -19,7 +17,8 @@ __all__ = [
     "ALL_READERS",
 ]
 
-from .bibliopolis import BibliopolisReader
+from edpop_explorer import Reader
+
 from .bnf import BnFReader
 from .cerl_thesaurus import CERLThesaurusReader
 from .fbtee import FBTEEReader
@@ -35,11 +34,11 @@ import sys
 from typing import List, Type
 
 
-def _get_all_readers() -> List[Type]:
+def _get_all_readers() -> List[Type[Reader]]:
     """Create a list of all reader classes included in this package."""
     all_names = __all__.copy()
     all_names.pop()  # Remove "ALL_READERS" itself
-    all_readers: List[str] = []
+    all_readers: List[Type[Reader]] = []
     for name in all_names:
         cls = getattr(sys.modules[__name__], name, None)
         if cls is not None:

@@ -1,6 +1,9 @@
+from rdflib import URIRef
 from edpop_explorer import SRUReader, BibliographicalRecord, Field
 from typing import Optional
 import re
+import requests
+import xmltodict
 
 
 def _force_list(data) -> list:
@@ -28,6 +31,12 @@ class GallicaReader(SRUReader):
     sru_version = '1.2'
     CERL_LINK = 'https://data.cerl.org/thesaurus/{}'
     CTAS_PREFIX = 'http://sru.cerl.org/ctas/dtd/1.1:'
+    CATALOG_URIREF = URIRef(
+        'https://edpop.hum.uu.nl/readers/gallica'
+    )
+    IRI_PREFIX = "https://edpop.hum.uu.nl/readers/gallica/"
+    DOCUMENT_API_URL = "https://gallica.bnf.fr/services/OAIRecord?ark={}"
+    IDENTIFIER_PREFIX = "https://gallica.bnf.fr/"
 
     @classmethod
     def _convert_record(cls, sruthirecord: dict) -> BibliographicalRecord:
@@ -39,8 +48,8 @@ class GallicaReader(SRUReader):
         # and as the link.
         identifiers = _force_list(sruthirecord.get('identifier', None))
         for identifier in identifiers:
-            if identifier.startswith('https://'):
-                record.identifier = identifier
+            if identifier.startswith(cls.IDENTIFIER_PREFIX):
+                record.identifier = identifier[len(cls.IDENTIFIER_PREFIX):]
                 record.link = identifier
         record.data = {}
         for key in sruthirecord:
@@ -76,5 +85,42 @@ class GallicaReader(SRUReader):
 
         return record
 
-    def transform_query(self, query: str) -> str:
+    @classmethod
+    def get_by_id(cls, identifier: str) -> BibliographicalRecord:
+        # Getting by id works via another interface (a simple XML API), but the 
+        # returned data is the same in a slightly different format. Hence,
+        # convert it to JSON just like sruthi does and extract the right piece
+        # of data.
+        url = cls.DOCUMENT_API_URL.format(identifier)
+        res = requests.get(url, headers={"accept": "application/xml"})
+        response_as_dict = xmltodict.parse(
+            res.text,
+            dict_constructor=dict,
+            process_namespaces=True,
+            namespaces={  # Remove these namespace prefixes
+                "http://purl.org/dc/elements/1.1/": None,
+                "http://www.openarchives.org/OAI/2.0/oai_dc/": None,
+            },
+            attr_prefix="",
+            cdata_key="text",
+        )
+        data = response_as_dict["results"]["notice"]["record"]["metadata"]["dc"]
+        # The returned XML has elements with attributes, while these attributes
+        # are missing from the XML that is sent back by the SRU interface.
+        # An attribute-less element is represented as a simple string by 
+        # xmltodict, while an attribute with elements is represented as a 
+        # dict where the contents is in the value of "text". Replace these
+        # dicts with simple strings. (Not a very clean solution but refactoring
+        # is not worth the time at this point.)
+        for key in data:
+            value = data[key]
+            if isinstance(value, list):
+                for index in range(len(value)):
+                    item = value[index]
+                    if isinstance(item, dict):
+                        value[index] = item["text"]
+        return cls._convert_record(data)
+
+    @classmethod
+    def transform_query(cls, query: str) -> str:
         return 'gallica all {}'.format(query)

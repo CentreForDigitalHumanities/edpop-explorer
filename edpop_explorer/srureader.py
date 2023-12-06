@@ -4,17 +4,22 @@ from abc import abstractmethod
 from typing import List, Optional
 
 from edpop_explorer import Reader, Record, ReaderError
+from edpop_explorer.reader import GetByIdBasedOnQueryMixin
 
 RECORDS_PER_PAGE = 10
 
 
-class SRUReader(Reader):
+class SRUReader(GetByIdBasedOnQueryMixin, Reader):
     '''Subclass of ``Reader`` that adds basic SRU functionality
     using the ``sruthi`` library.
 
     This class is still abstract and subclasses should implement
-    the ``transform_query()`` and ``_convert_record()`` methods,
+    the ``transform_query()`` and ``_convert_record()`` methods
     and set the attributes ``sru_url`` and ``sru_version``.
+    
+    The ``_prepare_get_by_id_query()`` method by default returns
+    the transformed version of the identifier as a query, which
+    normally works, but this may be optimised by overriding it.
 
     .. automethod:: _convert_record'''
     sru_url: str
@@ -22,7 +27,6 @@ class SRUReader(Reader):
     sru_version: str
     '''Version of the SRU protocol. Can be '1.1' or '1.2'.'''
     query: Optional[str] = None
-    records: List[Record]  # Move to superclass?
     session: requests.Session
     '''The ``Session`` object of the ``requests`` library.'''
 
@@ -32,8 +36,9 @@ class SRUReader(Reader):
         # see https://github.com/metaodi/sruthi#custom-parameters-and-settings
         self.session = requests.Session()
 
+    @classmethod
     @abstractmethod
-    def transform_query(self, query: str) -> str:
+    def transform_query(cls, query: str) -> str:
         pass
 
     @classmethod
@@ -42,6 +47,10 @@ class SRUReader(Reader):
         '''Convert the output of ``sruthi`` into an instance of
         (a subclass of) ``Record``.'''
         pass
+
+    @classmethod
+    def _prepare_get_by_id_query(cls, identifier: str) -> str:
+        return cls.transform_query(identifier)
 
     def _perform_query(self, start_record: int) -> List[Record]:
         try:
