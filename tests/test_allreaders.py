@@ -51,12 +51,12 @@ def test_realrequest(readercls: Type[Reader]):
     reader = readercls()
     reader.prepare_query("gruninger")
     reader.fetch()
-    assert reader.number_fetched is not None
     assert reader.number_of_results is not None
     assert reader.number_fetched == len(reader.records)
     assert reader.number_of_results >= reader.number_fetched
     if reader.number_fetched > 0:
         record = reader.records[0]
+        assert record is not None
         record.fetch()
         assert isinstance(record.to_graph(), Graph)
         # Take the IRI and check if searching by IRI gives
@@ -69,3 +69,20 @@ def test_realrequest(readercls: Type[Reader]):
             warnings.warn(
                 UserWarning(f"Record {record} has empty IRI")
             )
+    # Perform a second fetch
+    fetched_before = reader.number_fetched
+    reader.fetch()
+    # If not all records had been fetched already, more records
+    # should be available now. Otherwise, nothing should have
+    # changed.
+    if fetched_before < reader.number_of_results:
+        assert reader.number_fetched > fetched_before
+        # Assert that the last record of the previous fetch is not the same as
+        # the first record of the current fetch
+        record1 = reader.records[fetched_before - 1]
+        record2 = reader.records[fetched_before]
+        assert record1 is not None and record2 is not None
+        if record1.identifier is not None:
+            assert record1.identifier != record2.identifier
+    else:
+        assert reader.number_fetched == fetched_before

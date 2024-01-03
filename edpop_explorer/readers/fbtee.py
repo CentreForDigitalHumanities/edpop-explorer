@@ -96,7 +96,8 @@ class FBTEEReader(GetByIdBasedOnQueryMixin, Reader):
         self.prepare_data()
         if not self.prepared_query:
             raise ReaderError('First call prepare_query method')
-
+        if self.fetching_exhausted:
+            return
         cur = self.con.cursor()
         columns = [x[1] for x in cur.execute('PRAGMA table_info(books)')]
         res = cur.execute(
@@ -133,7 +134,3 @@ class FBTEEReader(GetByIdBasedOnQueryMixin, Reader):
             self._add_fields(record)
         self.number_of_results = len(self.records)
         self.number_fetched = self.number_of_results
-        self.fetching_exhausted = True
-
-    def fetch_next(self):
-        pass

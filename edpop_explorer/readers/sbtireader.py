@@ -126,22 +126,12 @@ class SBTIReader(Reader):
         return query
 
     def fetch(self) -> None:
-        self.records = []
         if self.prepared_query is None:
             raise ReaderError('First call prepare_query')
-        results = self._perform_query(0)
-        self.records.extend(results)
-        self.number_fetched = len(self.records)
-        if self.number_fetched == self.number_of_results:
-            self.fetching_exhausted = True
-
-    def fetch_next(self) -> None:
-        # TODO: can be merged with fetch method
         if self.fetching_exhausted:
             return
-        start_record = len(self.records) + 1
+        start_record = len(self.records)
         results = self._perform_query(start_record)
         self.records.extend(results)
         self.number_fetched = len(self.records)
-        if self.number_fetched == self.number_of_results:
-            self.fetching_exhausted = True
+

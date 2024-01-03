@@ -34,6 +34,7 @@ class SRUReader(GetByIdBasedOnQueryMixin, Reader):
         # Set a session to allow reuse of HTTP sessions and to set additional
         # parameters and settings, which some SRU APIs require -
         # see https://github.com/metaodi/sruthi#custom-parameters-and-settings
+        super().__init__()
         self.session = requests.Session()
 
     @classmethod
@@ -79,18 +80,14 @@ class SRUReader(GetByIdBasedOnQueryMixin, Reader):
         self.prepared_query = self.transform_query(query)
 
     def fetch(self) -> None:
-        self.records = []
+        if self.records is None or self.number_fetched is None:
+            self.records = []
+            self.number_fetched = 0
+        if self.fetching_exhausted:
+            return
         if self.prepared_query is None:
             raise ReaderError('First call prepare_query')
-        results = self._perform_query(1)
-        self.records.extend(results)
-        self.number_fetched = len(self.records)
-
-    def fetch_next(self) -> None:
-        # TODO: can be merged with fetch method
-        if self.number_of_results == self.number_fetched:
-            return
-        start_record = len(self.records) + 1
-        results = self._perform_query(start_record)
+        start_number = self.number_fetched + 1  # SRU starts at 1
+        results = self._perform_query(start_number)
         self.records.extend(results)
         self.number_fetched = len(self.records)
