@@ -66,7 +66,7 @@ class USTCReader(GetByIdBasedOnQueryMixin, Reader):
             arguments=[identifier_int]
         )
 
-    def fetch(self) -> None:
+    def fetch(self, number: Optional[int] = None) -> None:
         self.prepare_data()
 
         # This method fetches all records immediately, because the data is

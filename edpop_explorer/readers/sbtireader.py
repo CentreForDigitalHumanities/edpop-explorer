@@ -6,8 +6,6 @@ from edpop_explorer import (
     Reader, Record, ReaderError, BiographicalRecord, Field
 )
 
-RECORDS_PER_PAGE = 10
-
 
 class SBTIReader(Reader):
     api_url = 'https://data.cerl.org/sbti/_search'
@@ -19,6 +17,7 @@ class SBTIReader(Reader):
         'https://edpop.hum.uu.nl/readers/sbti'
     )
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/sbti/"
+    DEFAULT_RECORDS_PER_PAGE = 10
 
     @classmethod
     def _get_name_field(cls, data: dict) -> Optional[Field]:
@@ -80,14 +79,17 @@ class SBTIReader(Reader):
 
         return record
 
-    def _perform_query(self, start_record: int) -> List[Record]:
+    def _perform_query(self, start_record: int, maximum_records: Optional[int]) -> List[Record]:
+        assert isinstance(self.prepared_query, str)
+        if maximum_records is None:
+            maximum_records = self.DEFAULT_RECORDS_PER_PAGE
         try:
             response = requests.get(
                 self.api_url,
                 params={
                     'query': self.prepared_query,
                     'from': start_record,
-                    'size': RECORDS_PER_PAGE,
+                    'size': maximum_records,
                     'mode': 'default',
                     'sort': 'default'
                 },
@@ -125,13 +127,13 @@ class SBTIReader(Reader):
         # No transformation needed
         return query
 
-    def fetch(self) -> None:
+    def fetch(self, number: Optional[int] = None) -> None:
         if self.prepared_query is None:
             raise ReaderError('First call prepare_query')
         if self.fetching_exhausted:
             return
         start_record = len(self.records)
-        results = self._perform_query(start_record)
+        results = self._perform_query(start_record, number)
         self.records.extend(results)
         self.number_fetched = len(self.records)
 

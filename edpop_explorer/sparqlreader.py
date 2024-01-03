@@ -116,7 +116,7 @@ class SparqlReader(Reader):
     def get_by_id(cls, identifier: str) -> Record:
         return cls._create_lazy_record(identifier)
 
-    def fetch(self):
+    def fetch(self, number: Optional[int] = None):
         if not self.prepared_query:
             raise ReaderError('First call prepare_query method')
         if self.fetching_exhausted:

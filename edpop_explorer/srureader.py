@@ -6,8 +6,6 @@ from typing import List, Optional
 from edpop_explorer import Reader, Record, ReaderError
 from edpop_explorer.reader import GetByIdBasedOnQueryMixin
 
-RECORDS_PER_PAGE = 10
-
 
 class SRUReader(GetByIdBasedOnQueryMixin, Reader):
     '''Subclass of ``Reader`` that adds basic SRU functionality
@@ -29,6 +27,8 @@ class SRUReader(GetByIdBasedOnQueryMixin, Reader):
     query: Optional[str] = None
     session: requests.Session
     '''The ``Session`` object of the ``requests`` library.'''
+    DEFAULT_RECORDS_PER_PAGE: int = 10
+    '''The number of records to fetch at a time if not determined by user.'''
 
     def __init__(self):
         # Set a session to allow reuse of HTTP sessions and to set additional
@@ -53,13 +53,15 @@ class SRUReader(GetByIdBasedOnQueryMixin, Reader):
     def _prepare_get_by_id_query(cls, identifier: str) -> str:
         return cls.transform_query(identifier)
 
-    def _perform_query(self, start_record: int) -> List[Record]:
+    def _perform_query(self, start_record: int, maximum_records: Optional[int]) -> List[Record]:
+        if maximum_records is None:
+            maximum_records = self.DEFAULT_RECORDS_PER_PAGE
         try:
             response = sruthi.searchretrieve(
                 self.sru_url,
                 self.prepared_query,
                 start_record=start_record,
-                maximum_records=RECORDS_PER_PAGE,
+                maximum_records=maximum_records,
                 sru_version=self.sru_version,
                 session=self.session
             )
@@ -71,7 +73,7 @@ class SRUReader(GetByIdBasedOnQueryMixin, Reader):
         self.number_of_results = response.count
 
         records: List[Record] = []
-        for sruthirecord in response[0:RECORDS_PER_PAGE]:
+        for sruthirecord in response[0:maximum_records]:
             records.append(self._convert_record(sruthirecord))
 
         return records
@@ -79,7 +81,7 @@ class SRUReader(GetByIdBasedOnQueryMixin, Reader):
     def prepare_query(self, query) -> None:
         self.prepared_query = self.transform_query(query)
 
-    def fetch(self) -> None:
+    def fetch(self, number: Optional[int] = None) -> None:
         if self.records is None or self.number_fetched is None:
             self.records = []
             self.number_fetched = 0
@@ -88,6 +90,6 @@ class SRUReader(GetByIdBasedOnQueryMixin, Reader):
         if self.prepared_query is None:
             raise ReaderError('First call prepare_query')
         start_number = self.number_fetched + 1  # SRU starts at 1
-        results = self._perform_query(start_number)
+        results = self._perform_query(start_number, number)
         self.records.extend(results)
         self.number_fetched = len(self.records)
