@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Optional, List, Union
 from rdflib import Graph, RDF, URIRef
+from urllib.parse import quote, unquote
 
 from edpop_explorer import (
     EDPOPREC, BIBLIOGRAPHICAL, BIOGRAPHICAL, bind_common_namespaces
@@ -131,7 +132,7 @@ class Reader(ABC):
                 f"Cannot convert identifier to IRI: {__class__}.IRI_PREFIX "
                 "not a string."
             )
-        return cls.IRI_PREFIX + identifier
+        return cls.IRI_PREFIX + quote(identifier)
 
     @classmethod
     def iri_to_identifier(cls, iri: str) -> str:
@@ -141,7 +142,7 @@ class Reader(ABC):
                 "not a string."
             )
         if iri.startswith(cls.IRI_PREFIX):
-            return iri[len(cls.IRI_PREFIX):]
+            return unquote(iri[len(cls.IRI_PREFIX):])
         else:
             raise ReaderError(
                 f"Cannot convert IRI {iri} to identifier: IRI does not start "
