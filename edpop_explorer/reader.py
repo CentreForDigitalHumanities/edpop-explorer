@@ -92,7 +92,7 @@ class Reader(ABC):
         This functionality may be ignored by readers that can only load 
         all records at once; generally these are readers that return lazy 
         records."""
-        if self.records is not None:
+        if self.number_of_results is not None:
             raise ReaderError(
                 "adjust_start_record should not be called after fetching."
             )
