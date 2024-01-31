@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Optional, List, Union
 from rdflib import Graph, RDF, URIRef
+from urllib.parse import quote, unquote
 
 from edpop_explorer import (
     EDPOPREC, BIBLIOGRAPHICAL, BIOGRAPHICAL, bind_common_namespaces
@@ -38,9 +39,10 @@ class Reader(ABC):
     number_of_results: Optional[int] = None
     '''The total number of results for the query, including those
     that have not been fetched yet.'''
-    number_fetched: Optional[int] = None
-    '''The number of results that has been fetched so far.'''
-    records: List[Record]
+    number_fetched: int = 0
+    '''The number of results that has been fetched so far, or 0 if
+    no fetch has been performed yet.'''
+    records: List[Optional[Record]]
     '''The records that have been fetched as instances of
     (a subclass of) ``Record``.'''
     prepared_query: Optional[PreparedQueryType] = None
@@ -56,6 +58,9 @@ class Reader(ABC):
     `identifier_to_iri` and `iri_to_identifier` methods have to be
     overridden.'''
     _graph: Optional[Graph] = None
+
+    def __init__(self):
+        self.records = []
 
     @classmethod
     @abstractmethod
@@ -77,14 +82,35 @@ class Reader(ABC):
         attribute.'''
         self.prepared_query = query
 
-    @abstractmethod
-    def fetch(self):
-        '''Perform an initial query.'''
-        pass
+    def adjust_start_record(self, start_number: int) -> None:
+        """Skip the given number of first records and start fetching 
+        afterwards. Should be calling before the first time calling
+        ``fetch()``. The missing records in the ``records`` attribute
+        will be filled by ``None``s. The ``number_fetched`` attribute
+        will be adjusted as if the first records have been fetched.
+        This is mainly useful if the skipped records have already been 
+        fetched but the original ``Reader`` object is not available anymore. 
+        This functionality may be ignored by readers that can only load 
+        all records at once; generally these are readers that return lazy 
+        records."""
+        if self.number_of_results is not None:
+            raise ReaderError(
+                "adjust_start_record should not be called after fetching."
+            )
+        self.number_fetched = start_number
+        self.records = [None for _ in range(start_number)]
 
     @abstractmethod
-    def fetch_next(self):
-        '''Perform a subsequental query.'''
+    def fetch(
+            self, number: Optional[int] = None
+    ):
+        '''Perform an initial or subsequent query. Most readers fetch
+        a limited number of records at once -- this number depends on
+        the reader but it may be adjusted using the ``number`` argument.
+        Other readers fetch all records at once and ignore the ``number``
+        argument. After fetching, the ``records`` and ``number_fetched``
+        attributes are adjusted and the ``number_of_results`` attribute
+        will be available.'''
         pass
 
     @classmethod
@@ -106,7 +132,7 @@ class Reader(ABC):
                 f"Cannot convert identifier to IRI: {__class__}.IRI_PREFIX "
                 "not a string."
             )
-        return cls.IRI_PREFIX + identifier
+        return cls.IRI_PREFIX + quote(identifier)
 
     @classmethod
     def iri_to_identifier(cls, iri: str) -> str:
@@ -116,7 +142,7 @@ class Reader(ABC):
                 "not a string."
             )
         if iri.startswith(cls.IRI_PREFIX):
-            return iri[len(cls.IRI_PREFIX):]
+            return unquote(iri[len(cls.IRI_PREFIX):])
         else:
             raise ReaderError(
                 f"Cannot convert IRI {iri} to identifier: IRI does not start "
@@ -146,6 +172,13 @@ class Reader(ABC):
         bind_common_namespaces(g)
         
         return g
+
+    @property
+    def fetching_exhausted(self) -> bool:
+        """Return ``True`` if all results have been fetched. This is currently
+        implemented by simply checking if the ``number_of_results`` and
+        ``number_fetched`` attributes are equal."""
+        return self.number_fetched == self.number_of_results
 
 
 class GetByIdBasedOnQueryMixin(ABC):

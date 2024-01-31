@@ -116,9 +116,11 @@ class SparqlReader(Reader):
     def get_by_id(cls, identifier: str) -> Record:
         return cls._create_lazy_record(identifier)
 
-    def fetch(self):
+    def fetch(self, number: Optional[int] = None):
         if not self.prepared_query:
             raise ReaderError('First call prepare_query method')
+        if self.fetching_exhausted:
+            return
         wrapper = SPARQLWrapper(self.endpoint)
         wrapper.setReturnFormat(JSONFormat)
         wrapper.setQuery(self.prepared_query)
@@ -137,9 +139,6 @@ class SparqlReader(Reader):
             name = result['name']['value']
             self.records.append(self._create_lazy_record(iri, name))
         self.number_fetched = self.number_of_results
-
-    def fetch_next(self):
-        pass
 
     @classmethod
     @abstractmethod

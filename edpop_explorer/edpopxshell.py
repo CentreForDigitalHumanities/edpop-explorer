@@ -74,7 +74,7 @@ class EDPOPXShell(cmd2.Cmd):
             self.perror('All records have been shown')
         else:
             if self.reader.number_fetched - self.shown < self.RECORDS_PER_PAGE:
-                self.reader.fetch_next()
+                self.reader.fetch()
             self.shown += self._show_records(self.reader.records,
                                              self.shown,
                                              self.RECORDS_PER_PAGE)
@@ -195,7 +195,7 @@ class EDPOPXShell(cmd2.Cmd):
         'Koninklijke Bibliotheek'
         self._query(KBReader, args)
 
-    def _show_records(self, records: List[Record],
+    def _show_records(self, records: List[Optional[Record]],
                       start: int,
                       limit=math.inf) -> int:
         """Show the records from start, with limit as the maximum number
