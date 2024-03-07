@@ -192,6 +192,7 @@ class GetByIdBasedOnQueryMixin(ABC):
         if reader.number_of_results == 0:
             raise ReaderError("No results returned")
         for record in reader.records:
+            assert record is not None
             if record.identifier == identifier:
                 return record
         # Record with correct ID was not returned in first fetch -
