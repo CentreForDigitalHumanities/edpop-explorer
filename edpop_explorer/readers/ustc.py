@@ -20,6 +20,7 @@ class USTCReader(GetByIdBasedOnQueryMixin, Reader):
     )
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/ustc/"
     prepared_query: Optional[SQLPreparedQuery] = None
+    FETCH_ALL_AT_ONCE = True
 
     def __init__(self):
         self.database_file = Path(

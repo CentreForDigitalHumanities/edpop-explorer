@@ -57,6 +57,11 @@ class Reader(ABC):
     If an IRI cannot be created with a simple prefix, the 
     `identifier_to_iri` and `iri_to_identifier` methods have to be
     overridden.'''
+    FETCH_ALL_AT_ONCE = False
+    '''True if the reader is configured to fetch all records at once,
+    even if the user only needs a subset. If so, it may be economic to
+    save the state (by pickling) if the results are needed in a future 
+    session.'''
     _graph: Optional[Graph] = None
 
     def __init__(self):
@@ -179,6 +184,27 @@ class Reader(ABC):
         implemented by simply checking if the ``number_of_results`` and
         ``number_fetched`` attributes are equal."""
         return self.number_fetched == self.number_of_results
+    
+    def generate_identifier(self) -> str:
+        """Generate an identifier for this reader that is unique for the
+        combination of reader type and prepared query. This identifier can
+        be used when the reader has to be reused across sessions by
+        pickling and unpickling.
+        
+        Note: while the identifier is guaranteed to be unique, there
+        is no guarantee that the generated identifier is the same for
+        every combination of reader type and prepared query."""
+        if self.prepared_query is None:
+            raise RuntimeError("A prepared query should be set first")
+        # Create identifier based on reader class name and prepared query.
+        readertype = self.__class__
+        # self.prepared_query is either a string or a dataclass instance,
+        # which means that it has a __str__ method that gives a unique
+        # string representation of its contents (at least as long as
+        # it does not contain a very complex data structure, which should
+        # not be the case). For dataclasses, it is not guaranteed 
+        prepared_query = str(self.prepared_query)
+        return f"{readertype} | {prepared_query}"
 
 
 class GetByIdBasedOnQueryMixin(ABC):

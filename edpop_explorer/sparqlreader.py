@@ -103,6 +103,7 @@ class SparqlReader(Reader):
     name_predicate: str
     filter: Optional[str] = None
     prepared_query: Optional[str]
+    FETCH_ALL_AT_ONCE = True
 
     @classmethod
     def transform_query(cls, query: str):

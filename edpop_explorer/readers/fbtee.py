@@ -24,6 +24,7 @@ class FBTEEReader(GetByIdBasedOnQueryMixin, Reader):
     )
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/fbtee/"
     prepared_query: Optional[SQLPreparedQuery] = None
+    FETCH_ALL_AT_ONCE = True
 
     def __init__(self):
         self.database_file = Path(
@@ -93,6 +94,9 @@ class FBTEEReader(GetByIdBasedOnQueryMixin, Reader):
             record.contributors.append(Field(author[1]))
 
     def fetch(self, number: Optional[int] = None) -> None:
+        # This method always fetches all data at once. This could be avoided,
+        # but it is inexpensive because the data is locally available and
+        # the dataset is small.
         self.prepare_data()
         if not self.prepared_query:
             raise ReaderError('First call prepare_query method')
