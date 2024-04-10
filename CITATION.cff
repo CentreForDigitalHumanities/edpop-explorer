@@ -14,7 +14,7 @@ authors:
     city: Utrecht
     country: NL
     email: cdh@uu.nl
-repository-code: 'https://github.com/UUDigitalHumanitieslab/edpop-explorer'
+repository-code: 'https://github.com/CentreForDigitalHumanities/edpop-explorer'
 abstract: >-
   EDPOP Explorer is a Python library and commandline
   application that offers a common interface to multiple
