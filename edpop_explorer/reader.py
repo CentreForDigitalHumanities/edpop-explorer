@@ -208,6 +208,12 @@ class Reader(ABC):
 
 
 class GetByIdBasedOnQueryMixin(ABC):
+    """Mixin for readers that are based on an API that has no special
+    way of retrieving single records -- instead, these readers fetch
+    single records using a list query. To use, make sure to override
+    the ``_prepare_get_by_id_query`` method, which defines the list
+    query that should be used."""
+
     @classmethod
     def get_by_id(cls, identifier: str) -> Record:
         reader = cls()
