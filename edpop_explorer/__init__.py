@@ -2,7 +2,7 @@ __all__ = [
     'EDPOPREC', 'RELATORS', 'bind_common_namespaces',
     'Field', 'FieldError', 'LocationField',
     'Reader', 'ReaderError', 'NotFoundError',
-    'GetByIdBasedOnQueryMixin', 'PreparedQuery', 'PreparedQueryType',
+    'GetByIdBasedOnQueryMixin', 'BasePreparedQuery', 'PreparedQueryType',
     'Record', 'RawData', 'RecordError', 'BibliographicalRecord',
     'BiographicalRecord', 'LazyRecordMixin',
     'SRUReader',
@@ -19,7 +19,7 @@ BIOGRAPHICAL = "biographical"
 from .rdf import EDPOPREC, RELATORS, bind_common_namespaces
 from .fields import Field, FieldError, LocationField
 from .reader import (
-    Reader, ReaderError, GetByIdBasedOnQueryMixin, PreparedQuery,
+    Reader, ReaderError, GetByIdBasedOnQueryMixin, BasePreparedQuery,
     PreparedQueryType, NotFoundError
 )
 from .record import (

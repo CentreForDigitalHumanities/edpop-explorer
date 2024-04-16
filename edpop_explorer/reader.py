@@ -11,11 +11,14 @@ from .record import Record
 
 
 @dataclass
-class PreparedQuery:
+class BasePreparedQuery:
+    """Empty base dataclass for prepared queries. For prepared queries that
+    can be represented by a single string, do not inherit from this class
+    but use a simple string instead."""
     pass
 
 
-PreparedQueryType = Union[str, PreparedQuery]
+PreparedQueryType = Union[str, BasePreparedQuery]
 
 
 class Reader(ABC):
