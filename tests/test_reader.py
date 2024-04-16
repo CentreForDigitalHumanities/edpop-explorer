@@ -96,3 +96,16 @@ def test_getbyidbasedonquerymixin_multiplereturned():
 def test_getbyidbasedonquerymixin_nonereturned():
     with pytest.raises(ReaderError):
        SimpleReaderGetByIdBasedOnQuery.get_by_id("nonematching")
+
+
+def test_generate_identifier():
+    reader = SimpleReader()
+    reader.prepare_query("Hoi")
+    identifier = reader.generate_identifier()
+    # A new reader with the same query should have the same identifier. Now,
+    # also perform a fetch.
+    reader2 = SimpleReader()
+    reader2.prepare_query("Hoi")
+    reader2.fetch()
+    identifier2 = reader2.generate_identifier()
+    assert identifier == identifier2
