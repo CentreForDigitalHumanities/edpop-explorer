@@ -1,3 +1,5 @@
+"""Base reader class and strongly related functionality."""
+
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Optional, List, Union
@@ -22,23 +24,23 @@ PreparedQueryType = Union[str, BasePreparedQuery]
 
 
 class Reader(ABC):
-    '''Base reader class (abstract).
+    """Base reader class (abstract).
 
     This abstract base class provides a common interface for all readers.
-    To use, instantiate a subclass, set a query using the 
+    To use, instantiate a subclass, set a query using the
     ``prepare_query()`` or ``set_query()`` method, call ``fetch()``
     and subsequently ``fetch_next()`` until you have the number
     of results that you want. The attributes ``number_of_results``,
-    ``number_fetched`` and ``records`` will be updated after 
+    ``number_fetched`` and ``records`` will be updated after
     fetching.
 
-    To create a concrete reader, make a subclass that implements the 
+    To create a concrete reader, make a subclass that implements the
     ``fetch()``, ``fetch_next()`` and ``transform_query()`` methods
     and set the ``READERTYPE`` and ``CATALOG_URIREF`` attributes.
-    ``fetch()`` and ``fetch_next()`` should populate the 
+    ``fetch()`` and ``fetch_next()`` should populate the
     ``records``, ``number_of_results`` and ``number_fetched``
     attributes.
-    '''
+    """
     number_of_results: Optional[int] = None
     '''The total number of results for the query, including those
     that have not been fetched yet.'''
@@ -76,12 +78,12 @@ class Reader(ABC):
         '''Return a version of the query that is prepared for use in the
         API.
 
-        This method does not have to be called directly; instead 
+        This method does not have to be called directly; instead
         ``prepare_query()`` can be used.'''
         pass
 
     def prepare_query(self, query: str) -> None:
-        '''Prepare a query for use by the reader's API. Updates the 
+        '''Prepare a query for use by the reader's API. Updates the
         ``prepared_query`` attribute.'''
         self.prepared_query = self.transform_query(query)
 
@@ -91,15 +93,15 @@ class Reader(ABC):
         self.prepared_query = query
 
     def adjust_start_record(self, start_number: int) -> None:
-        """Skip the given number of first records and start fetching 
+        """Skip the given number of first records and start fetching
         afterwards. Should be calling before the first time calling
         ``fetch()``. The missing records in the ``records`` attribute
         will be filled by ``None``s. The ``number_fetched`` attribute
         will be adjusted as if the first records have been fetched.
-        This is mainly useful if the skipped records have already been 
-        fetched but the original ``Reader`` object is not available anymore. 
-        This functionality may be ignored by readers that can only load 
-        all records at once; generally these are readers that return lazy 
+        This is mainly useful if the skipped records have already been
+        fetched but the original ``Reader`` object is not available anymore.
+        This functionality may be ignored by readers that can only load
+        all records at once; generally these are readers that return lazy
         records."""
         if self.number_of_results is not None:
             raise ReaderError(
@@ -124,12 +126,12 @@ class Reader(ABC):
     @classmethod
     @abstractmethod
     def get_by_id(cls, identifier: str) -> Record:
-        '''Get a single record by its identifier.'''
+        """Get a single record by its identifier."""
         pass
 
     @classmethod
     def get_by_iri(cls, iri: str) -> Record:
-        '''Get a single records by its IRI.'''
+        """Get a single records by its IRI."""
         identifier = cls.iri_to_identifier(iri)
         return cls.get_by_id(identifier)
 
@@ -193,7 +195,7 @@ class Reader(ABC):
         combination of reader type and prepared query. This identifier can
         be used when the reader has to be reused across sessions by
         pickling and unpickling.
-        
+
         Note: while the identifier is guaranteed to be unique, there
         is no guarantee that the generated identifier is the same for
         every combination of reader type and prepared query."""
@@ -244,6 +246,8 @@ class GetByIdBasedOnQueryMixin(ABC):
 
 
 class ReaderError(Exception):
+    """Generic exception for failures in ``Reader`` class. More specific errors
+    derive from this class."""
     pass
 
 
