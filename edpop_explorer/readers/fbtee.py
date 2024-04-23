@@ -3,7 +3,7 @@ import sqlite3
 from rdflib import URIRef
 import requests
 from appdirs import AppDirs
-from typing import List, Optional
+from typing import Optional
 
 from edpop_explorer import (
     Reader, BibliographicalRecord, ReaderError, Field, BIBLIOGRAPHICAL

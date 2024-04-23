@@ -2,11 +2,10 @@
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Optional, List, Union, Dict
+from typing import Optional, Union, Dict
 from rdflib import Graph, RDF, URIRef
 from urllib.parse import quote, unquote
 
-from typing_extensions import override
 
 from edpop_explorer import (
     EDPOPREC, BIBLIOGRAPHICAL, BIOGRAPHICAL, bind_common_namespaces

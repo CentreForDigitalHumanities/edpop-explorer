@@ -1,4 +1,3 @@
-from typing import Optional
 
 from typing_extensions import override
 
@@ -41,7 +40,7 @@ class SimpleReader(Reader):
     @classmethod
     @override
     def get_by_id(cls, identifier: str) -> Record:
-        if not int(identifier) in range(cls.NUMBER_OF_ITEMS):
+        if int(identifier) not in range(cls.NUMBER_OF_ITEMS):
             raise NotFoundError
         record = Record(cls)
         record.identifier = identifier
@@ -115,7 +114,7 @@ def test_get_no_fetching():
     reader = SimpleReader()
     reader.set_query("test")
     with pytest.raises(NotFoundError):
-        record = reader.get(5, False)
+        reader.get(5, False)
 
 
 class SimpleReaderGetByIdBasedOnQuery(GetByIdBasedOnQueryMixin, SimpleReader):
