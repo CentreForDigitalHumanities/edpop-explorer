@@ -20,6 +20,7 @@ dependencies = [
   'rdflib>=7.0.0,<8',
   'Pygments',
   'xmltodict>=0.13.0',
+  'typing_extensions',
 ]
 
 description = "Common interface to multiple library catalogues and bibliographical databases"
