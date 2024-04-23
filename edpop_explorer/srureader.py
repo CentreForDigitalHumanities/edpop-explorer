@@ -27,8 +27,6 @@ class SRUReader(GetByIdBasedOnQueryMixin, Reader):
     query: Optional[str] = None
     session: requests.Session
     '''The ``Session`` object of the ``requests`` library.'''
-    DEFAULT_RECORDS_PER_PAGE: int = 10
-    '''The number of records to fetch at a time if not determined by user.'''
 
     def __init__(self):
         # Set a session to allow reuse of HTTP sessions and to set additional
