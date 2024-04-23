@@ -79,15 +79,17 @@ class SRUReader(GetByIdBasedOnQueryMixin, Reader):
     def prepare_query(self, query) -> None:
         self.prepared_query = self.transform_query(query)
 
-    def fetch(self, number: Optional[int] = None) -> None:
-        if self.records is None or self.number_fetched is None:
-            self.records = []
-            self.number_fetched = 0
+    def fetch_range(self, range_to_fetch: range) -> range:
+        # SRU provides paged retrieve using a start record (that starts at
+        # 1, while we start at 0) and a maximum number of results.
         if self.fetching_exhausted:
-            return
+            return range(0, 0)
         if self.prepared_query is None:
             raise ReaderError('First call prepare_query')
-        start_number = self.number_fetched + 1  # SRU starts at 1
-        results = self._perform_query(start_number, number)
-        self.records.extend(results)
-        self.number_fetched = len(self.records)
+        start_number = range_to_fetch.start
+        start_number_sru = start_number + 1  # SRU starts at 1
+        records_to_fetch = range_to_fetch.stop - range_to_fetch.start
+        results = self._perform_query(start_number_sru, records_to_fetch)
+        for i, result in enumerate(results):
+            self.records[i + start_number] = result
+        return range(start_number, start_number + len(results))

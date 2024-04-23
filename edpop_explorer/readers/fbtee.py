@@ -17,7 +17,6 @@ class FBTEEReader(GetByIdBasedOnQueryMixin, Reader):
     DATABASE_LICENSE = 'https://dhstatic.hum.uu.nl/edpop/LICENSE.txt'
     FBTEE_LINK = 'http://fbtee.uws.edu.au/stn/interface/browse.php?t=book&' \
         'id={}'
-    records: List[BibliographicalRecord]
     READERTYPE = BIBLIOGRAPHICAL
     CATALOG_URIREF = URIRef(
         'https://edpop.hum.uu.nl/readers/fbtee'
@@ -27,6 +26,7 @@ class FBTEEReader(GetByIdBasedOnQueryMixin, Reader):
     FETCH_ALL_AT_ONCE = True
 
     def __init__(self):
+        super().__init__()
         self.database_file = Path(
             AppDirs('edpop-explorer', 'cdh').user_data_dir
         ) / 'cl.sqlite3'
@@ -93,7 +93,7 @@ class FBTEEReader(GetByIdBasedOnQueryMixin, Reader):
             # author is tuple of author code and author name
             record.contributors.append(Field(author[1]))
 
-    def fetch(self, number: Optional[int] = None) -> None:
+    def fetch_range(self, range_to_fetch: range) -> range:
         # This method always fetches all data at once. This could be avoided,
         # but it is inexpensive because the data is locally available and
         # the dataset is small.
@@ -101,7 +101,7 @@ class FBTEEReader(GetByIdBasedOnQueryMixin, Reader):
         if not self.prepared_query:
             raise ReaderError('First call prepare_query method')
         if self.fetching_exhausted:
-            return
+            return range(0)
         cur = self.con.cursor()
         columns = [x[1] for x in cur.execute('PRAGMA table_info(books)')]
         res = cur.execute(
@@ -112,29 +112,31 @@ class FBTEEReader(GetByIdBasedOnQueryMixin, Reader):
             'ORDER BY B.book_code',
             self.prepared_query.arguments
         )
-        self.records = []
         last_book_code = ''
+        i = -1
         for row in res:
             # Since we are joining with another table, a book may be repeated,
             # so check if this is a new item
             book_code: str = row[columns.index('book_code')]
             if last_book_code != book_code:
+                # We have a new book, so update i
+                i += 1
                 record = BibliographicalRecord(self.__class__)
                 record.data = {}
-                for i in range(len(columns)):
-                    record.data[columns[i]] = row[i]
+                for j in range(len(columns)):
+                    record.data[columns[j]] = row[j]
                 record.identifier = book_code
                 record.link = self.FBTEE_LINK.format(book_code)
                 record.data['authors'] = []
-                self.records.append(record)
+                self.records[i] = record
                 last_book_code = book_code
             # Add author_code and author_name to the last record
             assert len(self.records) > 0
             author_code = row[len(columns)]
             author_name = row[len(columns) + 1]
-            assert isinstance(self.records[-1].data, dict)
-            self.records[-1].data['authors'].append((author_code, author_name))
+            assert isinstance(self.records[i].data, dict)
+            self.records[i].data['authors'].append((author_code, author_name))
         for record in self.records:
             self._add_fields(record)
         self.number_of_results = len(self.records)
-        self.number_fetched = self.number_of_results
+        return range(0, len(self.records))

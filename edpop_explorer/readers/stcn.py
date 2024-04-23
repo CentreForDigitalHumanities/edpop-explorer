@@ -35,7 +35,7 @@ class STCNReader(SparqlReader):
         super().__init__()
 
     @classmethod
-    def _convert_record(
+    def convert_record(
         cls, graph: Graph, record: BibliographicalRDFRecord
     ) -> None:
         SCHEMA = Namespace('http://schema.org/')

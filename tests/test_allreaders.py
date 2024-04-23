@@ -1,5 +1,5 @@
-'''Test all readers for basic sanity, without invoking methods that could
-access the internet or manipulate files.'''
+"""Test all readers for basic sanity, without invoking methods that could
+access the internet or manipulate files."""
 
 import pytest
 import warnings
@@ -50,9 +50,10 @@ def test_catalog_to_graph(readercls: Type[Reader]):
 def test_realrequest(readercls: Type[Reader]):
     reader = readercls()
     reader.prepare_query("gruninger")
-    reader.fetch(5)
+    rng = reader.fetch(5)
     assert reader.number_of_results is not None
     assert reader.number_fetched == len(reader.records)
+    assert rng == range(0, reader.number_fetched)
     if not reader.fetching_exhausted:
         # Assert that maximum number of results is respected if reader does
         # not fetch all results at once
@@ -70,23 +71,28 @@ def test_realrequest(readercls: Type[Reader]):
             samerecord = reader.get_by_iri(iri)
             assert samerecord.iri == iri
         else:
-            warnings.warn(
-                UserWarning(f"Record {record} has empty IRI")
-            )
+            warnings.warn(UserWarning(f"Record {record} has empty IRI"))
     # Perform a second fetch
     fetched_before = reader.number_fetched
-    reader.fetch()  # Do not pass number of results to test that as well
+    rng2 = reader.fetch()  # Do not pass number of results to test that as well
     # If not all records had been fetched already, more records
     # should be available now. Otherwise, nothing should have
     # changed.
     if fetched_before < reader.number_of_results:
         assert reader.number_fetched > fetched_before
+        assert rng2.start == fetched_before
+        assert rng2.stop == reader.number_fetched
         # Assert that the last record of the previous fetch is not the same as
         # the first record of the current fetch
         record1 = reader.records[fetched_before - 1]
         record2 = reader.records[fetched_before]
         assert record1 is not None and record2 is not None
-        if record1.identifier is not None:
-            assert record1.identifier != record2.identifier
+        if record1.identifier is not None and record1.identifier == record2.identifier:
+            # Both records have the same identifier, which could mean that
+            # there was a mistake with the offsets. But just give a warning,
+            # because there are APIs that (by mistake?) return duplicated
+            # records.
+            warnings.warn(UserWarning("Last record from first fetch is same as first record from second fetch"))
     else:
         assert reader.number_fetched == fetched_before
+        assert rng2 == range(0)
