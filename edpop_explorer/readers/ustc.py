@@ -20,8 +20,10 @@ class USTCReader(GetByIdBasedOnQueryMixin, Reader):
     )
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/ustc/"
     prepared_query: Optional[SQLPreparedQuery] = None
+    FETCH_ALL_AT_ONCE = True
 
     def __init__(self):
+        super().__init__()
         self.database_file = Path(
             AppDirs('edpop-explorer', 'cdh').user_data_dir
         ) / self.DATABASE_FILENAME
@@ -66,7 +68,7 @@ class USTCReader(GetByIdBasedOnQueryMixin, Reader):
             arguments=[identifier_int]
         )
 
-    def fetch(self, number: Optional[int] = None) -> None:
+    def fetch_range(self, range_to_fetch: range) -> range:
         self.prepare_data()
 
         # This method fetches all records immediately, because the data is
@@ -75,7 +77,7 @@ class USTCReader(GetByIdBasedOnQueryMixin, Reader):
         if not self.prepared_query:
             raise ReaderError('No query has been set')
         if self.fetching_exhausted:
-            return
+            return range(0)
 
         cur = self.con.cursor()
         columns = [x[1] for x in cur.execute('PRAGMA table_info(editions)')]
@@ -88,15 +90,14 @@ class USTCReader(GetByIdBasedOnQueryMixin, Reader):
             + ' ORDER BY E.id',
             self.prepared_query.arguments,
         )
-        self.records = []
-        for row in res:
+        for i, row in enumerate(res):
             data = {}
-            for i in range(len(columns)):
-                data[columns[i]] = row[i]
+            for j in range(len(columns)):
+                data[columns[j]] = row[j]
             record = self._convert_record(data)
-            self.records.append(record)
+            self.records[i] = record
         self.number_of_results = len(self.records)
-        self.number_fetched = self.number_of_results
+        return range(0, len(self.records))
 
     def _convert_record(self, data: dict) -> BibliographicalRecord:
         record = BibliographicalRecord(from_reader=self.__class__)

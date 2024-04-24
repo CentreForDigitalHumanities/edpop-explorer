@@ -34,7 +34,7 @@ class Record:
     While this is a non-abstract base class, no fields are
     defined here -- these should be added in subclasses. ``Record``
     and its subclasses should be created by calling the constructor
-    with the ``Reader`` class as the ``from_reader`` argument
+    with the ``Reader`` class as the ``from_reader`` parameter
     and by setting the ``data``, ``link``, ``identifier`` and
     ``subject_node`` attributes (all are optional but recommended),
     as well as the fields that are defined by the subclass.

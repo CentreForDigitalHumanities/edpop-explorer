@@ -4,6 +4,8 @@ import json
 from SPARQLWrapper import SPARQLWrapper, SPARQLExceptions, JSON as JSONFormat
 from abc import abstractmethod
 
+from typing_extensions import override
+
 from edpop_explorer import (
     Reader, Record, BibliographicalRecord, ReaderError, RecordError,
     LazyRecordMixin
@@ -103,8 +105,10 @@ class SparqlReader(Reader):
     name_predicate: str
     filter: Optional[str] = None
     prepared_query: Optional[str]
+    FETCH_ALL_AT_ONCE = True
 
     @classmethod
+    @override
     def transform_query(cls, query: str):
         return prepare_listing_query(
             name_predicate=cls.name_predicate,
@@ -113,14 +117,17 @@ class SparqlReader(Reader):
         )
 
     @classmethod
+    @override
     def get_by_id(cls, identifier: str) -> Record:
         return cls._create_lazy_record(identifier)
 
-    def fetch(self, number: Optional[int] = None):
+    @override
+    def fetch_range(self, range_to_fetch: range) -> range:
+        # Fetch all records at one, because this is an expensive operation.
         if not self.prepared_query:
             raise ReaderError('First call prepare_query method')
         if self.fetching_exhausted:
-            return
+            return range(0, 0)
         wrapper = SPARQLWrapper(self.endpoint)
         wrapper.setReturnFormat(JSONFormat)
         wrapper.setQuery(self.prepared_query)
@@ -132,17 +139,17 @@ class SparqlReader(Reader):
             )
         assert isinstance(response, dict)
         results = response['results']['bindings']
-        self.records = []
+        self.records = {}
         self.number_of_results = len(results)
-        for result in results:
+        for i, result in enumerate(results):
             iri = result['s']['value']
             name = result['name']['value']
-            self.records.append(self._create_lazy_record(iri, name))
-        self.number_fetched = self.number_of_results
+            self.records[i] = self._create_lazy_record(iri, name)
+        return range(0, self.number_of_results)
 
     @classmethod
     @abstractmethod
-    def _convert_record(cls, graph: Graph, record: Record) -> None:
+    def convert_record(cls, graph: Graph, record: Record) -> None:
         '''Convert data from an RDF graph to Fields in a Record. The 
         Record is changed in-place.'''
         pass

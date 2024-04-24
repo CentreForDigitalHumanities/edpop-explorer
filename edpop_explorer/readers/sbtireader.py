@@ -127,13 +127,15 @@ class SBTIReader(Reader):
         # No transformation needed
         return query
 
-    def fetch(self, number: Optional[int] = None) -> None:
+    def fetch_range(self, range_to_fetch: range) -> range:
         if self.prepared_query is None:
             raise ReaderError('First call prepare_query')
         if self.fetching_exhausted:
-            return
-        start_record = len(self.records)
-        results = self._perform_query(start_record, number)
-        self.records.extend(results)
-        self.number_fetched = len(self.records)
+            return range(0)
+        start_record = range_to_fetch.start
+        number_to_fetch = range_to_fetch.stop - start_record
+        results = self._perform_query(start_record, number_to_fetch)
+        for i, result in enumerate(results):
+            self.records[i] = result
+        return range(start_record, start_record + len(results))
 
