@@ -4,7 +4,12 @@ from typing import List, Dict, Optional
 from edpop_explorer import Reader, ReaderError, BibliographicalRecord
 
 class PierreBelleReader(Reader):
-    filename = Path(__file__).parent /'data'/'biblio_pierrebelle.csv'
+    FILENAME = Path(__file__).parent / 'data' / 'biblio_pierrebelle.csv'
+    CATALOG_URIREF = URIRef(
+        'https://edpop.hum.uu.nl/readers/pierre_belle'
+    )
+    IRI_PREFIX = "https://edpop.hum.uu.nl/readers/pierre_belle/"
+    FETCH_ALL_AT_ONCE = True
 
     @classmethod
     def _convert_record(cls, rawrecord: dict) -> BibliographicalRecord:
@@ -25,30 +30,25 @@ class PierreBelleReader(Reader):
 
     @classmethod
     def get_by_id(cls, identifier: str) -> BibliographicalRecord:
-        with open(cls.filename, 'r',encoding='utf-8-sig') as file:
-            reader = csv.DictReader(file,delimiter=';')
+        with open(cls.filename, 'r', encoding='utf-8-sig') as file:
+            reader = csv.DictReader(file, delimiter=';')
             for row in reader:
                 if row['ID'] == identifier:
                     return cls._convert_record(row)
         raise ReaderError(f"Item with id {identifier} does not exist.")
     
-
-    def _perform_query(self, start_record: int, maximum_records: Optional[int]) -> List[BibliographicalRecord]:
+    def _perform_query(self) -> List[BibliographicalRecord]:
         assert isinstance(self.prepared_query, str)
-        if maximum_records is None:
-            maximum_records = self.DEFAULT_RECORDS_PER_PAGE
         
-        # Fetch results based on query
+        # Search query in all columns, and fetch results based on query
         results = []
-        with open(self.__class__.filename, 'r',encoding='utf-8-sig') as file:
-            reader = csv.DictReader(file,delimiter=';')
+        with open(self.__class__.filename, 'r', encoding='utf-8-sig') as file:
+            reader = csv.DictReader(file, delimiter=';')
             for row in reader:
                 found = False
                 for key in row.keys():
                     if self.prepared_query in row[key]:
                         results.append(row)
-                        found = True
-                    if found:
                         break
         
         self.number_of_results = len(results)
@@ -58,7 +58,6 @@ class PierreBelleReader(Reader):
             records.append(record)
 
         return records
-
 
     def fetch_range(self, range_to_fetch: range) -> range:
         if self.prepared_query is None:

@@ -1,240 +1,239 @@
-﻿ID;Shortened title;Language;Place of publication;Publisher;Date;References;Notes
-PB:1;[colophon:] le livre et l’istoire de Pierre filz du conte de Prouvence et de la belle Maguelonne fille du roy de Naples.;French;[Lyon];[Guillaume Le Roy for Barthélemy Buyer];ca. 1475;ISTC ip00645130;
-PB:2;[colophon:] le livre et l’ystoire de Pierre, filz du conte de Provence, et de la belle Maguelonne …;French;[Lyon];[Martin Huss];ca. 1479–1481;ISTC ip00645150;USTC 95514 attributes to Guillaume Le Roy
-PB:3;"[incipit:] cy commence l’istoyre du vaillant chevalier Pierre filz du comte de Provence et de la 	belle Maguelonne fille du roy de Naples";French;Lyon;Guillaume Le Roy;ca. 1483;ISTC ip00645200;
-PB:4;La belle Maguelonne.;French;Lyon;Guillaume Le Roy;ca. 1485;ISTC ip00645250;
-PB:5;La belle Maguelonne.;French;Lyon;Mathias Huss;ca. 1486;ISTC ip00645300;
-PB:6;La belle Maguelonne.;French;[Lyon];Pierre Bouttellier/Peter Schenck;ca. 1487;ISTC ip00645350;digitized copy: Paris, BnF, Y2-705 <https://gallica.bnf.fr/ark:/12148/bpt6k8713806r>)
-PB:7;Cy commence l’istoire du vaillant chevalier pierre de provence et de la belle maguelonne. ;French;[Lyon];Jean Du Pré;14 March 1489 ;ISTC ip00645400;
-PB:8;Cy commence l’istoire […] maguelonne fille du roy de naples.;French;[Lyon];Jean de La Fontaine;11 January 1490;ISTC ip00645450;
-PB:9;La belle Maguelonne;French;Paris;Denis Meslier;ca. 1491;ISTC ip00645430;
-PB:10;La belle Maguelonne;French;Paris;Jean Trepperel;15 May 1492/1493;ISTC ip00645480 and ip00645500;"two states; copy state 2: Paris, BnF, RES-Y2-1083"
-PB:11;La belle Maguelonne;French;Rouen;Jacques Le Forestier;ca. 1493–1512;ISTC ip00645530;
-PB:12;Cy commence l’ystoire du vaillant chevalier pierre de prouvence et de la belle maguelonne fille du roy de naples. ;French;[Lyon];[Martin Havard];ca. 1502;ELR;no copy located
-PB:13;La belle Maguelonne;French;Paris;Michel Le Noir;12 November 1504;ELR;no copy located
-PB:14;L'istoire du noble et vaillant chevalier Piere de Prouence. Et aussi de la belle Maguelonne fille du roy de naples. ;French;[Lyon];[Pierre Maréchal and Barnabé Chaussard];ca. 1504;ISTC ip00645550;"error in GW 11 Sp.253a, no copy in Vienna; second copy in Aix-en-Provence, Bibliothèque Méjanes, Inc. D. 46"
-PB:15;La belle Maguelonne;French;Rouen;Richard Goupil for Michel Angier, Raulin Gaultier and Jean Macé;ca. 1511–1513;ELR;no copy located
-PB:16;La belle Maguelonne;French;Rouen;Richard Goupil for Raulin Gaultier ;1516;ELR;
-PB:17;Sensuyt l’histoire de Pierre de prouvence et de la belle Maguelonne Nouvellement imprime a paris. Vc. ;French;Paris;Veuve Jean Trepperel;ca. 1511–1525;ELR;
-PB:18;L’Histoire de Pierre de prouvence et de la belle maguelonne. Nouuellement […] V.;French;Paris;Veuve Jean Trepperel and Jean Janot;ca. 1512ؘ–1519;ELR;
-PB:19;Cy commance l'hystoire des deulx vrays et parfaictz amans. C’est à scavoir Pierre de provence et la belle Maguelonne fille du Roy de Naples.;French;Avignon;Jean de Channey;1524;ELR;
-PB:20;Sensuit l'hystoire de Pierre de prouvence et de la belle Maguelonne: imprimé à Paris. ;French;Paris;Alain Lotrian;ca. 1525–1547;ELR;
-PB:21;Sensuit l'histoire de Pierre de provence et de la belle Maguelone. Nouvellement imprimé à Paris. v. ca.;French;Paris;Alain Lotrian and Denis Janot;ca. 1530;ELR;
-PB:22;Cy commence l’ystoire du noble et vaillant chevalier Pierre de Prouvence et de la belle Maguelonne fille du roy de Naples. ;French;Lyon;en la maison de Barnabé Chaussard;ca. 1533–1552;ELR;no copy located
-PB:23;Cy commence l’hystoire du noble et vaillant chevalier Pierre de Prouvence et de la belle Maguelonne fille du roy de Naples. ;French;[Lyon];[Jacques Moderne];ca. 1540;copy: Basel, UB, EW VI 58:8;Attribution made by me on the basis of the typographical material.
-PB:24;L’Histoire de Pierre de Prouvence, et de la belle Maguelonne. ;French;Antwerp;Jan van Waesberghe ;1560;ELR;
-PB:25;L'Histoire de Pierre de Provence, et de la belle Maguelonne, vi Ca.;French;Paris;Veuve Jean Bonfons;ca. 1568–1573;ELR;
-PB:26;.L'Histoire de Pierre de Provence, et de la belle Maguelonne, vi Ca. ;French;Paris;Simon Calvarin;"ca. 	1569–1585";ELR;
-PB:27;L’Histoire de Pierre de Provence, et de la belle Maguelonne, vi c.;French;Paris;Nicolas Bonfons;"ca. 	1573–1580";ELR;Gothic type
-PB:28;"L’Histoire du noble et vaillant Chevalier Pierre de Provence, et la belle Maguelonne, fille du Roy 	de Naples: Où sont amplement déclarées ses prouesses, et leurs honnestes et chastes amours. ";French;Lyon;Héritiers de François Didier;ca. 1581–1592;ELR;
-PB:29;"Histoire du noble et vaillant chevalier Pierre de Provence, autrement dict le Chevalier des Clefs. 	Et de la belle Princesse Maguelonne fille du Roy de Naples. ";French;Paris;Nicolas Bonfons;"ca. 1580–	1595";ELR;Roman type
-PB:30;"Histoire mémorable et fort plaisante et recreative pour tous amateurs de courtoisie du noble et 	vaillant chevalier Pierre de Provence et de la belle Maguelone.";French;Lyon;Jacques Pons?;1585;ELR;no copy located
-PB:31;"Histoire du noble et vaillant chevalier Pierre de Provence, autrement dict le Chevalier des Clefs: 	Et de la belle Princesse Maguelonne, fille du Roy de Naples. Où est traité de leur chaste amour, et 	des adventures qui leur sont survenues en icelle. ";French;Paris;Nicolas and Pierre Bonfons;1595–1601;ELR;
-PB:32;"L’histoire du noble et vaillant Chevalier Pierre de Provence, et de la belle Maguelonne, fille du 	Roy de Naples. Où sont amplement declarees ses proüesses, et leurs honnestes et chastes Amours. ";French;Montpellier;Jean Gilet;1597;ELR;
-PB:33;L’Histoire de Pierre de Provence et de la belle Maguelonne. vi. F.;French;Rouen;Louis [II] Costé;"ca. 	1601–1632";Blom 2012;
-PB:34;"L’Histoire du noble et vaillant chevalier Pierre de Provence et de la belle Maguelonne, fille du 	Roy de Naples. Où sont amplement declarees ses prouesses, et leurs honnestes et chastes amours. ";French;Lyon;Jean Didier;1625;Blom 2012;
-PB:35;L’Histoire de Pierre de Provence et de la belle Maguelonne. ;French;Rouen;s.n.;1626;Blom 2012;no copy located
-PB:36;L’histoire du noble et vaillant chevalier Pierre de Provence et de la belle Maguelonne, fille du Roy de Naples: Où sont amplement declarées ses proüesses, & leurs honnestes & chastes amours.;French;Lyon;Claude Chastelard;1630;Blom 2012;
-PB:37;L’Histoire de Pierre de Provence et de la belle Maguelonne. ;French;Troyes;Nicolas Oudot;ca. 1600–1677;Blom 2012;
-PB:38;L’Histoire de Pierre de Provence et de la belle Maguelonne. ;French;Rouen;David Ferrand [dit le jeune];ca. 1615–1660;Blom 2012;
-PB:39;L’Histoire de Pierre de Provence et de la belle Maguelonne. ;French;Rouen;Veuve Louis [II] Costé;ca. 1632–1677;Blom 2012;
-PB:40;L’Histoire de Pierre de Provence et de la belle Maguelonne. ;French;Brussels;Jean Mommart;1644;copy: Bruxelles, BR, III 93.139 A (RP), incomplete;
-PB:41;L’Histoire du noble et vaillant chevalier Pierre de Provence, et de Maguelonne fille du Roy de ;French;Lyon;Claude Chancey;1665;Blom 2012;
-PB:42;L’Histoire de Pierre de Provence et de la belle Maguelonne.;French;Troyes;Jacques [II] Oudot;1687;Blom 2012;
-PB:43;L’Histoire de Pierre de Provence et de la belle Maguelonne.;French;Troyes, & se vendent à Paris;Antoine de Rafflé;ca. 1661–1680;Blom 2012;
-PB:44;L’Histoire de Pierre de Provence et de la belle Maguelonne.;French;Troyes, & se vendent à Paris;Antoine de Rafflé;ca. 1680–April 1696;Blom 2012;
-PB:45;L’histoire de Pierre de Provence, et de la belle Maguelonnie [sic]. ;French;Troyes, & se vendent à Paris;Jean Musier;ca. May 1696–January 1703;Blom 2012;
-PB:46;L’Histoire de Pierre de Provence et de la belle Maguelonne.;French;Troyes;Jacques [II] Oudot;1700;Blom 2012;
-PB:47;L’Histoire de Pierre de Provence et de la belle Maguelonne.;French;Rouen;Jean-Baptiste [I] Besongne;1700;Blom 2012;
-PB:48;L’Histoire de Pierre de Provence et de la belle Maguelonne.;French;Rouen;Jean-Baptiste [I] Besongne;ca. 1676–1715;Blom 2012;
-PB:49; L'histoire du noble et vaillant chevalier Pierre de Provence, et de Maguelonne, fille du roy de Naples.;French;Lyon;s.n.;1712;Bibliotheca Croftsiana 1783, 4951;no copy located
-PB:50;L'Histoire de Pierre de Provence et de la belle Maguelonne. Galante héroïque.;French;Troyes;"Veuve 	Jacques [II] Oudot";1714;copy: London, BL, 643.c.33;
-PB:51;L'Histoire de Pierre de Provence et de la belle Maguelonne. Galante héroïque.;French;Troyes;Veuve Jacques [II] Oudot;1715;copy: Troyes, BM, Bbl. 889;
-PB:52;"Histoire du noble et vaillant chevalier Pierre de Provence, et de Maguelonne, fille du Roi de 	Naples, où sont amplement declarées leurs promesses, leurs honnetes amours & mariage. ";French;Lyon;Michel Laroche;ca. 1720?;copy: Madrid, BNE, R/11514(2));
-PB:53;Histoire de Pierre de Provence et de la belle Maguelonne. ;French;Rouen;Jean Oursel l’aîné;"ca. 1725–	1745";Mounier 2021;
-PB:54;L'Histoire de Pierre de Provence et de la belle Maguelonne. Galante héroïque. ;French;Troyes;"Veuve 	Jacques Oudot and Jean Oudot fils";1729;copy: Troyes, BM, Bbl. 2252;
-PB:55;Histoire de Pierre de Provence et de la belle Maguelonne. ;French;Troyes;Pierre Garnier;ca. 1729–1754;copy: Marseille, Mucem, 1R.765;permission dated 1729
-PB:56;L'histoire du noble et vaillant chevalier Pierre de Provence, et de Magelone, fille du roy de Naples, où sont amplement declarees ses prouesses et leurs honnetes amours et mariages [sic]. ;French;Tarascon;Pierre Tassi;1733;copy: Marseille, Mucem, 1R 1086.2;
-PB:57;L'histoire du noble […] Pierre […], et de Maguelonne […]. Où […] leurs promesse et leurs honnêtes Amours, et Mariage. Dernière Edition Revûë, corrigée & mise en nouveau langage. ;French;Zürich;J. Conrad Bincheldre;1733;copy: Macon, BM, 43185;
-PB:58;Histoire de Pierre de Provence et de la belle Maguelonne. ;French;Rouen;Veuve Jean [III] Oursel;after 1735;Mounier 2021;permission dated 1735
-PB:59;Histoire de Pierre de Provence et de la belle Maguelonne. ;French;Troyes;Pierre Garnier;ca. 1738–1754;copy: Troyes, BM, Bbl. 249;permission dated 19 May 1738
-PB:60;Histoire complète du noble et vaillant chevalier Pierre de Provence et de Maguelonne, fille du Roy ;French;Toulouse;Abraham Porchet;1748;copy: Toulouse, BM, M2973;
-PB:61;L'histoire de Pierre de Provence et de la belle Maguelonne. ;French;Rouen;Veuve [Jean-François] Behourt;ca. 1759–1763;copy: Troyes, BM, Bbl. 3297;permission on behalf of Jean-François Behourt
-PB:62;L'histoire de Pierre de Provence et de la belle Maguelonne. ;French;Rouen;Pierre Seyer;ca. 1763–1787;Mounier 2021;
-PB:63;Histoire de Pierre de Pierre de Provence, et de la belle Maguelonne.;French;Troyes;Jean Garnier;ca. 1754–1765;copy: Troyes, BM, Bbl. 781;permission on behalf of Pierre Garnier dated 19-05-1738
-PB:64;Histoire de Pierre de Pierre de Provence, et de la belle Maguelonne.;French;Troyes;Jean-Antoine Garnier;ca. 1765–1780;"copies: Troyes, BM, Bbl. 197 and 1537; Morin 1974, 542";permission on behalf  of Pierre Garnier dated 19-05-1738
-PB:65;Histoire de Pierre de Pierre de Provence, et de la belle Maguelonne.;French;Troyes;Jean-Antoine Garnier;ca. 1765–1780;Morin 1974, 543;no copy located
-PB:66;Histoire de Pierre de Pierre de Provence, et de la belle Maguelonne.;French;Troyes;Jean-Antoine Garnier;ca. 1765–1780;"copy: Troyes, BM, Bbl. 194; Morin 1974, 544";permision on behalf of Pierre Garnier dated 19-05-1738
-PB:67;Histoire de Pierre de Pierre de Provence, et de la belle Maguelonne.;French;Troyes;Garnier le jeune;ca. 1773–1783;copy: Marseille, Mucem, O1R.1;
-PB:68;L'Histoire du noble et vaillant chevalier Pierre de Provence, et de la belle Maguelonne, fille du Roy de Naples, où sont décrits ses beaux faits, et leurs bonnes amours & mariage.;French;Lyon;Antoine Dubois;ca. 1780?;copy: Montauban, BM, RF 443 pièce 3;
-PB:69;"L'Histoire du vaillant Pierre de Provence, et de la belle Maguelone, fille du roi de Naples; contenant leur chaste amour et mariage.";French;Rouen;P. Chalopin;1788;Mounier 2021;probably Pierre-Jean-Aimé Chalopin
-PB:70;"L'Histoire du vaillant Pierre de Provence, et de la belle Maguelone, fille du roi de Naples; contenant leur chaste amour et mariage.";French;Limoges;F. Chapoulaud;ca. 1800?;copy: Marseille, Mucem, O1R 611;
-PB:71;Pierre de Provence, et la belle Maguelone, par M. le Comte de Tressan. ;French;Rouen;"P. Seyer and 	Behourt";ca. 1787–1803;Hélot 1928, 193;
-PB:72;Pierre de Provence, et la belle Maguelone, par M. le Comte de Tressan. ;French;Rouen;Veuve Behourt;after 1779;copy: Troyes, BM, Bbl. 1297;
-PB:73;Pierre de Provence, et la belle Maguelone, par M. le Comte de Tressan. ;French;Troyes;Veuve Garnier;ca. 1779–1790;copy: Troyes, BM, Bbl. 109;
-PB:74;Pierre de Provence, et la belle Maguelone, par M. le Comte de Tressan. ;French;Troyes;Garnier;ca. 1790–1814;copy: Troyes, BM, Bbl. 19;
-PB:75;Pierre de Provence, et la belle Maguelone, par M. le Comte de Tressan. ;French;Troyes;Citoyenne Garnier;ca. 1800;copy: Marseille, Mucem, 1R 1252;
-PB:76;La plaisante histoire du noble et vaillant Chevalier Pierre de Provence, et de la belle Maguelonne, fille du Roi de Naples. Nouvellement mise en Flamen et Françoys ensemble. / De ghenuechlijcke historie van den edelen ende vroomen ridder Peeter van Provincien, ende van de schoone Maguelonne, dogter der koning van Napels. Nieuwelijckx in Nederduyts ende Fransoys tsamen ghestelt. Op een nieu ghecorrigeert ende oversien.;French and Dutch;Antwerp;Jan van Waesberghe;1587;ELR;
-PB:77;La plaisante histoire […] / De […] historie […]. Alles desen vierden druck seer neerstich ghecorrigeert, oversien ende toeghelaten. ;French and Dutch;Antwerp;Matthieu de Rische for Hieronymus Verdussen;1588;ELR;
-PB:78;La plaisante histoire du noble et vaillant chevalier Pierre de Provence et de la belle Maguelonne [...] Nouvellement mise en Flamen et en François ensemble …;French and Dutch;Rotterdam;Jan van Waesberghe;1624;ELR;no copy located
-PB:79;Die historie van Peeter van Provencen ende die schoone Maghelone van Napels.;Dutch;Antwerp;Willem Vorsterman;ca. 1517;copy: München, LMU, Cim 81;online: <https://epub.ub.uni-muenchen.de/14363/>
-PB:80;Die historie van Peeter van Provencen ende die schoone Maghelone van Napels.;Dutch;Antwerp;Claes van den Wouwere;ca. 1565;copy: Washington, LoC, Lessing J. Rosenwald collection, 1188; 
-PB:81;"De Historie van den Edelen ende Vromen Ridder Pieter van Provencien, Ende van de Schoone Maguelone, Dochter des Koninghs van Napels ende van hare wonderlijcke Avontueren ende 	Geschiedenissen. Op nieuws oversien ende gecorrigeert. ";Dutch;Utrecht;Wed. J[urriaen] van Poolsum;ca. 1691–1709;copy: Leiden, UL, BKNOOG 118;online: <https://digitalcollections.universiteitleiden.nl/view/item/1806626>
-PB:82;La historia de la linda magalona fija del rey de napoles. y del muy esforçado cavallero Pierres de provença: fijo del conde de provença: y de las fortunas y trabajos que passaron. ;Castilian;Seville;"Jacobo 	Cromberger";1519;IB 16697;
-PB:83;[La historia de la linda magalona]. ;Castilian;Burgos;Alonso de Melgar;1521;IB 16698;no copy located
-PB:84;La historia de la linda Magalona … ;Castilian;Toledo;[Miguel de Eguía],;1526;IB 16699;digitized copy: Paris, BnF, RES-Y2-819 <https://gallica.bnf.fr/ark:/12148/bpt6k310859f>
-PB:85;La historia de la linda Magalona … ;Castilian;Seville;Juan Cromberger;1533;IB 16700;digitized copy: Paris, BIS, RXVI 879. Pièce 3, <https://nubis.univ-paris1.fr/ark:/15733/358m>
-PB:86;La historia de la linda Magalona … ;Castilian;Seville;Domenico de Robertis;1542;IB 16701;digitized copy: Paris, BnF, RES-YD-240, <https://gallica.bnf.fr/ark:/12148/bpt6k317882r>
-PB:87;[La historia de la linda magalona]. ;Castilian;Burgos;Felippe de Junta;1562;IB 16776;
-PB:88;Historia de la linda Magalona … ;Castilian;Burgos;Felippe de Junta;1564;"not in IB; copy: München, LMU, 0017/8 Hist.prof. 173";
-PB:89;Libro de la linda Magalona, hija del rey de Napoles, y del muy esforçado cavallero Pierres de ;Castilian;Zaragoza;Jusepe de Altaraque;1602;IB 46869;digitized copy: Paris, BnF, RES-Y2-823, <https://gallica.bnf.fr/ark:/12148/bpt6k3113896>)
-PB:90;Magalona. Historia de la linda Magalona […] y del mui noble […] cavallero Pierres […], y de las muchas adversidades, y grandes trabajos, que passaron, siendo siempre constantes en la virtud, y como despues reynaron, y acabaron su vida honradamente en servicio de Dios.;Castilian;Lisbon;António Álvares;1625;IB 58813;
-PB:91;[La historia de la linda magalona].;Castilian;Baeza;s.n.;1628;IB 58814;no copy located
-PB:92;La historia de la Linda Magalona, hija del Rey de Napoles, y del esforçado cavallero Pierres de Provença, y de las muchas fortunas que passaron. Compuesto por Felipe Camus. Licenciado in utroque.;Castilian;Cuenca;Salvador de Viader;1629;IB 23668;digitized copy: København, KB, 77:1, 15, <https://www.kb.dk/e-mat/dod/120771000667-color.pdf>
-PB:93;"Magalona. Historia de la linda magalona hija del rey de napoles, y del muy noble, y esforçado 	cavallero pierres de provença, hijo del conde de prove[n]ça: y de las muchas adversidades, y 	grandes trabajos, que passaron siendo siempre constantes en la virtud, y como despues reynaron, y acabaron su vida honradamente en sirvicio de dios";Castilian;Lisbon;Domingos Carneiro;1664;IB 120274;copy: Lisboa, BNP, RES. 6712 P
-PB:94;"Magalona. Historia de la linda magalona hija del rey de napoles, y del muy noble, y esforçado 	cavallero pierres de provença …";Castilian;Lisbon;s.n.;[17th c.?];copy: Madrid, BNE, R/2176;online: <http://bdh-rd.bne.es/viewer.vm?id=0000193820&page=1>
-PB:95;"Historia de la linda Magalona, hija del Rey de Napoles, y del esforzado Cavallero Pierres de 	Provenza, hijo del Conde de Provença, y de las fortunas que passaron. ";Castilian;Madrid;Francisco Sanz;1676;IB 109588;
-PB:96;La historia de la linda Magalona … ;Castilian;Seville;Lucas Martín de Hermosilla;1689;IB 109604;
-PB:97;La historia de la linda Magalona … ;Castilian;Madrid;Francisco Sanz;ca. 1690;IB 109605;copy: Paris, BnF, RES-Y2-851
-PB:98;"Magalona. Historia de la Linda Magalona hija del rey de Napoles, y del mui noble y esforçado 	cavallero Pierres de Provença, y de las muchas adversidades, y grandes trabajos, que passaron, siendo siempre constantes en la virtud, y como despues reynaron, y acabaron su vida honradamente en servicio de Dios. ";Castilian;Évora;s.n.;1722;copy: Berkeley, Bancroft Library,PQ9191.A1.H571722;
-PB:99;La Historia de la linda Magalona […] Rey de Nápoles, y del esforzado […] Pierres de Provenza, ;Castilian;Barcelona;Pedro Escuder;ca. 1747–1750;CCPB000554687-7;
-PB:100;Historia de Pierres, y Magalona, hija del Rey de Napoles y las aventuras que tuvon [sic]. Compuesta por Phelipe Camus, licenciado en Vtroque. ;Castilian;[Valladolid];Alonso del Riego;ca. 1700–1763;CCPB001316370-X;
-PB:101;Historia de Pierres […] Gamus, Licenciado in Utroque.;Castilian;[Valladolid];Alonso del Riego;ca. 1700–1763;CCPB001316371-X and CCPB000135541-4;
-PB:102;Historia de la linda Magalona, hija del Rey de Napoles, y del esforzado Caballero Pierres de Provenza, hijo del Conde de Provença, y de las fortunas que pasaron.;Castilian;s.l.;s.n.;[18th c.?];CCPB001106842-6;online: <https://books.google.nl/books?id=M8iVo_CTJQkC&hl=fr&source=gbs_navlinks_s>
-PB:103;[Pierres y Magalona]. ;Castilian;Madrid;Antonio Sanz;ca. 1750;López 1993;no copy located
-PB:104;"La Historia de la linda Magalona, hija del rey de Napoles; Y del esforzado cavallero Pierres de 	Provenza, hijo del conde de Provenza; y de las forunas que passaron. ";Castilian;Valencia;Viuda de Geronimo Conejos;ca. 1750;copy: Valencia, University of Valencia, Biblioteca Històrica, BH E/1162 (13);
-PB:105;La Historia de la linda Magalona …;Castilian;Salamanca;Imprenta de la Santa Cruz;ca. 1755;López 1993;no copy located
-PB:106;[Magalona]. ;Castilian;Valencia;Augustín Laborda;ca. 1755;"López 1993; Moll 1981–	1982";no copy located
-PB:107;Historia del esforzado caballero Pierres de Provenza y de la hermosa Magalona. ;Castilian;Murcia;for Francisco Benedicto;1772;copy: Vilanova i la Geltrú, Biblioteca Museu Victor Balaguer, XVIII/995;
-PB:108;[Himperiou]. ;Greek;Venice;fratelli Nicolini da Sabbio for Damiano di Santa Maria;1543;Yiavis 2006;no copy located
-PB:109;Exēgēsis tou thaumastou Himperiou.;Greek;Venice;Christophoro di Zanetti;1553;Yiavis 2006;"digitized copy: 	Wien, ÖNB, *38.L.147,  <http://data.onb.ac.at/rep/10AA259B>"
-PB:110;Exēgēsis tou thaumastou Himperiou.;Greek;Venice;Christophoro di Zanetti;1562;Yiavis 2006;
-PB:111;[Himperiou]. ;Greek;Venice;Francesco Giuliani for Emmanouel Glyzounis;ca. 1594;Yiavis 2006;no copy located
-PB:112;Himperiou. ;Greek;Venice;Antonio Pinelli;1600;Yiavis 2006;
-PB:113;Himperiou. ;Greek;Venice;Antonio Pinelli;1606;"not in Yiavis 2006; catalogue Vergos auctions 17-03-2014, online: <https://erp.vergosauctions.com/uploads/auctions/189/Catalogue.pdf>)";
-PB:114;Himperiou. ;Greek;Venice;Antonio Pinelli;1624;Yiavis 2006;
-PB:115;Himperiou Istoria. ;Greek;Venice;Giovanni Pietro Pinelli;1638;Yiavis 2006;
-PB:116;Himperiou Istoria. ;Greek;Venice;Giovanni Antonio Giuliani;1644;Yiavis 2006;
-PB:117;Istoria Himperiou. ;Greek;Venice;Giovanni Pietro Pinelli;1646;Yiavis 2006;
-PB:118;Himperiou Istoria. ;Greek;Venice;Andrea Giuliani;1666;Yiavis 2006;
-PB:119;[Himperios]. ;Greek;Venice;Antonio Bortoli;1712;Yiavis 2006;no copy located
-PB:120;Istoria … Himperiou. ;Greek;Venice;Antonio Bortoli;1747;Yiavis 2006;no copy located
-PB:121;Istoria tou Imberiou.;Greek;Venice;Antonio Bortoli;1770;Yiavis 2006;
-PB:122;Istoria tou Imberiou.;Greek;Venice;Antonio Bortoli;1779;Yiavis 2006;
-PB:123;Die Schön Magelona. Ein fast lustige und kurtzweylige Histori, vonn der schönen Magelona, eins Künigs tochter von Neaples, und einem Ritter, genannt Peter mit den silberin schlüsseln, eins Graffen son ausz Provincia, durch Magister Veiten Warbeck, ausz Frantzösischer sprach in die Teütschen verdolmetscht, mit eynem Sendbrieff Georgij Spalatini.;German;Augsburg;Heinrich Steiner;1535;VD16 H 3867;
-PB:124;Die Schön Magelona …;German;Augsburg;Heinrich Steiner;1536;VD16 ZV 15953;
-PB:125;Die Schön Magelona …;German;Augsburg;Heinrich Steiner;1537;VD16 H 3868;
-PB:126;Die Schön Magelona …;German;Augsburg;Heinrich Steiner;1539;"VD16 H 3869; copy: Kraków, BJ";
-PB:127;Die Schön Magelona …;German;Augsburg;Heinrich Steiner;1541;VD16 H 3872;
-PB:128;Die Schön Magelona …;German;Augsburg;Heinrich Steiner;1544;VD16 H 3873;
-PB:129;Die Schön Magelona …;German;Augsburg;Heinrich Steiner;1545;VD16 H 3874;
-PB:130;Die Schön Magelona …;German;Frankfurt am Main;Herman Gülfferich;1548;VD 16 H 3875;
-PB:131;Die Schön Magelona …;German;Frankfurt am Main;Herman Gülfferich;1549;VD16 H 3876;
-PB:132;Die Schön Magelona …;German;Frankfurt am Main;Herman Gülfferich;1550;VD16 H 3877;
-PB:133;Die Schön Magelona …;German;Frankfurt am Main;Herman Gülfferich;1553;VD 16 H 3878;
-PB:134;Ein fast kurtzweilige History von der schönen Magelone, eines Königs Tochter von Neaples, und einem Ritter, genant Peter mit dem silbern Schlüsseln eines Graven Son aus Provincia durch Magister Veiten Warbeck auß Frantzoesischer sprach inn Teutsch verdolmetscht mit einem Sendbrieff Georgii Spalatini. ;German;Frankfurt am Main;[Weigand Han];1556;VD16 ZV 31993;digitized copy: Wien, ÖNB, 24976-A, online: < http://data.onb.ac.at/rep/10886EDE> 
-PB:135;Ein fast kurtzweilige History von der schönen Magelone …;German;Frankfurt am Main;Weigand Han;ca. 1558;VD16 H 3880;
-PB:136;Ein fast kurtzweilige History von der schönen Magelone …;German;Frankfurt am Main;Heirs Weigand Han and Georg Raben;ca. 1565;VD16 H 3881;
-PB:137;Ein fast kurtzweilige History von der schönen Magelone …;German;Frankfurt am Main;Kilian Han;1575;copy: Karlsruhe, BLB, 100B 76086 RH;
-PB:138;Ein fast kurtzweilige History … in: Das Buch der Liebe … ;German;Frankfurt am Main;Sigmund Feierabend;1587;VD16 B 8959;ff. 31v–44r 
-PB:139;Ein fast kurtzweilige History … ;German;Leipzig;Vincenz Strach for Nicolaus Nerlich;1598;"VD16 H 	3882";
-PB:140;Ein fast kurtzweilige History… ;German;s.l.;s.n.;1603;VD17 384:741859K;
-PB:141;Historia von der schönen Magelona, eines Königs Tochter von Neaples, und einem Ritter, [ge]nannt Peter mit den silbern Schlüsseln, eines Grafen Sohn von Provincia. Aus Französischer Sprache in das Teutsche verdolmetschet. Durch M. Vietem Warbeck. Samt einer Vorrede Georgii Spalatini. ;German;Nuremberg;In Verlegung Michael und Friederich Endter;1661;copy: London, BL,C.57.b.23;
-PB:142;Eine lustige historia von der schönen Magelona, eines Königes Tochter von Neaples, und einem Ritter, genant Peter mit den silbern Schlüsseln, eines Grafen Sohn auss Provincia. Aus frantzösischer Sprache ins Deutsche verdolmetschet, durch M. Veiten Warbeck.;German;s.l.;s.n.;1668;copy: Budapest, Eötvös Loránd University, Bar.09754/c1;
-PB:143;Historia von der schönen Magelona … ;German;Nuremberg;In Verlegung Johann Friderich Endtern;1678;VD17 7:667601L;
-PB:144;Historia von der schönen Magelona … ;German;Nuremberg;In Verlegung Balthasar Joachim Endter;1697;copy: London, BL, C.99.a.39;
-PB:145;Historia von der schönen Magelona … ;German;Nuremberg;Im Verlag der Johann Andreä Endterischen Buchhandlung;ca. 1651–1670;"VD17 39:120174X; copy: Erfurt, UB";
-PB:146;Historia von der schönen Magelona … ;German;Nuremberg;Im Verlag der Johann Andreä Endterischen Buchhandlung;ca. 1651–1670;VD17 32:635916C;
-PB:147;Historia von der schönen Magelona … ;German;s.l.;s.n.;1725;VD18 10850678;
-PB:148;"Ein lustige History, von der schönen Magelona […] Durch Veiten Warbeck ausz frantzösischer 	Sprach in Teutsch verdolmetschet …";German;s.l.;s.n.;1743;copy: Basel, UB, UBH Am VI 66:2;
-PB:149;Historia von der schönen Magelona … ;German;Nuremberg;"In Verlegung der Johann Andreä Endterischen 	handlung";after 1744?;VD18 14871483;"digitized copy: München, BSB, P.o.gall. 1057 e, <https://www.digitale-sammlungen.de/view/bsb10092375?page=1>; NB: the link in VD18 leads to a copy of another edition"
-PB:150;Historia von der schönen Magelona …;German;Nuremberg;In Verlegung der Johann Andreä Endterischen handlung;ca. 1750;copy: London, BL, RB.23.a.2019;"online: 	<https://books.google.nl/books?vid=BL:A0022129435&redir_esc=y>"
-PB:151;Historia von der schönen Magelona …;German;s.l.;s.n.;1756;copy: London, BL, C.175.a.10;
-PB:152;Historia von der schönen Magelona …;German;s.l. [Nuremberg?];s.n.;1784;VD18 11772212;
-PB:153;Historia von der schönen Magelona …;German;s.l.;s.n.;Gedruckt im diesem Jahr ;VD18 90748336;
-PB:154;Historie von der schönen Magelona, eines Königs Tochter von Neapolis… ;German;s.l;s.n.;Gedruckt im diesem Jahr ;copy: Stadtbibliothek Braunschweig, Brosch. I 6129;
-PB:155;Historie von der schönen Magelona, eines Königs Tochter von Neapolis… ;German;s.l.;s.n.;Gedruckt im diesem Jahr ;copy: sold at auction by Reiss & Sohn on 14 November 2017, lot 1681;no copy located
-PB:156;Historie von der schönen Magelona, eines Königs Tochter von Neapolis… ;German;s.l.;s.n.;[18th c.];copy: Weimar: HAAB, 278936–A;
-PB:157;Eine anmüthige und lesenswürdige Historie von der schönen Magelona, Eines Königs Tochter von Neapolis, und einem Ritter, genannt Peter mit den silbern Schlüsseln, eines Grafen Sohn von Provincia / Aus dem Französischen übersetzet durch M. Vitum Warbeck. ;German;Cologne;Christian Everaerts;ca. 1780–1813;VD18 11772166;
-PB:158;Historia von der Schönen Magelona, Eines Königs Tochter von Neapolis … Ganz neu gedruckt. ;German;s.l.;s.n.;ca. 1800;VD18 90823451;
-PB:159;[Historie o krásné kněžně Mageloně a udatném rytíři Petrovi];Czech;[Olomouc];Jan Günther;[1565];KPS K03021;no copy located
-PB:160;[Historie o krásné kněžně Mageloně a udatném rytíři Petrovi];Czech;[Olomouc];Vít Jindřich Ettel;ca. 1670;Myšák 2015, p. 394;it is uncertain if this is indeed a version in Bohemian
-PB:161;[Píseň utěšená a kratochvilná o krásné Mageloně a Petrovi z Provinci ...];Czech;s.l.;s.n.;ca. 1680–1700;KPS K09900;
-PB:162;[Pjseň […] Mageloně a Petrowi z Prowincy kterak gsau se náramně spolu zamilowali potom gak se s njmi dálo];Czech;Prague;s.n.;1685;KPS K09899;
-PB:163;[Píseň o Mageloně?]. ;Czech;s.l.;s.n.;ca. 1700–1750;KPS K09901;
-PB:164;Welmi vtěssená a kratochwjlná Hystorye O Krásné Panně Mageloně dceři Krále z Neapolis. A O gednom Rytjři Gménem Petrowi znamenitého hraběte z Prowincy Synu. Kterážto Hystorye prwe z Francauské Ržeči w Německau a nynj zase w nowě z Némecké w Cžeskau s Pilnosti přeložena gest.;Czech;Olomouc;František Antonín Hirnle;1741;KPS K17693;
-PB:165;[Historie o krásné Mageloně, krále z Neapolis dceři, a o jednom ctném a udatném rytíři jménem Petrovi, jednoho znamenitého hraběte z Provincy synu]. ;Czech;s.l.;s.n.;ca. 1751–1800;KPS K17695;
-PB:166;Welmi vtěssená Hystorye o Krásné Mageloně Dceři Krále z Neapolis…;Czech;Prague;"Karel Jozeff 	Jaurnich";ca. 1755–1767;KPS K03025;
-PB:167;[Velmi utěšená historie o krásné Mageloně…]. ;Czech;s.l.;s.n.;ca. 1751–1800;KPS K17697;
-PB:168;Kratochwjlná Hystorye o krásné Panně Mageloně z Neapolis, králowské Dceři, a o vdatném Rytjři Petrowi z Prowence, znamenitého Hraběta Synu. ;Czech;Skalica;[Josef Antonín Škarnicl];ca. 1765–1798;KPS K17691;
-PB:169;Historie o krásné kněžně Mageloně a udatném rytíři Petrovi ... ;Czech;Olomouc;[Josefa Terezie Hirnleová?];1767;KPS K03022;
-PB:170;Welmi vtěssená Hystorye O krásné Mageľoně […] Wssem pro Obweselenj Mysle a Vkrácenj Cžasu nowu na Swětľo wydan[á]. ;Czech;Kutná Hora;[František Vincenc Korec?];1774;KPS K03023;
-PB:171;"Hystorye o krásné Kněžně Mageloně a vdatném Rytjřj Petrowi. Wssem milownjkům k 	přigemněgssjmu čtenj zřjzená a oprawená.";Czech;Hradec Králové;s.n.;ca. 1775–1820;KPS K03026;
-PB:172;Welmi vtěssená, a kratochwjlná Hystorye, O krásné Panně Mageloně […] Kterážto Hystorye prwe z Francauské Ržeči w Německau, a nynj zase w nowě z Německé w Cžeskau s Pilnosti přeložená gest. ;Czech;Olomouc;Josef František Loserth for Josefa Terezie Hirnleová;1780;KPS K03024;
-PB:173;Welmi vtěssená hystorye o krásné Mageloně ... ;Czech;Jindřichův Hradec;s.n.;ca. 1780–1825;"KPS 	K17696";
-PB:174;Historie o krásné kněžně Mageloně a udatném rytíři Petrowi ;Czech;Prague;s.n.;1793;KPS K17692;no copy located
-PB:175;Welmi vtěssená hystorye o krásné Mageloně … ;Czech;Jindřichův Hradec;[Josef Landfras];"ca. 1796–	1826";KPS K17694;
-PB:176;Welmi vtěssená, a krátochwjlná Hystorye O Krásné Panně Mageloně … ;Czech;s.l.;s.n.;1800;KPS K03027;
-PB:177;[Historyje o Magielonie]. ;Polish;s.l.;s.n.;ca. 1565–1587;Kiliańczyk-Zięba 2013;no copy located
-PB:178;[Historyje o Magielonie]. ;Polish;s.l.;s.n.;ca. 1600–1650;"Brückner 1901, 	description of an incomplete copy";
-PB:179;[Historyje o Magielonie].;Polish;s.l.;s.n.;ca. 1650–1677;"copy: Kraków, BJ, 586036 I, incomplete: first gathering 	missing";online: <https://jbc.bj.uj.edu.pl/publication/929142>
-PB:180;[Historyje o Magielonie].;Polish;Kraków;s.n.;1677;copy: Kharkiv, Scientific Library of Kharkiv National University, 196692, incomplete;
-PB:181;[Historia o Magiellonie]. ;Polish;s.l.;s.n.;1696;Elektroniczna Baza Bibliografii Estreichera (EBBE), 128584;no copy located
-PB:182;Historya o Magielonie Krolewnie Neapolitanskiey: Vmyslu swpániálościa̦, Vrody pieknośčia̦, Najaśnicysza̦ Godnośčia̦, wizelákich cnot z przymiotow zgromádzeniem.;Polish;Kraków;"Krysztof 	Domanski";1701;copy: Dresden, SLUB, Lit.Slav.244;
-PB:183;Historya o Magielonie Krolewnie Neapolitanskiey: Vmyslu swpániálościa̦, Vrody pieknośčia̦, Najaśnicysza̦ Godnośčia̦, wizelákich cnot z przymiotow zgromádzeniem.;Polish;Kraków;"Krysztof 	Domanski";1710;copy: Kraków, BJ, 586033 I;"online: 	https://jbc.bj.uj.edu.pl/dlibra/publication/943888/edition/907537"
-PB:184;Historya o Magielonie Krolewnie Neapolitanskiey: Vmyslu swpániálościa̦, Vrody pieknośčia̦, Najaśnicysza̦ Godnośčia̦, wizelákich cnot z przymiotow zgromádzeniem.;Polish;s.l.;s.n.;1725;copy: Kraków, BJ, 586034 I;online: https://jbc.bj.uj.edu.pl//dlibra/metadatasearch?action=AdvancedSearchAction&type=-3&val1=dig:%22NDIGSTDR094820%22
-PB:185;Historya o Magielonie Krolewnie Neapolitanskiey: Vmyslu swpániálościa̦, Vrody pieknośčia̦, Najaśnicysza̦ Godnośčia̦, wizelákich cnot z przymiotow zgromádzeniem.;Polish;Kraków;Dominik Siarkowski;1739;copy: Gdańsk, BG PAN, Dm 3281 8°;
-PB:186;Historya o Magielonie Krolewnie Neapolitanskiey: Vmyslu swpániálościa̦, Vrody pieknośčia̦, Najaśnicysza̦ Godnośčia̦, wizelákich cnot z przymiotow zgromádzeniem.;Polish;s.l.;s.n.;[18th c.];copy: Wrocław, Zakład Narodowy im. Ossolińskich, XVIIII-8353;"online: <https://dbc.wroc.pl/dlibra/publication/25639/edition/23188/historya-o-magielonie-	krolewnie-neapolitanskiey?language=pl#description>)"
-PB:187;Historya o Magielonie Krolewnie Neapolitanskiey: Vmyslu swpániálościa̦, Vrody pieknośčia̦, Najaśnicysza̦ Godnośčia̦, wizelákich cnot z przymiotow zgromádzeniem.;Polish;Kraków;Michal Józef Antoni Dyaszewski;1752;EBBE 128593;no copy located
-PB:188;[Historya O Magielonie Krolewnie Neapolitanskiey: Dla Zachęcenia Ciekawego Czytelnika Z ;Polish;s.l.;s.n.;1773;EBBE 128594;no copy located
-PB:189;[Historya O Magielonie Krolewnie Neapolitanskiey: Dla Zachęcenia Ciekawego Czytelnika Z ;Polish;[Supraśl];[Drukarnia Bazylianów];1783;copy: Warszawa, Instytut Badań Literackich Polskiej Akademii Nauk, XVIII.1.461;online: <https://rcin.org.pl/dlibra/publication/272395>
-PB:190;[Historya O Magielonie Krolewnie Neapolitanskiey: Dla Zachęcenia Ciekawego Czytelnika Z ;Polish;[Supraśl];[Drukarnia Bazylianów];1787;copy: Warszawa, Instytut Badań Literackich ;online: <https://rcin.org.pl/dlibra/publication/272401>)
-PB:191;[Skøne Magelona]. ;Danish;Copenhagen;Laurentz Benedicht;1583;DFB 7, p. 237;no copy located
-PB:192;"Skøne Magelona. En saare lustig oc schön historie om dend schøne Magelona en konges saatter off Neaples: och en Ridder ved naffn Peder, som kalladis den ridder med dett sølff nøgle, en	greffuis søn aff Provinzia. Wfstaett aff frantzosist paa thydsch ved M.Vitus Varbeck. Och nu nyligen fordanschet, saare lystig at loese.";Danish;Helsingør;Peder Huaen;1610;DFB 7, p. 238;no copy located
-PB:193;[Den skiönne Magelona].;Danish;Copenhagen;s.n.;1662;DFB 7, p. 238;no copy located
-PB:194;En meget Kortvillig historiae om den skiønne Magelona en Konges Daater aff Neaples oc en ridder som bleff kaldet Peder med Sølff-Nøglen, en Grevis søn udaff Provincia. Wfstaett. Aff det Franzoske Sprock først paa Tydsken udsoet oc nu nyligen fordansket;Danish;Copenhagen;s.n.;1690;copy: København, KB, N 1850 8°;
-PB:195;En […] historie om den skiønne Magelona … ;Danish;Copenhagen;s.n.;1698;copy: København, KB, 58,-455 8° 15023;
-PB:196;[Historie om den skiønne Magdelone]. ;Danish;Copenhagen;s.n.;1704;DFB 7, p. 239;no copy located
-PB:197;[Den skiønne Magellona].;Danish;s.l.;s.n.;1720;DFB 7, pp. 239–240;no copy located
-PB:198;En meget Kortvillig historie om den skiønne Magelona … ;Danish;Copenhagen;s.n.;1731;copy: København, KB, 58,-455 8° 15025;
-PB:199;[Historie om den skiønne Magelona]. ;Danish;s.l.;s.n.;1734;DFB 7, p. 240;no copy located
-PB:200;[Historie om den skiønne Magelona]. ;Danish;Copenhagen;s.n.;1740;DFB 7, p. 240;no copy located
-PB:201;En meget kortvillig historie … ;Danish;Copenhagen;s.n.;1755;copy: København, KB, 58,-455 8° 15026;
-PB:202;En meget kortvillig historie … ;Danish;Copenhagen;s.n.;1761;copy: København, KB, 58,-455 8° 15027;
-PB:203;Historien om den skiønne Magelona og Peder med Sølv-Nøglen]. ;Danish;Copenhagen;s.n.;1782;DFB 7, p. 241;no copy located
-PB:204;En meget smuk Historie, om den skiønne Magelona, en Konges Datter af Neapolis, og en Ridder, som blev kaldet Peder med Sølv Nøglen, en Greves Søn af Provintia. Af det Frantzosiske Sprog først paa Tydsk udsat og siden defeter paa Danske. ;Danish;Copenhagen;Hans Jensen Graae;1783;copy: København, KB, 58,-455 8° 15029;
-PB:205;[Magelona]. ;Danish;s.l.;s.n.;ca. 1750–1800?;copy: København, KB, 1906/22b.1-3. 56-71;
-PB:206;[Magelona. Peder med Sølvnøglen]. ;Danish;s.l.;s.n.;ca. 1750–1800?;København, KB, 1929/75;
-PB:207;Eine seer korttwylige Historia, van der schönen Magelona, eines Königes dochter van Neaples, unde einem Ridder, genömet Peter mit den sülveren Schlötelen, eines Graven Söhn uth Provintz : Erstlick uth der frantzösischen in de Hochdüdesche, nu överst in de Sassische Sprake övergesettet. ;Low German;Hamburg;[Hermann Möller];1601;copy: Göttingen, SUB, 8 FAB III, 2052 RARA;online: <https://gdz.sub.uni-goettingen.de/id/PPN798808632>
-PB:208;Eine seer korttwylige Historia, van der schönen Magelona, eines Königes dochter van Neaples, unde einem Ridder, genömet Peter mit den sülveren Schlötelen, eines Graven Söhn uth Provintz : Erstlick uth der frantzösischen in de Hochdüdesche, nu överst in de Sassische Sprake övergesettet. ;Low German;Hamburg;s.n.;1611;Westermann 1932, p. 291;no copy located
-PB:209;La historia del cavaller Pierres de Provença fill del conte de Provença y de la gentil Magalona filla del rey de Napoles, traduida de llengua castellana en la llengua catalana per Honorat Comalada. ;Catalan;Barcelona;Sebastià Cormellas;1616;Pastor i Briones 2018;no copy located
-PB:210;"Ací comença la historia del noble, y, esforçat Cavaller Pierres de Prouença, fill del Comte de Provença. Y de la gentil Magalona, filla del Rey de Napols; y de les fortunes y treballs que passaren en la sua molt enamorada vida. Traduyda de Catalana, per lo discret y honrat Honorat Comalada. ";Catalan;Barcelona;Sebastià Cormellas;1650;IB 58827;digitized copy: Paris, BnF, RES-Y2-710, <https://gallica.bnf.fr/ark:/12148/bpt6k8573996>
-PB:211;Asi comença la historia del noble, y esforçat cavaller Pierres de Provença. ;Catalan;Barcelona;"Antoni 	Lacavalleria";1670;Pastor i Briones 2018;no copy located
-PB:212;"La historia del noble, y esforsat Cavaller Pierres de Provença, y de la gentil Magalona filla del	Rey de Napols, y de les fortunes y treballs que passaren en la sua molt enamorada vida. Traduhida de llengua castellana, en la nostra Catalana, per lo discret, y honrat Honorat Comalada. ";Catalan;Barcelona;"Antoni 	Lacavalleria";1683;Pastor i Briones 2018;copy in private collection
-PB:213;Història del noble y molt esforsat cavaller Pierres de Provensa, y de la gentil Magalona … ;Catalan;Barcelona;Joan Jolis;ca. 1679–1705;CCPB000566407-1;"both copies are available online: <https://books.google.nl/books?id=L7xcP4viQDUC&hl=fr&pg=PA1#v=onepage&q&f=false>; <https://books.google.nl/books?id=8vBQAAAAcAAJ&hl=fr&pg=PA1#v=onepage&q&f=false>)"
-PB:214;La historia del noble, y esforsat Cavaller Pierres de Provença …;Catalan;Barcelona;Rafel Figueró;ca. 1667–1717;CCPB000403870-3;online: <http://www.bibgirona.cat/pandora/viewer.vm?id=0000000267&page=1&search=&lang=ca&view=Ripoll>
-PB:215;"La historia del noble, y esforsat cavaller Pierres de Provença, y de la gentil Magalona, filla del 	rey de Napols. Y de les fortunes, y treballs que passaren en la sua enamorada vida. Traduhida de llengua Castellana en la nostra Catalana, per lo discret, y honràt Honoràt Comalada. ";Catalan;Girona;Francisco Oliva;1710;copy in private collection;
-PB:216;"La historia del noble, y esforsat cavaller Pierres de Provença, y de la gentil Magalona, filla del 	rey de Napols. Y de les fortunes, y treballs que passaren en la sua enamorada vida. Traduhida de llengua Castellana en la nostra Catalana, per lo discret, y honràt Honoràt Comalada. ";Catalan;Girona;Jaume Bró;ca. 1703–1768;copy: Wien, ÖNB, BE.12.Y.61;online: <http://data.onb.ac.at/rep/106E2682>)
-PB:217;"La historia del noble, y esforsat cavaller Pierres de Provença, y de la gentil Magalona, filla del 	rey de Napols. Y de les fortunes, y treballs que passaren en la sua enamorada vida. Traduhida de llengua Castellana en la nostra Catalana, per lo discret, y honràt Honoràt Comalada. ";Catalan;Girona;Jaume Bró;ca. 1703–1768;Barcelona, BC, Bon. 9-II-26;online: <https://books.google.nl/books?id=FYwbHHEo1P0C&hl=fr&pg=PA1#v=onepage&q&f=false>
-PB:218;La historia del noble, y esforsat cavaller Pierres de Provença, y de la gentil Magalona ...;Catalan;Olot;Josep Rovira;ca. 1751–1764;CCPB000422997-5;digitized copy: Ripoll, Biblioteca Pública Lambert Mata, FONS MATA 766, <http://www.cervantesvirtual.com/nd/ark:/59851/bmc5b021>)
-PB:219;La historia del noble, y esforsat cavaller Pierres de Provença, y de la gentil Magalona …;Catalan;Olot;Josep Rovira;ca. 1751–1771;copy: Toulouse, BU, Res 34347;"online: 	<https://tolosana.univ-toulouse.fr/notice/175899061>"
-PB:220;Kedves es nyajas historia, szep Magelonarol, Neapolis királynak leányáról, és edgy Peter nevü vitézröl az ezüstös kúltsokkal, ki edgy provinciabeli gróf fia volt. Francziai nyelvböl nemet nyelvre meg-fordittatott Spalatini György küldött levelével edgyütt M. Warbeck Vitus által. Mostan penig németböl magyarrá forditotta Tesseni Wenczel, az magyar olvasók kedvéjért. ;Hungarian;Levoča (Löcse);Samuel Brewer;1676;copy: Budapest, Országos Széchényi Könyvtár;"online: 	<https://oszkdk.oszk.hu/DRJ/4460>"
-PB:221;A sheyn lid fun a riter oiz proventzien land … ;Yiddish;Fürth;Josef Schneiór;1698;copy: Trier, UB, 24=XH/nc38784;
-PB:222;A sheyn lid fun a riter proventsion land … ;Yiddish;Prague;s.n.;ca. 1705;"Dowling 1992, 	p. 51";no copy located
-PB:223;A sheyn historye fun riter Zigmund un Magdeleyne … ;Yiddish;Offenbach;s.n.;1714;"Dowling 1992, 	p. 51";no copy located
-PB:224;Mageleyne lid. ;Yiddish;Amsterdam;s.n.;[18th c.] ;"Dowling 1992, p. 61; Oxford, Bodleian Library, Oppenheim collection?";
-PB:225;Ayn shen historie fun riter Zigmund und Magdelena. ;Yiddish;Fürth;Isaac ben David Zerendorf;1791;copy: Amsterdam, UB, UBM: Ros. 15 G 43;
-PB:226;Historia verdadeira da Princeza Magalona … ;Portuguese;Lisbon;Bernardo da Costa de Carvalho;1733;Severino 2005, p. 40, and Azevedo de Abreu 1993, p. 50, 62 and 78, who gives 1732 as the date of the first edition;no copy located
-PB:227;Historia verdadeira da princeza Magalona, filha d'el-rey de Napoles, e do nobre, e valoroso cavalheiro Pierres, Pedro de Provença … ;Portuguese;Lisbon;Manoel Fernandes da Costa;1737;copy: Lisboa, BNP, F. 238;online: <https://purl.pt/30786/1/index.html#/1/html>
-PB:228;Historia verdadeira da princeza Magalona, filha d'el-rey de Napoles, e do nobre, e valoroso cavalheiro Pierres, Pedro de Provença e dos muitos trabalhos, e adversidades, que passaraõ, sendo sempre constantes na fé, e virtude, e como depois reinaraõ e acabaraõ a sua vida virtuosamente no serviço de Deos. ;Portuguese;Lisbon;Heirs of Antonio Pedrozo Galrão;1753;copy: Paris, BIS, C 8= 400-15;
-PB:229;Historia verdadeira da princeza Magalona, filha d'el-rey de Napoles …;Portuguese;Lisbon;Francisco Borges de Sousa;1758;copy: Lisboa, BNP, L. 3569 A;
-PB:230;Historia verdadeira da princeza Magalona, filha d'el-rey de Napoles …;Portuguese;Lisbon;Francisco Borges de Sousa;1767;copy: Lisboa, BNP, L. 75233 P;
-PB:231;Historia verdadeira da princeza Magalona, filha d'el-rey de Napoles …;Portuguese;Lisbon;Francisco Borges de Sousa;1783;description in a bookseller’s catalogue: <https://www.bestnetleiloes.com/pt/leiloes/importante-leilao-de-livros-e-manuscritos/princesa-magalona-1783>;no copy located
-PB:232;Historia verdadeira da princeza Magalona, filha d'el-rey de Napoles …;Portuguese;Lisbon;Francisco Borges de Sousa;1789;copy: München, BSB, 4 P.o.hisp. 505#Beibd.1;online: <http://reader.digitale-sammlungen.de/de/fs1/object/display/bsb10530173_00040.html>)
-PB:233;Historia verdadeira da princeza Magalona, filha d'el-rey de Napoles …;Portuguese;Porto;Antonio Alvarez Ribeiro;1793;description in a bookseller’s catalogue: <https://www.abebooks.co.uk/Historia-verdadeira-princeza-Magalona-filha-dEl-Rey/30336405648/bd>;no copy located
-PB:234;Historia verdadeira da princeza Magalona, filha d'el-rey de Napoles …;Portuguese;Lisbon;Simão Thaddeo Ferreira;1794;copy: Lisboa, BNP, L. 4980//10 V;
-PB:235;Istoria memorabile e molto piacevole per ogni generoso, e nobile cavaliere: Del valoroso Pietro di Provenza e della bella Maghelona figliuola del re de Napoli, dove sono ampiamente dichiarate le loro prodezze, e casti amori. Opera delettevole con accomodate figure à suoi luoghi nuovamente ristampata. ;Italian;Turin;Gerardo Giuliano;ca. 1726–1765;copy: Ithaka, NY, Cornell University, Kroch Library Rare & Manuscripts (Non-Circulating) Rare Books PQ1501.P53 I8 1600 tiny;
-PB:236;Istoria memorabile e molto piacevole per ogni generoso, e nobile cavaliere: Del valoroso Pietro di Provenza e della bella Maghelona figliuola del re de Napoli, dove sono ampiamente dichiarate le loro prodezze, e casti amori. Opera delettevole con accomodate figure à suoi luoghi nuovamente ristampata. ;Italian;Turin;Gerardo Giuliano;ca. 1726–1765;"(copy: Genève, Musée d'Ethnografie, Magasin 	A3 MEG PR EU 1566 GAZ ITA 37";
-PB:237;Istoria memorabile e molto piacevole per ogni generoso e nobile cavaliere del valoroso Pietro di Provenza e della bella Maghelona figliola del re di Napoli dove ampiamente sono dichiarate le loro prodezze, ed amori. ;Italian;Turin/Vercelli;Francesco Prato/Giuseppe Panialis;ca. 1790;mentioned in a bookseller’s catalogue that is no longer available online;no copy located
-PB:238;Povest' o blagorodnom knjaze Petre zlatych ključach i o blagorodnoj korolevne Magilene. ;Russian;s.l.;s.n.;ca. 1780, before 1782;copy: Göttingen, SUB, 8 FAB X, 6725 (3) RARA;
-PB:239;Povest' o blagorodnom knjaze Petre zlatych ključach i o blagorodnoj korolevne Magilene. ;Russian;s.l.;s.n.;ca. 1784;Göttingen, SUB, 8 FAB X, 6855 RARA;
+﻿BPB:1;[colophon:] le livre et l’istoire de Pierre filz du conte de Prouvence et de la belle Maguelonne fille du roy de Naples.;French;[Lyon];[Guillaume Le Roy for Barthélemy Buyer];ca. 1475;ISTC ip00645130;
+BPB:2;[colophon:] le livre et l’ystoire de Pierre, filz du conte de Provence, et de la belle Maguelonne …;French;[Lyon];[Martin Huss];ca. 1479–1481;ISTC ip00645150;USTC 95514 attributes to Guillaume Le Roy
+BPB:3;"[incipit:] cy commence l’istoyre du vaillant chevalier Pierre filz du comte de Provence et de la 	belle Maguelonne fille du roy de Naples";French;Lyon;Guillaume Le Roy;ca. 1483;ISTC ip00645200;
+BPB:4;La belle Maguelonne.;French;Lyon;Guillaume Le Roy;ca. 1485;ISTC ip00645250;
+BPB:5;La belle Maguelonne.;French;Lyon;Mathias Huss;ca. 1486;ISTC ip00645300;
+BPB:6;La belle Maguelonne.;French;[Lyon];Pierre Bouttellier/Peter Schenck;ca. 1487;ISTC ip00645350;digitized copy: Paris, BnF, Y2-705 <https://gallica.bnf.fr/ark:/12148/bpt6k8713806r>)
+BPB:7;Cy commence l’istoire du vaillant chevalier pierre de provence et de la belle maguelonne. ;French;[Lyon];Jean Du Pré;14 March 1489 ;ISTC ip00645400;
+BPB:8;Cy commence l’istoire […] maguelonne fille du roy de naples.;French;[Lyon];Jean de La Fontaine;11 January 1490;ISTC ip00645450;
+BPB:9;La belle Maguelonne;French;Paris;Denis Meslier;ca. 1491;ISTC ip00645430;
+BPB:10;La belle Maguelonne;French;Paris;Jean Trepperel;15 May 1492/1493;ISTC ip00645480 and ip00645500;"two states; copy state 2: Paris, BnF, RES-Y2-1083"
+BPB:11;La belle Maguelonne;French;Rouen;Jacques Le Forestier;ca. 1493–1512;ISTC ip00645530;
+BPB:12;Cy commence l’ystoire du vaillant chevalier pierre de prouvence et de la belle maguelonne fille du roy de naples. ;French;[Lyon];[Martin Havard];ca. 1502;ELR;no copy located
+BPB:13;La belle Maguelonne;French;Paris;Michel Le Noir;12 November 1504;ELR;no copy located
+BPB:14;L'istoire du noble et vaillant chevalier Piere de Prouence. Et aussi de la belle Maguelonne fille du roy de naples. ;French;[Lyon];[Pierre Maréchal and Barnabé Chaussard];ca. 1504;ISTC ip00645550;"error in GW 11 Sp.253a, no copy in Vienna; second copy in Aix-en-Provence, Bibliothèque Méjanes, Inc. D. 46"
+BPB:15;La belle Maguelonne;French;Rouen;Richard Goupil for Michel Angier, Raulin Gaultier and Jean Macé;ca. 1511–1513;ELR;no copy located
+BPB:16;La belle Maguelonne;French;Rouen;Richard Goupil for Raulin Gaultier ;1516;ELR;
+BPB:17;Sensuyt l’histoire de Pierre de prouvence et de la belle Maguelonne Nouvellement imprime a paris. Vc. ;French;Paris;Veuve Jean Trepperel;ca. 1511–1525;ELR;
+BPB:18;L’Histoire de Pierre de prouvence et de la belle maguelonne. Nouuellement […] V.;French;Paris;Veuve Jean Trepperel and Jean Janot;ca. 1512ؘ–1519;ELR;
+BPB:19;Cy commance l'hystoire des deulx vrays et parfaictz amans. C’est à scavoir Pierre de provence et la belle Maguelonne fille du Roy de Naples.;French;Avignon;Jean de Channey;1524;ELR;
+BPB:20;Sensuit l'hystoire de Pierre de prouvence et de la belle Maguelonne: imprimé à Paris. ;French;Paris;Alain Lotrian;ca. 1525–1547;ELR;
+BPB:21;Sensuit l'histoire de Pierre de provence et de la belle Maguelone. Nouvellement imprimé à Paris. v. ca.;French;Paris;Alain Lotrian and Denis Janot;ca. 1530;ELR;
+BPB:22;Cy commence l’ystoire du noble et vaillant chevalier Pierre de Prouvence et de la belle Maguelonne fille du roy de Naples. ;French;Lyon;en la maison de Barnabé Chaussard;ca. 1533–1552;ELR;no copy located
+BPB:23;Cy commence l’hystoire du noble et vaillant chevalier Pierre de Prouvence et de la belle Maguelonne fille du roy de Naples. ;French;[Lyon];[Jacques Moderne];ca. 1540;copy: Basel, UB, EW VI 58:8;Attribution made by me on the basis of the typographical material.
+BPB:24;L’Histoire de Pierre de Prouvence, et de la belle Maguelonne. ;French;Antwerp;Jan van Waesberghe ;1560;ELR;
+BPB:25;L'Histoire de Pierre de Provence, et de la belle Maguelonne, vi Ca.;French;Paris;Veuve Jean Bonfons;ca. 1568–1573;ELR;
+BPB:26;.L'Histoire de Pierre de Provence, et de la belle Maguelonne, vi Ca. ;French;Paris;Simon Calvarin;"ca. 	1569–1585";ELR;
+BPB:27;L’Histoire de Pierre de Provence, et de la belle Maguelonne, vi c.;French;Paris;Nicolas Bonfons;"ca. 	1573–1580";ELR;Gothic type
+BPB:28;"L’Histoire du noble et vaillant Chevalier Pierre de Provence, et la belle Maguelonne, fille du Roy 	de Naples: Où sont amplement déclarées ses prouesses, et leurs honnestes et chastes amours. ";French;Lyon;Héritiers de François Didier;ca. 1581–1592;ELR;
+BPB:29;"Histoire du noble et vaillant chevalier Pierre de Provence, autrement dict le Chevalier des Clefs. 	Et de la belle Princesse Maguelonne fille du Roy de Naples. ";French;Paris;Nicolas Bonfons;"ca. 1580–	1595";ELR;Roman type
+BPB:30;"Histoire mémorable et fort plaisante et recreative pour tous amateurs de courtoisie du noble et 	vaillant chevalier Pierre de Provence et de la belle Maguelone.";French;Lyon;Jacques Pons?;1585;ELR;no copy located
+BPB:31;"Histoire du noble et vaillant chevalier Pierre de Provence, autrement dict le Chevalier des Clefs: 	Et de la belle Princesse Maguelonne, fille du Roy de Naples. Où est traité de leur chaste amour, et 	des adventures qui leur sont survenues en icelle. ";French;Paris;Nicolas and Pierre Bonfons;1595–1601;ELR;
+BPB:32;"L’histoire du noble et vaillant Chevalier Pierre de Provence, et de la belle Maguelonne, fille du 	Roy de Naples. Où sont amplement declarees ses proüesses, et leurs honnestes et chastes Amours. ";French;Montpellier;Jean Gilet;1597;ELR;
+BPB:33;L’Histoire de Pierre de Provence et de la belle Maguelonne. vi. F.;French;Rouen;Louis [II] Costé;"ca. 	1601–1632";Blom 2012;
+BPB:34;"L’Histoire du noble et vaillant chevalier Pierre de Provence et de la belle Maguelonne, fille du 	Roy de Naples. Où sont amplement declarees ses prouesses, et leurs honnestes et chastes amours. ";French;Lyon;Jean Didier;1625;Blom 2012;
+BPB:35;L’Histoire de Pierre de Provence et de la belle Maguelonne. ;French;Rouen;s.n.;1626;Blom 2012;no copy located
+BPB:36;L’histoire du noble et vaillant chevalier Pierre de Provence et de la belle Maguelonne, fille du Roy de Naples: Où sont amplement declarées ses proüesses, & leurs honnestes & chastes amours.;French;Lyon;Claude Chastelard;1630;Blom 2012;
+BPB:37;L’Histoire de Pierre de Provence et de la belle Maguelonne. ;French;Troyes;Nicolas Oudot;ca. 1600–1677;Blom 2012;
+BPB:38;L’Histoire de Pierre de Provence et de la belle Maguelonne. ;French;Rouen;David Ferrand [dit le jeune];ca. 1615–1660;Blom 2012;
+BPB:39;L’Histoire de Pierre de Provence et de la belle Maguelonne. ;French;Rouen;Veuve Louis [II] Costé;ca. 1632–1677;Blom 2012;
+BPB:40;L’Histoire de Pierre de Provence et de la belle Maguelonne. ;French;Brussels;Jean Mommart;1644;copy: Bruxelles, BR, III 93.139 A (RP), incomplete;
+BPB:41;L’Histoire du noble et vaillant chevalier Pierre de Provence, et de Maguelonne fille du Roy de ;French;Lyon;Claude Chancey;1665;Blom 2012;
+BPB:42;L’Histoire de Pierre de Provence et de la belle Maguelonne.;French;Troyes;Jacques [II] Oudot;1687;Blom 2012;
+BPB:43;L’Histoire de Pierre de Provence et de la belle Maguelonne.;French;Troyes, & se vendent à Paris;Antoine de Rafflé;ca. 1661–1680;Blom 2012;
+BPB:44;L’Histoire de Pierre de Provence et de la belle Maguelonne.;French;Troyes, & se vendent à Paris;Antoine de Rafflé;ca. 1680–April 1696;Blom 2012;
+BPB:45;L’histoire de Pierre de Provence, et de la belle Maguelonnie [sic]. ;French;Troyes, & se vendent à Paris;Jean Musier;ca. May 1696–January 1703;Blom 2012;
+BPB:46;L’Histoire de Pierre de Provence et de la belle Maguelonne.;French;Troyes;Jacques [II] Oudot;1700;Blom 2012;
+BPB:47;L’Histoire de Pierre de Provence et de la belle Maguelonne.;French;Rouen;Jean-Baptiste [I] Besongne;1700;Blom 2012;
+BPB:48;L’Histoire de Pierre de Provence et de la belle Maguelonne.;French;Rouen;Jean-Baptiste [I] Besongne;ca. 1676–1715;Blom 2012;
+BPB:49; L'histoire du noble et vaillant chevalier Pierre de Provence, et de Maguelonne, fille du roy de Naples.;French;Lyon;s.n.;1712;Bibliotheca Croftsiana 1783, 4951;no copy located
+BPB:50;L'Histoire de Pierre de Provence et de la belle Maguelonne. Galante héroïque.;French;Troyes;"Veuve 	Jacques [II] Oudot";1714;copy: London, BL, 643.c.33;
+BPB:51;L'Histoire de Pierre de Provence et de la belle Maguelonne. Galante héroïque.;French;Troyes;Veuve Jacques [II] Oudot;1715;copy: Troyes, BM, Bbl. 889;
+BPB:52;"Histoire du noble et vaillant chevalier Pierre de Provence, et de Maguelonne, fille du Roi de 	Naples, où sont amplement declarées leurs promesses, leurs honnetes amours & mariage. ";French;Lyon;Michel Laroche;ca. 1720?;copy: Madrid, BNE, R/11514(2));
+BPB:53;Histoire de Pierre de Provence et de la belle Maguelonne. ;French;Rouen;Jean Oursel l’aîné;"ca. 1725–	1745";Mounier 2021;
+BPB:54;L'Histoire de Pierre de Provence et de la belle Maguelonne. Galante héroïque. ;French;Troyes;"Veuve 	Jacques Oudot and Jean Oudot fils";1729;copy: Troyes, BM, Bbl. 2252;
+BPB:55;Histoire de Pierre de Provence et de la belle Maguelonne. ;French;Troyes;Pierre Garnier;ca. 1729–1754;copy: Marseille, Mucem, 1R.765;permission dated 1729
+BPB:56;L'histoire du noble et vaillant chevalier Pierre de Provence, et de Magelone, fille du roy de Naples, où sont amplement declarees ses prouesses et leurs honnetes amours et mariages [sic]. ;French;Tarascon;Pierre Tassi;1733;copy: Marseille, Mucem, 1R 1086.2;
+BPB:57;L'histoire du noble […] Pierre […], et de Maguelonne […]. Où […] leurs promesse et leurs honnêtes Amours, et Mariage. Dernière Edition Revûë, corrigée & mise en nouveau langage. ;French;Zürich;J. Conrad Bincheldre;1733;copy: Macon, BM, 43185;
+BPB:58;Histoire de Pierre de Provence et de la belle Maguelonne. ;French;Rouen;Veuve Jean [III] Oursel;after 1735;Mounier 2021;permission dated 1735
+BPB:59;Histoire de Pierre de Provence et de la belle Maguelonne. ;French;Troyes;Pierre Garnier;ca. 1738–1754;copy: Troyes, BM, Bbl. 249;permission dated 19 May 1738
+BPB:60;Histoire complète du noble et vaillant chevalier Pierre de Provence et de Maguelonne, fille du Roy ;French;Toulouse;Abraham Porchet;1748;copy: Toulouse, BM, M2973;
+BPB:61;L'histoire de Pierre de Provence et de la belle Maguelonne. ;French;Rouen;Veuve [Jean-François] Behourt;ca. 1759–1763;copy: Troyes, BM, Bbl. 3297;permission on behalf of Jean-François Behourt
+BPB:62;L'histoire de Pierre de Provence et de la belle Maguelonne. ;French;Rouen;Pierre Seyer;ca. 1763–1787;Mounier 2021;
+BPB:63;Histoire de Pierre de Pierre de Provence, et de la belle Maguelonne.;French;Troyes;Jean Garnier;ca. 1754–1765;copy: Troyes, BM, Bbl. 781;permission on behalf of Pierre Garnier dated 19-05-1738
+BPB:64;Histoire de Pierre de Pierre de Provence, et de la belle Maguelonne.;French;Troyes;Jean-Antoine Garnier;ca. 1765–1780;"copies: Troyes, BM, Bbl. 197 and 1537; Morin 1974, 542";permission on behalf  of Pierre Garnier dated 19-05-1738
+BPB:65;Histoire de Pierre de Pierre de Provence, et de la belle Maguelonne.;French;Troyes;Jean-Antoine Garnier;ca. 1765–1780;Morin 1974, 543;no copy located
+BPB:66;Histoire de Pierre de Pierre de Provence, et de la belle Maguelonne.;French;Troyes;Jean-Antoine Garnier;ca. 1765–1780;"copy: Troyes, BM, Bbl. 194; Morin 1974, 544";permision on behalf of Pierre Garnier dated 19-05-1738
+BPB:67;Histoire de Pierre de Pierre de Provence, et de la belle Maguelonne.;French;Troyes;Garnier le jeune;ca. 1773–1783;copy: Marseille, Mucem, O1R.1;
+BPB:68;L'Histoire du noble et vaillant chevalier Pierre de Provence, et de la belle Maguelonne, fille du Roy de Naples, où sont décrits ses beaux faits, et leurs bonnes amours & mariage.;French;Lyon;Antoine Dubois;ca. 1780?;copy: Montauban, BM, RF 443 pièce 3;
+BPB:69;"L'Histoire du vaillant Pierre de Provence, et de la belle Maguelone, fille du roi de Naples; contenant leur chaste amour et mariage.";French;Rouen;P. Chalopin;1788;Mounier 2021;probably Pierre-Jean-Aimé Chalopin
+BPB:70;"L'Histoire du vaillant Pierre de Provence, et de la belle Maguelone, fille du roi de Naples; contenant leur chaste amour et mariage.";French;Limoges;F. Chapoulaud;ca. 1800?;copy: Marseille, Mucem, O1R 611;
+BPB:71;Pierre de Provence, et la belle Maguelone, par M. le Comte de Tressan. ;French;Rouen;"P. Seyer and 	Behourt";ca. 1787–1803;Hélot 1928, 193;
+BPB:72;Pierre de Provence, et la belle Maguelone, par M. le Comte de Tressan. ;French;Rouen;Veuve Behourt;after 1779;copy: Troyes, BM, Bbl. 1297;
+BPB:73;Pierre de Provence, et la belle Maguelone, par M. le Comte de Tressan. ;French;Troyes;Veuve Garnier;ca. 1779–1790;copy: Troyes, BM, Bbl. 109;
+BPB:74;Pierre de Provence, et la belle Maguelone, par M. le Comte de Tressan. ;French;Troyes;Garnier;ca. 1790–1814;copy: Troyes, BM, Bbl. 19;
+BPB:75;Pierre de Provence, et la belle Maguelone, par M. le Comte de Tressan. ;French;Troyes;Citoyenne Garnier;ca. 1800;copy: Marseille, Mucem, 1R 1252;
+BPB:76;La plaisante histoire du noble et vaillant Chevalier Pierre de Provence, et de la belle Maguelonne, fille du Roi de Naples. Nouvellement mise en Flamen et Françoys ensemble. / De ghenuechlijcke historie van den edelen ende vroomen ridder Peeter van Provincien, ende van de schoone Maguelonne, dogter der koning van Napels. Nieuwelijckx in Nederduyts ende Fransoys tsamen ghestelt. Op een nieu ghecorrigeert ende oversien.;French and Dutch;Antwerp;Jan van Waesberghe;1587;ELR;
+BPB:77;La plaisante histoire […] / De […] historie […]. Alles desen vierden druck seer neerstich ghecorrigeert, oversien ende toeghelaten. ;French and Dutch;Antwerp;Matthieu de Rische for Hieronymus Verdussen;1588;ELR;
+BPB:78;La plaisante histoire du noble et vaillant chevalier Pierre de Provence et de la belle Maguelonne [...] Nouvellement mise en Flamen et en François ensemble …;French and Dutch;Rotterdam;Jan van Waesberghe;1624;ELR;no copy located
+BPB:79;Die historie van Peeter van Provencen ende die schoone Maghelone van Napels.;Dutch;Antwerp;Willem Vorsterman;ca. 1517;copy: München, LMU, Cim 81;online: <https://epub.ub.uni-muenchen.de/14363/>
+BPB:80;Die historie van Peeter van Provencen ende die schoone Maghelone van Napels.;Dutch;Antwerp;Claes van den Wouwere;ca. 1565;copy: Washington, LoC, Lessing J. Rosenwald collection, 1188; 
+BPB:81;"De Historie van den Edelen ende Vromen Ridder Pieter van Provencien, Ende van de Schoone Maguelone, Dochter des Koninghs van Napels ende van hare wonderlijcke Avontueren ende 	Geschiedenissen. Op nieuws oversien ende gecorrigeert. ";Dutch;Utrecht;Wed. J[urriaen] van Poolsum;ca. 1691–1709;copy: Leiden, UL, BKNOOG 118;online: <https://digitalcollections.universiteitleiden.nl/view/item/1806626>
+BPB:82;La historia de la linda magalona fija del rey de napoles. y del muy esforçado cavallero Pierres de provença: fijo del conde de provença: y de las fortunas y trabajos que passaron. ;Castilian;Seville;"Jacobo 	Cromberger";1519;IB 16697;
+BPB:83;[La historia de la linda magalona]. ;Castilian;Burgos;Alonso de Melgar;1521;IB 16698;no copy located
+BPB:84;La historia de la linda Magalona … ;Castilian;Toledo;[Miguel de Eguía],;1526;IB 16699;digitized copy: Paris, BnF, RES-Y2-819 <https://gallica.bnf.fr/ark:/12148/bpt6k310859f>
+BPB:85;La historia de la linda Magalona … ;Castilian;Seville;Juan Cromberger;1533;IB 16700;digitized copy: Paris, BIS, RXVI 879. Pièce 3, <https://nubis.univ-paris1.fr/ark:/15733/358m>
+BPB:86;La historia de la linda Magalona … ;Castilian;Seville;Domenico de Robertis;1542;IB 16701;digitized copy: Paris, BnF, RES-YD-240, <https://gallica.bnf.fr/ark:/12148/bpt6k317882r>
+BPB:87;[La historia de la linda magalona]. ;Castilian;Burgos;Felippe de Junta;1562;IB 16776;
+BPB:88;Historia de la linda Magalona … ;Castilian;Burgos;Felippe de Junta;1564;"not in IB; copy: München, LMU, 0017/8 Hist.prof. 173";
+BPB:89;Libro de la linda Magalona, hija del rey de Napoles, y del muy esforçado cavallero Pierres de ;Castilian;Zaragoza;Jusepe de Altaraque;1602;IB 46869;digitized copy: Paris, BnF, RES-Y2-823, <https://gallica.bnf.fr/ark:/12148/bpt6k3113896>)
+BPB:90;Magalona. Historia de la linda Magalona […] y del mui noble […] cavallero Pierres […], y de las muchas adversidades, y grandes trabajos, que passaron, siendo siempre constantes en la virtud, y como despues reynaron, y acabaron su vida honradamente en servicio de Dios.;Castilian;Lisbon;António Álvares;1625;IB 58813;
+BPB:91;[La historia de la linda magalona].;Castilian;Baeza;s.n.;1628;IB 58814;no copy located
+BPB:92;La historia de la Linda Magalona, hija del Rey de Napoles, y del esforçado cavallero Pierres de Provença, y de las muchas fortunas que passaron. Compuesto por Felipe Camus. Licenciado in utroque.;Castilian;Cuenca;Salvador de Viader;1629;IB 23668;digitized copy: København, KB, 77:1, 15, <https://www.kb.dk/e-mat/dod/120771000667-color.pdf>
+BPB:93;"Magalona. Historia de la linda magalona hija del rey de napoles, y del muy noble, y esforçado 	cavallero pierres de provença, hijo del conde de prove[n]ça: y de las muchas adversidades, y 	grandes trabajos, que passaron siendo siempre constantes en la virtud, y como despues reynaron, y acabaron su vida honradamente en sirvicio de dios";Castilian;Lisbon;Domingos Carneiro;1664;IB 120274;copy: Lisboa, BNP, RES. 6712 P
+BPB:94;"Magalona. Historia de la linda magalona hija del rey de napoles, y del muy noble, y esforçado 	cavallero pierres de provença …";Castilian;Lisbon;s.n.;[17th c.?];copy: Madrid, BNE, R/2176;online: <http://bdh-rd.bne.es/viewer.vm?id=0000193820&page=1>
+BPB:95;"Historia de la linda Magalona, hija del Rey de Napoles, y del esforzado Cavallero Pierres de 	Provenza, hijo del Conde de Provença, y de las fortunas que passaron. ";Castilian;Madrid;Francisco Sanz;1676;IB 109588;
+BPB:96;La historia de la linda Magalona … ;Castilian;Seville;Lucas Martín de Hermosilla;1689;IB 109604;
+BPB:97;La historia de la linda Magalona … ;Castilian;Madrid;Francisco Sanz;ca. 1690;IB 109605;copy: Paris, BnF, RES-Y2-851
+BPB:98;"Magalona. Historia de la Linda Magalona hija del rey de Napoles, y del mui noble y esforçado 	cavallero Pierres de Provença, y de las muchas adversidades, y grandes trabajos, que passaron, siendo siempre constantes en la virtud, y como despues reynaron, y acabaron su vida honradamente en servicio de Dios. ";Castilian;Évora;s.n.;1722;copy: Berkeley, Bancroft Library,PQ9191.A1.H571722;
+BPB:99;La Historia de la linda Magalona […] Rey de Nápoles, y del esforzado […] Pierres de Provenza, ;Castilian;Barcelona;Pedro Escuder;ca. 1747–1750;CCPB000554687-7;
+BPB:100;Historia de Pierres, y Magalona, hija del Rey de Napoles y las aventuras que tuvon [sic]. Compuesta por Phelipe Camus, licenciado en Vtroque. ;Castilian;[Valladolid];Alonso del Riego;ca. 1700–1763;CCPB001316370-X;
+BPB:101;Historia de Pierres […] Gamus, Licenciado in Utroque.;Castilian;[Valladolid];Alonso del Riego;ca. 1700–1763;CCPB001316371-X and CCPB000135541-4;
+BPB:102;Historia de la linda Magalona, hija del Rey de Napoles, y del esforzado Caballero Pierres de Provenza, hijo del Conde de Provença, y de las fortunas que pasaron.;Castilian;s.l.;s.n.;[18th c.?];CCPB001106842-6;online: <https://books.google.nl/books?id=M8iVo_CTJQkC&hl=fr&source=gbs_navlinks_s>
+BPB:103;[Pierres y Magalona]. ;Castilian;Madrid;Antonio Sanz;ca. 1750;López 1993;no copy located
+BPB:104;"La Historia de la linda Magalona, hija del rey de Napoles; Y del esforzado cavallero Pierres de 	Provenza, hijo del conde de Provenza; y de las forunas que passaron. ";Castilian;Valencia;Viuda de Geronimo Conejos;ca. 1750;copy: Valencia, University of Valencia, Biblioteca Històrica, BH E/1162 (13);
+BPB:105;La Historia de la linda Magalona …;Castilian;Salamanca;Imprenta de la Santa Cruz;ca. 1755;López 1993;no copy located
+BPB:106;[Magalona]. ;Castilian;Valencia;Augustín Laborda;ca. 1755;"López 1993; Moll 1981–	1982";no copy located
+BPB:107;Historia del esforzado caballero Pierres de Provenza y de la hermosa Magalona. ;Castilian;Murcia;for Francisco Benedicto;1772;copy: Vilanova i la Geltrú, Biblioteca Museu Victor Balaguer, XVIII/995;
+BPB:108;[Himperiou]. ;Greek;Venice;fratelli Nicolini da Sabbio for Damiano di Santa Maria;1543;Yiavis 2006;no copy located
+BPB:109;Exēgēsis tou thaumastou Himperiou.;Greek;Venice;Christophoro di Zanetti;1553;Yiavis 2006;"digitized copy: 	Wien, ÖNB, *38.L.147,  <http://data.onb.ac.at/rep/10AA259B>"
+BPB:110;Exēgēsis tou thaumastou Himperiou.;Greek;Venice;Christophoro di Zanetti;1562;Yiavis 2006;
+BPB:111;[Himperiou]. ;Greek;Venice;Francesco Giuliani for Emmanouel Glyzounis;ca. 1594;Yiavis 2006;no copy located
+BPB:112;Himperiou. ;Greek;Venice;Antonio Pinelli;1600;Yiavis 2006;
+BPB:113;Himperiou. ;Greek;Venice;Antonio Pinelli;1606;"not in Yiavis 2006; catalogue Vergos auctions 17-03-2014, online: <https://erp.vergosauctions.com/uploads/auctions/189/Catalogue.pdf>)";
+BPB:114;Himperiou. ;Greek;Venice;Antonio Pinelli;1624;Yiavis 2006;
+BPB:115;Himperiou Istoria. ;Greek;Venice;Giovanni Pietro Pinelli;1638;Yiavis 2006;
+BPB:116;Himperiou Istoria. ;Greek;Venice;Giovanni Antonio Giuliani;1644;Yiavis 2006;
+BPB:117;Istoria Himperiou. ;Greek;Venice;Giovanni Pietro Pinelli;1646;Yiavis 2006;
+BPB:118;Himperiou Istoria. ;Greek;Venice;Andrea Giuliani;1666;Yiavis 2006;
+BPB:119;[Himperios]. ;Greek;Venice;Antonio Bortoli;1712;Yiavis 2006;no copy located
+BPB:120;Istoria … Himperiou. ;Greek;Venice;Antonio Bortoli;1747;Yiavis 2006;no copy located
+BPB:121;Istoria tou Imberiou.;Greek;Venice;Antonio Bortoli;1770;Yiavis 2006;
+BPB:122;Istoria tou Imberiou.;Greek;Venice;Antonio Bortoli;1779;Yiavis 2006;
+BPB:123;Die Schön Magelona. Ein fast lustige und kurtzweylige Histori, vonn der schönen Magelona, eins Künigs tochter von Neaples, und einem Ritter, genannt Peter mit den silberin schlüsseln, eins Graffen son ausz Provincia, durch Magister Veiten Warbeck, ausz Frantzösischer sprach in die Teütschen verdolmetscht, mit eynem Sendbrieff Georgij Spalatini.;German;Augsburg;Heinrich Steiner;1535;VD16 H 3867;
+BPB:124;Die Schön Magelona …;German;Augsburg;Heinrich Steiner;1536;VD16 ZV 15953;
+BPB:125;Die Schön Magelona …;German;Augsburg;Heinrich Steiner;1537;VD16 H 3868;
+BPB:126;Die Schön Magelona …;German;Augsburg;Heinrich Steiner;1539;"VD16 H 3869; copy: Kraków, BJ";
+BPB:127;Die Schön Magelona …;German;Augsburg;Heinrich Steiner;1541;VD16 H 3872;
+BPB:128;Die Schön Magelona …;German;Augsburg;Heinrich Steiner;1544;VD16 H 3873;
+BPB:129;Die Schön Magelona …;German;Augsburg;Heinrich Steiner;1545;VD16 H 3874;
+BPB:130;Die Schön Magelona …;German;Frankfurt am Main;Herman Gülfferich;1548;VD 16 H 3875;
+BPB:131;Die Schön Magelona …;German;Frankfurt am Main;Herman Gülfferich;1549;VD16 H 3876;
+BPB:132;Die Schön Magelona …;German;Frankfurt am Main;Herman Gülfferich;1550;VD16 H 3877;
+BPB:133;Die Schön Magelona …;German;Frankfurt am Main;Herman Gülfferich;1553;VD 16 H 3878;
+BPB:134;Ein fast kurtzweilige History von der schönen Magelone, eines Königs Tochter von Neaples, und einem Ritter, genant Peter mit dem silbern Schlüsseln eines Graven Son aus Provincia durch Magister Veiten Warbeck auß Frantzoesischer sprach inn Teutsch verdolmetscht mit einem Sendbrieff Georgii Spalatini. ;German;Frankfurt am Main;[Weigand Han];1556;VD16 ZV 31993;digitized copy: Wien, ÖNB, 24976-A, online: < http://data.onb.ac.at/rep/10886EDE> 
+BPB:135;Ein fast kurtzweilige History von der schönen Magelone …;German;Frankfurt am Main;Weigand Han;ca. 1558;VD16 H 3880;
+BPB:136;Ein fast kurtzweilige History von der schönen Magelone …;German;Frankfurt am Main;Heirs Weigand Han and Georg Raben;ca. 1565;VD16 H 3881;
+BPB:137;Ein fast kurtzweilige History von der schönen Magelone …;German;Frankfurt am Main;Kilian Han;1575;copy: Karlsruhe, BLB, 100B 76086 RH;
+BPB:138;Ein fast kurtzweilige History … in: Das Buch der Liebe … ;German;Frankfurt am Main;Sigmund Feierabend;1587;VD16 B 8959;ff. 31v–44r 
+BPB:139;Ein fast kurtzweilige History … ;German;Leipzig;Vincenz Strach for Nicolaus Nerlich;1598;"VD16 H 	3882";
+BPB:140;Ein fast kurtzweilige History… ;German;s.l.;s.n.;1603;VD17 384:741859K;
+BPB:141;Historia von der schönen Magelona, eines Königs Tochter von Neaples, und einem Ritter, [ge]nannt Peter mit den silbern Schlüsseln, eines Grafen Sohn von Provincia. Aus Französischer Sprache in das Teutsche verdolmetschet. Durch M. Vietem Warbeck. Samt einer Vorrede Georgii Spalatini. ;German;Nuremberg;In Verlegung Michael und Friederich Endter;1661;copy: London, BL,C.57.b.23;
+BPB:142;Eine lustige historia von der schönen Magelona, eines Königes Tochter von Neaples, und einem Ritter, genant Peter mit den silbern Schlüsseln, eines Grafen Sohn auss Provincia. Aus frantzösischer Sprache ins Deutsche verdolmetschet, durch M. Veiten Warbeck.;German;s.l.;s.n.;1668;copy: Budapest, Eötvös Loránd University, Bar.09754/c1;
+BPB:143;Historia von der schönen Magelona … ;German;Nuremberg;In Verlegung Johann Friderich Endtern;1678;VD17 7:667601L;
+BPB:144;Historia von der schönen Magelona … ;German;Nuremberg;In Verlegung Balthasar Joachim Endter;1697;copy: London, BL, C.99.a.39;
+BPB:145;Historia von der schönen Magelona … ;German;Nuremberg;Im Verlag der Johann Andreä Endterischen Buchhandlung;ca. 1651–1670;"VD17 39:120174X; copy: Erfurt, UB";
+BPB:146;Historia von der schönen Magelona … ;German;Nuremberg;Im Verlag der Johann Andreä Endterischen Buchhandlung;ca. 1651–1670;VD17 32:635916C;
+BPB:147;Historia von der schönen Magelona … ;German;s.l.;s.n.;1725;VD18 10850678;
+BPB:148;"Ein lustige History, von der schönen Magelona […] Durch Veiten Warbeck ausz frantzösischer 	Sprach in Teutsch verdolmetschet …";German;s.l.;s.n.;1743;copy: Basel, UB, UBH Am VI 66:2;
+BPB:149;Historia von der schönen Magelona … ;German;Nuremberg;"In Verlegung der Johann Andreä Endterischen 	handlung";after 1744?;VD18 14871483;"digitized copy: München, BSB, P.o.gall. 1057 e, <https://www.digitale-sammlungen.de/view/bsb10092375?page=1>; NB: the link in VD18 leads to a copy of another edition"
+BPB:150;Historia von der schönen Magelona …;German;Nuremberg;In Verlegung der Johann Andreä Endterischen handlung;ca. 1750;copy: London, BL, RB.23.a.2019;"online: 	<https://books.google.nl/books?vid=BL:A0022129435&redir_esc=y>"
+BPB:151;Historia von der schönen Magelona …;German;s.l.;s.n.;1756;copy: London, BL, C.175.a.10;
+BPB:152;Historia von der schönen Magelona …;German;s.l. [Nuremberg?];s.n.;1784;VD18 11772212;
+BPB:153;Historia von der schönen Magelona …;German;s.l.;s.n.;Gedruckt im diesem Jahr ;VD18 90748336;
+BPB:154;Historie von der schönen Magelona, eines Königs Tochter von Neapolis… ;German;s.l;s.n.;Gedruckt im diesem Jahr ;copy: Stadtbibliothek Braunschweig, Brosch. I 6129;
+BPB:155;Historie von der schönen Magelona, eines Königs Tochter von Neapolis… ;German;s.l.;s.n.;Gedruckt im diesem Jahr ;copy: sold at auction by Reiss & Sohn on 14 November 2017, lot 1681;no copy located
+BPB:156;Historie von der schönen Magelona, eines Königs Tochter von Neapolis… ;German;s.l.;s.n.;[18th c.];copy: Weimar: HAAB, 278936–A;
+BPB:157;Eine anmüthige und lesenswürdige Historie von der schönen Magelona, Eines Königs Tochter von Neapolis, und einem Ritter, genannt Peter mit den silbern Schlüsseln, eines Grafen Sohn von Provincia / Aus dem Französischen übersetzet durch M. Vitum Warbeck. ;German;Cologne;Christian Everaerts;ca. 1780–1813;VD18 11772166;
+BPB:158;Historia von der Schönen Magelona, Eines Königs Tochter von Neapolis … Ganz neu gedruckt. ;German;s.l.;s.n.;ca. 1800;VD18 90823451;
+BPB:159;[Historie o krásné kněžně Mageloně a udatném rytíři Petrovi];Czech;[Olomouc];Jan Günther;[1565];KPS K03021;no copy located
+BPB:160;[Historie o krásné kněžně Mageloně a udatném rytíři Petrovi];Czech;[Olomouc];Vít Jindřich Ettel;ca. 1670;Myšák 2015, p. 394;it is uncertain if this is indeed a version in Bohemian
+BPB:161;[Píseň utěšená a kratochvilná o krásné Mageloně a Petrovi z Provinci ...];Czech;s.l.;s.n.;ca. 1680–1700;KPS K09900;
+BPB:162;[Pjseň […] Mageloně a Petrowi z Prowincy kterak gsau se náramně spolu zamilowali potom gak se s njmi dálo];Czech;Prague;s.n.;1685;KPS K09899;
+BPB:163;[Píseň o Mageloně?]. ;Czech;s.l.;s.n.;ca. 1700–1750;KPS K09901;
+BPB:164;Welmi vtěssená a kratochwjlná Hystorye O Krásné Panně Mageloně dceři Krále z Neapolis. A O gednom Rytjři Gménem Petrowi znamenitého hraběte z Prowincy Synu. Kterážto Hystorye prwe z Francauské Ržeči w Německau a nynj zase w nowě z Némecké w Cžeskau s Pilnosti přeložena gest.;Czech;Olomouc;František Antonín Hirnle;1741;KPS K17693;
+BPB:165;[Historie o krásné Mageloně, krále z Neapolis dceři, a o jednom ctném a udatném rytíři jménem Petrovi, jednoho znamenitého hraběte z Provincy synu]. ;Czech;s.l.;s.n.;ca. 1751–1800;KPS K17695;
+BPB:166;Welmi vtěssená Hystorye o Krásné Mageloně Dceři Krále z Neapolis…;Czech;Prague;"Karel Jozeff 	Jaurnich";ca. 1755–1767;KPS K03025;
+BPB:167;[Velmi utěšená historie o krásné Mageloně…]. ;Czech;s.l.;s.n.;ca. 1751–1800;KPS K17697;
+BPB:168;Kratochwjlná Hystorye o krásné Panně Mageloně z Neapolis, králowské Dceři, a o vdatném Rytjři Petrowi z Prowence, znamenitého Hraběta Synu. ;Czech;Skalica;[Josef Antonín Škarnicl];ca. 1765–1798;KPS K17691;
+BPB:169;Historie o krásné kněžně Mageloně a udatném rytíři Petrovi ... ;Czech;Olomouc;[Josefa Terezie Hirnleová?];1767;KPS K03022;
+BPB:170;Welmi vtěssená Hystorye O krásné Mageľoně […] Wssem pro Obweselenj Mysle a Vkrácenj Cžasu nowu na Swětľo wydan[á]. ;Czech;Kutná Hora;[František Vincenc Korec?];1774;KPS K03023;
+BPB:171;"Hystorye o krásné Kněžně Mageloně a vdatném Rytjřj Petrowi. Wssem milownjkům k 	přigemněgssjmu čtenj zřjzená a oprawená.";Czech;Hradec Králové;s.n.;ca. 1775–1820;KPS K03026;
+BPB:172;Welmi vtěssená, a kratochwjlná Hystorye, O krásné Panně Mageloně […] Kterážto Hystorye prwe z Francauské Ržeči w Německau, a nynj zase w nowě z Německé w Cžeskau s Pilnosti přeložená gest. ;Czech;Olomouc;Josef František Loserth for Josefa Terezie Hirnleová;1780;KPS K03024;
+BPB:173;Welmi vtěssená hystorye o krásné Mageloně ... ;Czech;Jindřichův Hradec;s.n.;ca. 1780–1825;"KPS 	K17696";
+BPB:174;Historie o krásné kněžně Mageloně a udatném rytíři Petrowi ;Czech;Prague;s.n.;1793;KPS K17692;no copy located
+BPB:175;Welmi vtěssená hystorye o krásné Mageloně … ;Czech;Jindřichův Hradec;[Josef Landfras];"ca. 1796–	1826";KPS K17694;
+BPB:176;Welmi vtěssená, a krátochwjlná Hystorye O Krásné Panně Mageloně … ;Czech;s.l.;s.n.;1800;KPS K03027;
+BPB:177;[Historyje o Magielonie]. ;Polish;s.l.;s.n.;ca. 1565–1587;Kiliańczyk-Zięba 2013;no copy located
+BPB:178;[Historyje o Magielonie]. ;Polish;s.l.;s.n.;ca. 1600–1650;"Brückner 1901, 	description of an incomplete copy";
+BPB:179;[Historyje o Magielonie].;Polish;s.l.;s.n.;ca. 1650–1677;"copy: Kraków, BJ, 586036 I, incomplete: first gathering 	missing";online: <https://jbc.bj.uj.edu.pl/publication/929142>
+BPB:180;[Historyje o Magielonie].;Polish;Kraków;s.n.;1677;copy: Kharkiv, Scientific Library of Kharkiv National University, 196692, incomplete;
+BPB:181;[Historia o Magiellonie]. ;Polish;s.l.;s.n.;1696;Elektroniczna Baza Bibliografii Estreichera (EBBE), 128584;no copy located
+BPB:182;Historya o Magielonie Krolewnie Neapolitanskiey: Vmyslu swpániálościa̦, Vrody pieknośčia̦, Najaśnicysza̦ Godnośčia̦, wizelákich cnot z przymiotow zgromádzeniem.;Polish;Kraków;"Krysztof 	Domanski";1701;copy: Dresden, SLUB, Lit.Slav.244;
+BPB:183;Historya o Magielonie Krolewnie Neapolitanskiey: Vmyslu swpániálościa̦, Vrody pieknośčia̦, Najaśnicysza̦ Godnośčia̦, wizelákich cnot z przymiotow zgromádzeniem.;Polish;Kraków;"Krysztof 	Domanski";1710;copy: Kraków, BJ, 586033 I;"online: 	https://jbc.bj.uj.edu.pl/dlibra/publication/943888/edition/907537"
+BPB:184;Historya o Magielonie Krolewnie Neapolitanskiey: Vmyslu swpániálościa̦, Vrody pieknośčia̦, Najaśnicysza̦ Godnośčia̦, wizelákich cnot z przymiotow zgromádzeniem.;Polish;s.l.;s.n.;1725;copy: Kraków, BJ, 586034 I;online: https://jbc.bj.uj.edu.pl//dlibra/metadatasearch?action=AdvancedSearchAction&type=-3&val1=dig:%22NDIGSTDR094820%22
+BPB:185;Historya o Magielonie Krolewnie Neapolitanskiey: Vmyslu swpániálościa̦, Vrody pieknośčia̦, Najaśnicysza̦ Godnośčia̦, wizelákich cnot z przymiotow zgromádzeniem.;Polish;Kraków;Dominik Siarkowski;1739;copy: Gdańsk, BG PAN, Dm 3281 8°;
+BPB:186;Historya o Magielonie Krolewnie Neapolitanskiey: Vmyslu swpániálościa̦, Vrody pieknośčia̦, Najaśnicysza̦ Godnośčia̦, wizelákich cnot z przymiotow zgromádzeniem.;Polish;s.l.;s.n.;[18th c.];copy: Wrocław, Zakład Narodowy im. Ossolińskich, XVIIII-8353;"online: <https://dbc.wroc.pl/dlibra/publication/25639/edition/23188/historya-o-magielonie-	krolewnie-neapolitanskiey?language=pl#description>)"
+BPB:187;Historya o Magielonie Krolewnie Neapolitanskiey: Vmyslu swpániálościa̦, Vrody pieknośčia̦, Najaśnicysza̦ Godnośčia̦, wizelákich cnot z przymiotow zgromádzeniem.;Polish;Kraków;Michal Józef Antoni Dyaszewski;1752;EBBE 128593;no copy located
+BPB:188;[Historya O Magielonie Krolewnie Neapolitanskiey: Dla Zachęcenia Ciekawego Czytelnika Z ;Polish;s.l.;s.n.;1773;EBBE 128594;no copy located
+BPB:189;[Historya O Magielonie Krolewnie Neapolitanskiey: Dla Zachęcenia Ciekawego Czytelnika Z ;Polish;[Supraśl];[Drukarnia Bazylianów];1783;copy: Warszawa, Instytut Badań Literackich Polskiej Akademii Nauk, XVIII.1.461;online: <https://rcin.org.pl/dlibra/publication/272395>
+BPB:190;[Historya O Magielonie Krolewnie Neapolitanskiey: Dla Zachęcenia Ciekawego Czytelnika Z ;Polish;[Supraśl];[Drukarnia Bazylianów];1787;copy: Warszawa, Instytut Badań Literackich ;online: <https://rcin.org.pl/dlibra/publication/272401>)
+BPB:191;[Skøne Magelona]. ;Danish;Copenhagen;Laurentz Benedicht;1583;DFB 7, p. 237;no copy located
+BPB:192;"Skøne Magelona. En saare lustig oc schön historie om dend schøne Magelona en konges saatter off Neaples: och en Ridder ved naffn Peder, som kalladis den ridder med dett sølff nøgle, en	greffuis søn aff Provinzia. Wfstaett aff frantzosist paa thydsch ved M.Vitus Varbeck. Och nu nyligen fordanschet, saare lystig at loese.";Danish;Helsingør;Peder Huaen;1610;DFB 7, p. 238;no copy located
+BPB:193;[Den skiönne Magelona].;Danish;Copenhagen;s.n.;1662;DFB 7, p. 238;no copy located
+BPB:194;En meget Kortvillig historiae om den skiønne Magelona en Konges Daater aff Neaples oc en ridder som bleff kaldet Peder med Sølff-Nøglen, en Grevis søn udaff Provincia. Wfstaett. Aff det Franzoske Sprock først paa Tydsken udsoet oc nu nyligen fordansket;Danish;Copenhagen;s.n.;1690;copy: København, KB, N 1850 8°;
+BPB:195;En […] historie om den skiønne Magelona … ;Danish;Copenhagen;s.n.;1698;copy: København, KB, 58,-455 8° 15023;
+BPB:196;[Historie om den skiønne Magdelone]. ;Danish;Copenhagen;s.n.;1704;DFB 7, p. 239;no copy located
+BPB:197;[Den skiønne Magellona].;Danish;s.l.;s.n.;1720;DFB 7, pp. 239–240;no copy located
+BPB:198;En meget Kortvillig historie om den skiønne Magelona … ;Danish;Copenhagen;s.n.;1731;copy: København, KB, 58,-455 8° 15025;
+BPB:199;[Historie om den skiønne Magelona]. ;Danish;s.l.;s.n.;1734;DFB 7, p. 240;no copy located
+BPB:200;[Historie om den skiønne Magelona]. ;Danish;Copenhagen;s.n.;1740;DFB 7, p. 240;no copy located
+BPB:201;En meget kortvillig historie … ;Danish;Copenhagen;s.n.;1755;copy: København, KB, 58,-455 8° 15026;
+BPB:202;En meget kortvillig historie … ;Danish;Copenhagen;s.n.;1761;copy: København, KB, 58,-455 8° 15027;
+BPB:203;Historien om den skiønne Magelona og Peder med Sølv-Nøglen]. ;Danish;Copenhagen;s.n.;1782;DFB 7, p. 241;no copy located
+BPB:204;En meget smuk Historie, om den skiønne Magelona, en Konges Datter af Neapolis, og en Ridder, som blev kaldet Peder med Sølv Nøglen, en Greves Søn af Provintia. Af det Frantzosiske Sprog først paa Tydsk udsat og siden defeter paa Danske. ;Danish;Copenhagen;Hans Jensen Graae;1783;copy: København, KB, 58,-455 8° 15029;
+BPB:205;[Magelona]. ;Danish;s.l.;s.n.;ca. 1750–1800?;copy: København, KB, 1906/22b.1-3. 56-71;
+BPB:206;[Magelona. Peder med Sølvnøglen]. ;Danish;s.l.;s.n.;ca. 1750–1800?;København, KB, 1929/75;
+BPB:207;Eine seer korttwylige Historia, van der schönen Magelona, eines Königes dochter van Neaples, unde einem Ridder, genömet Peter mit den sülveren Schlötelen, eines Graven Söhn uth Provintz : Erstlick uth der frantzösischen in de Hochdüdesche, nu överst in de Sassische Sprake övergesettet. ;Low German;Hamburg;[Hermann Möller];1601;copy: Göttingen, SUB, 8 FAB III, 2052 RARA;online: <https://gdz.sub.uni-goettingen.de/id/PPN798808632>
+BPB:208;Eine seer korttwylige Historia, van der schönen Magelona, eines Königes dochter van Neaples, unde einem Ridder, genömet Peter mit den sülveren Schlötelen, eines Graven Söhn uth Provintz : Erstlick uth der frantzösischen in de Hochdüdesche, nu överst in de Sassische Sprake övergesettet. ;Low German;Hamburg;s.n.;1611;Westermann 1932, p. 291;no copy located
+BPB:209;La historia del cavaller Pierres de Provença fill del conte de Provença y de la gentil Magalona filla del rey de Napoles, traduida de llengua castellana en la llengua catalana per Honorat Comalada. ;Catalan;Barcelona;Sebastià Cormellas;1616;Pastor i Briones 2018;no copy located
+BPB:210;"Ací comença la historia del noble, y, esforçat Cavaller Pierres de Prouença, fill del Comte de Provença. Y de la gentil Magalona, filla del Rey de Napols; y de les fortunes y treballs que passaren en la sua molt enamorada vida. Traduyda de Catalana, per lo discret y honrat Honorat Comalada. ";Catalan;Barcelona;Sebastià Cormellas;1650;IB 58827;digitized copy: Paris, BnF, RES-Y2-710, <https://gallica.bnf.fr/ark:/12148/bpt6k8573996>
+BPB:211;Asi comença la historia del noble, y esforçat cavaller Pierres de Provença. ;Catalan;Barcelona;"Antoni 	Lacavalleria";1670;Pastor i Briones 2018;no copy located
+BPB:212;"La historia del noble, y esforsat Cavaller Pierres de Provença, y de la gentil Magalona filla del	Rey de Napols, y de les fortunes y treballs que passaren en la sua molt enamorada vida. Traduhida de llengua castellana, en la nostra Catalana, per lo discret, y honrat Honorat Comalada. ";Catalan;Barcelona;"Antoni 	Lacavalleria";1683;Pastor i Briones 2018;copy in private collection
+BPB:213;Història del noble y molt esforsat cavaller Pierres de Provensa, y de la gentil Magalona … ;Catalan;Barcelona;Joan Jolis;ca. 1679–1705;CCPB000566407-1;"both copies are available online: <https://books.google.nl/books?id=L7xcP4viQDUC&hl=fr&pg=PA1#v=onepage&q&f=false>; <https://books.google.nl/books?id=8vBQAAAAcAAJ&hl=fr&pg=PA1#v=onepage&q&f=false>)"
+BPB:214;La historia del noble, y esforsat Cavaller Pierres de Provença …;Catalan;Barcelona;Rafel Figueró;ca. 1667–1717;CCPB000403870-3;online: <http://www.bibgirona.cat/pandora/viewer.vm?id=0000000267&page=1&search=&lang=ca&view=Ripoll>
+BPB:215;"La historia del noble, y esforsat cavaller Pierres de Provença, y de la gentil Magalona, filla del 	rey de Napols. Y de les fortunes, y treballs que passaren en la sua enamorada vida. Traduhida de llengua Castellana en la nostra Catalana, per lo discret, y honràt Honoràt Comalada. ";Catalan;Girona;Francisco Oliva;1710;copy in private collection;
+BPB:216;"La historia del noble, y esforsat cavaller Pierres de Provença, y de la gentil Magalona, filla del 	rey de Napols. Y de les fortunes, y treballs que passaren en la sua enamorada vida. Traduhida de llengua Castellana en la nostra Catalana, per lo discret, y honràt Honoràt Comalada. ";Catalan;Girona;Jaume Bró;ca. 1703–1768;copy: Wien, ÖNB, BE.12.Y.61;online: <http://data.onb.ac.at/rep/106E2682>)
+BPB:217;"La historia del noble, y esforsat cavaller Pierres de Provença, y de la gentil Magalona, filla del 	rey de Napols. Y de les fortunes, y treballs que passaren en la sua enamorada vida. Traduhida de llengua Castellana en la nostra Catalana, per lo discret, y honràt Honoràt Comalada. ";Catalan;Girona;Jaume Bró;ca. 1703–1768;Barcelona, BC, Bon. 9-II-26;online: <https://books.google.nl/books?id=FYwbHHEo1P0C&hl=fr&pg=PA1#v=onepage&q&f=false>
+BPB:218;La historia del noble, y esforsat cavaller Pierres de Provença, y de la gentil Magalona ...;Catalan;Olot;Josep Rovira;ca. 1751–1764;CCPB000422997-5;digitized copy: Ripoll, Biblioteca Pública Lambert Mata, FONS MATA 766, <http://www.cervantesvirtual.com/nd/ark:/59851/bmc5b021>)
+BPB:219;La historia del noble, y esforsat cavaller Pierres de Provença, y de la gentil Magalona …;Catalan;Olot;Josep Rovira;ca. 1751–1771;copy: Toulouse, BU, Res 34347;"online: 	<https://tolosana.univ-toulouse.fr/notice/175899061>"
+BPB:220;Kedves es nyajas historia, szep Magelonarol, Neapolis királynak leányáról, és edgy Peter nevü vitézröl az ezüstös kúltsokkal, ki edgy provinciabeli gróf fia volt. Francziai nyelvböl nemet nyelvre meg-fordittatott Spalatini György küldött levelével edgyütt M. Warbeck Vitus által. Mostan penig németböl magyarrá forditotta Tesseni Wenczel, az magyar olvasók kedvéjért. ;Hungarian;Levoča (Löcse);Samuel Brewer;1676;copy: Budapest, Országos Széchényi Könyvtár;"online: 	<https://oszkdk.oszk.hu/DRJ/4460>"
+BPB:221;A sheyn lid fun a riter oiz proventzien land … ;Yiddish;Fürth;Josef Schneiór;1698;copy: Trier, UB, 24=XH/nc38784;
+BPB:222;A sheyn lid fun a riter proventsion land … ;Yiddish;Prague;s.n.;ca. 1705;"Dowling 1992, 	p. 51";no copy located
+BPB:223;A sheyn historye fun riter Zigmund un Magdeleyne … ;Yiddish;Offenbach;s.n.;1714;"Dowling 1992, 	p. 51";no copy located
+BPB:224;Mageleyne lid. ;Yiddish;Amsterdam;s.n.;[18th c.] ;"Dowling 1992, p. 61; Oxford, Bodleian Library, Oppenheim collection?";
+BPB:225;Ayn shen historie fun riter Zigmund und Magdelena. ;Yiddish;Fürth;Isaac ben David Zerendorf;1791;copy: Amsterdam, UB, UBM: Ros. 15 G 43;
+BPB:226;Historia verdadeira da Princeza Magalona … ;Portuguese;Lisbon;Bernardo da Costa de Carvalho;1733;Severino 2005, p. 40, and Azevedo de Abreu 1993, p. 50, 62 and 78, who gives 1732 as the date of the first edition;no copy located
+BPB:227;Historia verdadeira da princeza Magalona, filha d'el-rey de Napoles, e do nobre, e valoroso cavalheiro Pierres, Pedro de Provença … ;Portuguese;Lisbon;Manoel Fernandes da Costa;1737;copy: Lisboa, BNP, F. 238;online: <https://purl.pt/30786/1/index.html#/1/html>
+BPB:228;Historia verdadeira da princeza Magalona, filha d'el-rey de Napoles, e do nobre, e valoroso cavalheiro Pierres, Pedro de Provença e dos muitos trabalhos, e adversidades, que passaraõ, sendo sempre constantes na fé, e virtude, e como depois reinaraõ e acabaraõ a sua vida virtuosamente no serviço de Deos. ;Portuguese;Lisbon;Heirs of Antonio Pedrozo Galrão;1753;copy: Paris, BIS, C 8= 400-15;
+BPB:229;Historia verdadeira da princeza Magalona, filha d'el-rey de Napoles …;Portuguese;Lisbon;Francisco Borges de Sousa;1758;copy: Lisboa, BNP, L. 3569 A;
+BPB:230;Historia verdadeira da princeza Magalona, filha d'el-rey de Napoles …;Portuguese;Lisbon;Francisco Borges de Sousa;1767;copy: Lisboa, BNP, L. 75233 P;
+BPB:231;Historia verdadeira da princeza Magalona, filha d'el-rey de Napoles …;Portuguese;Lisbon;Francisco Borges de Sousa;1783;description in a bookseller’s catalogue: <https://www.bestnetleiloes.com/pt/leiloes/importante-leilao-de-livros-e-manuscritos/princesa-magalona-1783>;no copy located
+BPB:232;Historia verdadeira da princeza Magalona, filha d'el-rey de Napoles …;Portuguese;Lisbon;Francisco Borges de Sousa;1789;copy: München, BSB, 4 P.o.hisp. 505#Beibd.1;online: <http://reader.digitale-sammlungen.de/de/fs1/object/display/bsb10530173_00040.html>)
+BPB:233;Historia verdadeira da princeza Magalona, filha d'el-rey de Napoles …;Portuguese;Porto;Antonio Alvarez Ribeiro;1793;description in a bookseller’s catalogue: <https://www.abebooks.co.uk/Historia-verdadeira-princeza-Magalona-filha-dEl-Rey/30336405648/bd>;no copy located
+BPB:234;Historia verdadeira da princeza Magalona, filha d'el-rey de Napoles …;Portuguese;Lisbon;Simão Thaddeo Ferreira;1794;copy: Lisboa, BNP, L. 4980//10 V;
+BPB:235;Istoria memorabile e molto piacevole per ogni generoso, e nobile cavaliere: Del valoroso Pietro di Provenza e della bella Maghelona figliuola del re de Napoli, dove sono ampiamente dichiarate le loro prodezze, e casti amori. Opera delettevole con accomodate figure à suoi luoghi nuovamente ristampata. ;Italian;Turin;Gerardo Giuliano;ca. 1726–1765;copy: Ithaka, NY, Cornell University, Kroch Library Rare & Manuscripts (Non-Circulating) Rare Books PQ1501.P53 I8 1600 tiny;
+BPB:236;Istoria memorabile e molto piacevole per ogni generoso, e nobile cavaliere: Del valoroso Pietro di Provenza e della bella Maghelona figliuola del re de Napoli, dove sono ampiamente dichiarate le loro prodezze, e casti amori. Opera delettevole con accomodate figure à suoi luoghi nuovamente ristampata. ;Italian;Turin;Gerardo Giuliano;ca. 1726–1765;"(copy: Genève, Musée d'Ethnografie, Magasin 	A3 MEG PR EU 1566 GAZ ITA 37";
+BPB:237;Istoria memorabile e molto piacevole per ogni generoso e nobile cavaliere del valoroso Pietro di Provenza e della bella Maghelona figliola del re di Napoli dove ampiamente sono dichiarate le loro prodezze, ed amori. ;Italian;Turin/Vercelli;Francesco Prato/Giuseppe Panialis;ca. 1790;mentioned in a bookseller’s catalogue that is no longer available online;no copy located
+BPB:238;Povest' o blagorodnom knjaze Petre zlatych ključach i o blagorodnoj korolevne Magilene. ;Russian;s.l.;s.n.;ca. 1780, before 1782;copy: Göttingen, SUB, 8 FAB X, 6725 (3) RARA;
+BPB:239;Povest' o blagorodnom knjaze Petre zlatych ključach i o blagorodnoj korolevne Magilene. ;Russian;s.l.;s.n.;ca. 1784;Göttingen, SUB, 8 FAB X, 6855 RARA;

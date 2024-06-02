@@ -22,7 +22,7 @@ from edpop_explorer.readers import (
     SBTIReader,
     USTCReader,
     BnFReader,
-    PierreBelleReader
+    PierreBelleReader,
 )
 
 

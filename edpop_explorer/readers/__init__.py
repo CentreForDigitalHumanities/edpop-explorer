@@ -14,7 +14,7 @@ __all__ = [
     "VDLiedReader",
     "STCNReader",
     "USTCReader",
-    "PierreBelleReader"
+    "PierreBelleReader",
     "ALL_READERS",
 ]
 
