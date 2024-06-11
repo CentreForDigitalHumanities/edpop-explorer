@@ -2,8 +2,10 @@ import csv
 from pathlib import Path
 from typing import List, Dict, Optional
 from edpop_explorer import Reader, ReaderError, BibliographicalRecord
+from rdflib import URIRef
 
 class PierreBelleReader(Reader):
+    """ Pierre-Belle database reader. Access with command 'pb'."""
     FILENAME = Path(__file__).parent / 'data' / 'biblio_pierrebelle.csv'
     CATALOG_URIREF = URIRef(
         'https://edpop.hum.uu.nl/readers/pierre_belle'
@@ -30,7 +32,7 @@ class PierreBelleReader(Reader):
 
     @classmethod
     def get_by_id(cls, identifier: str) -> BibliographicalRecord:
-        with open(cls.filename, 'r', encoding='utf-8-sig') as file:
+        with open(cls.FILENAME, 'r', encoding='utf-8-sig') as file:
             reader = csv.DictReader(file, delimiter=';')
             for row in reader:
                 if row['ID'] == identifier:
@@ -42,10 +44,9 @@ class PierreBelleReader(Reader):
         
         # Search query in all columns, and fetch results based on query
         results = []
-        with open(self.__class__.filename, 'r', encoding='utf-8-sig') as file:
+        with open(self.__class__.FILENAME, 'r', encoding='utf-8-sig') as file:
             reader = csv.DictReader(file, delimiter=';')
             for row in reader:
-                found = False
                 for key in row.keys():
                     if self.prepared_query in row[key]:
                         results.append(row)
@@ -65,8 +66,7 @@ class PierreBelleReader(Reader):
         if self.fetching_exhausted:
             return range(0)
         start_record = range_to_fetch.start
-        number_to_fetch = range_to_fetch.stop - start_record
-        results = self._perform_query(start_record, number_to_fetch)
+        results = self._perform_query()
         for i, result in enumerate(results):
             self.records[i] = result
         return range(start_record, start_record + len(results))
