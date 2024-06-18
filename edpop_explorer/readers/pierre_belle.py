@@ -1,8 +1,9 @@
 import csv
 from pathlib import Path
-from typing import List, Dict, Optional
+from typing import List
 from edpop_explorer import Reader, ReaderError, BibliographicalRecord
 from rdflib import URIRef
+
 
 class PierreBelleReader(Reader):
     """ Pierre-Belle database reader. Access with command 'pb'."""
