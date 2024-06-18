@@ -22,6 +22,7 @@ from edpop_explorer.readers import (
     SBTIReader,
     USTCReader,
     BnFReader,
+    PierreBelleReader,
 )
 
 
@@ -194,6 +195,10 @@ class EDPOPXShell(cmd2.Cmd):
     def do_kb(self, args) -> None:
         'Koninklijke Bibliotheek'
         self._query(KBReader, args)
+
+    def do_pb(self, args) -> None:
+        'BIBLIOGRAPHY OF EARLY MODERN EDITIONS OF PIERRE DE PROVENCE ET LA BELLE MAGUELONNE (CA. 1470–CA. 1800)'
+        self._query(PierreBelleReader, args)
 
     def _show_records(self, records: List[Optional[Record]],
                       start: int,
