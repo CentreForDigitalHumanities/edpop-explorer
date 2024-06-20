@@ -96,6 +96,8 @@ class VDLiedReader(VDCommonMixin, SRUMarc21BibliographicalReader):
         'https://edpop.hum.uu.nl/readers/vdlied'
     )
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/vdlied/"
+    SHORT_NAME = "VDLied"
+    DESCRIPTION = "Das Verzeichnis der deutschsprachigen Liedflugschriften"
 
     @classmethod
     def transform_query(cls, query: str) -> str:
