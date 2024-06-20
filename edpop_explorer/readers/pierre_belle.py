@@ -13,6 +13,7 @@ class PierreBelleReader(Reader):
     )
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/pierre_belle/"
     FETCH_ALL_AT_ONCE = True
+    SHORT_NAME = "Pierre and Belle"
 
     @classmethod
     def _convert_record(cls, rawrecord: dict) -> BibliographicalRecord:

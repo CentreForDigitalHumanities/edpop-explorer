@@ -31,6 +31,8 @@ class VD16Reader(VDCommonMixin, SRUMarc21BibliographicalReader):
         'https://edpop.hum.uu.nl/readers/vd16'
     )
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/vd16/"
+    SHORT_NAME = "VD16"
+    DESCRIPTION = "Verzeichnis der im deutschen Sprachbereich erschienenen Drucke des 16. Jahrhunderts"
 
     @classmethod
     def transform_query(cls, query: str) -> str:
@@ -48,6 +50,8 @@ class VD17Reader(VDCommonMixin, SRUMarc21BibliographicalReader):
         'https://edpop.hum.uu.nl/readers/vd17'
     )
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/vd17/"
+    SHORT_NAME = "VD16"
+    DESCRIPTION = "Verzeichnis der im deutschen Sprachbereich erschienenen Drucke des 17. Jahrhunderts"
 
     @classmethod
     def transform_query(cls, query: str) -> str:
@@ -64,6 +68,8 @@ class VD18Reader(VDCommonMixin, SRUMarc21BibliographicalReader):
         'https://edpop.hum.uu.nl/readers/vd18'
     )
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/vd18/"
+    SHORT_NAME = "VD16"
+    DESCRIPTION = "Verzeichnis der im deutschen Sprachbereich erschienenen Drucke des 18. Jahrhunderts"
 
     @classmethod
     def transform_query(cls, query: str) -> str:

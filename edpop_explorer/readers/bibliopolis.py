@@ -10,6 +10,7 @@ class BibliopolisReader(SRUReader):
         'https://edpop.hum.uu.nl/readers/bibliopolis'
     )
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/bibliopolis/"
+    SHORT_NAME = "Bibliopolis"
 
     def __init__(self):
         super().__init__()

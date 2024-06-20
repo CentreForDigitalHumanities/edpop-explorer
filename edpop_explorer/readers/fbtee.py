@@ -24,6 +24,7 @@ class FBTEEReader(GetByIdBasedOnQueryMixin, Reader):
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/fbtee/"
     prepared_query: Optional[SQLPreparedQuery] = None
     FETCH_ALL_AT_ONCE = True
+    SHORT_NAME = "French Book Trade in Enlightenment Europe (FBTEE)"
 
     def __init__(self):
         super().__init__()

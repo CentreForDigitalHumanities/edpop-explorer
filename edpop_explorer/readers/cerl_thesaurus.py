@@ -14,6 +14,7 @@ class CERLThesaurusReader(SRUReader):
         'https://edpop.hum.uu.nl/readers/cerlthesaurus'
     )
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/cerlthesaurus/"
+    SHORT_NAME = "CERL Thesaurus"
 
     @classmethod
     def _get_acceptable_names(

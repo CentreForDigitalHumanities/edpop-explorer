@@ -37,6 +37,7 @@ class GallicaReader(SRUReader):
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/gallica/"
     DOCUMENT_API_URL = "https://gallica.bnf.fr/services/OAIRecord?ark={}"
     IDENTIFIER_PREFIX = "https://gallica.bnf.fr/"
+    SHORT_NAME = "Gallica"
 
     @classmethod
     def _convert_record(cls, sruthirecord: dict) -> BibliographicalRecord:
