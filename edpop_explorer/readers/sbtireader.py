@@ -19,6 +19,8 @@ class SBTIReader(Reader):
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/sbti/"
     DEFAULT_RECORDS_PER_PAGE = 10
     SHORT_NAME = "Scottish Book Trade Index (SBTI)"
+    DESCRIPTION = "An index of the names, trades and addresses of people "\
+        "involved in printing in Scotland up to 1850"
 
     @classmethod
     def _get_name_field(cls, data: dict) -> Optional[Field]:

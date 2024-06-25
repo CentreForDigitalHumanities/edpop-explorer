@@ -25,6 +25,8 @@ class FBTEEReader(GetByIdBasedOnQueryMixin, Reader):
     prepared_query: Optional[SQLPreparedQuery] = None
     FETCH_ALL_AT_ONCE = True
     SHORT_NAME = "French Book Trade in Enlightenment Europe (FBTEE)"
+    DESCRIPTION = "Mapping the Trade of the Société Typographique de " \
+        "Neuchâtel, 1769-1794"
 
     def __init__(self):
         super().__init__()

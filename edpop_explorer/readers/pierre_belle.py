@@ -14,6 +14,8 @@ class PierreBelleReader(Reader):
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/pierre_belle/"
     FETCH_ALL_AT_ONCE = True
     SHORT_NAME = "Pierre and Belle"
+    DESCRIPTION = "Bibliography of early modern editions of Pierre de " \
+        "Provence et la Belle Maguelonne (ca. 1470-ca. 1800)"
 
     @classmethod
     def _convert_record(cls, rawrecord: dict) -> BibliographicalRecord:

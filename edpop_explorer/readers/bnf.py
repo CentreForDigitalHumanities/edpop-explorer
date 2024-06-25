@@ -15,6 +15,7 @@ class BnFReader(SRUMarc21BibliographicalReader):
     )
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/bnf/"
     SHORT_NAME = "Bibliothèque nationale de France (BnF)"
+    DESCRIPTION = "General catalogue of the French National Library"
     _title_field_subfield = ('200', 'a')
     _alternative_title_field_subfield = ('500', 'a')
     _publisher_field_subfield = ('201', 'c')

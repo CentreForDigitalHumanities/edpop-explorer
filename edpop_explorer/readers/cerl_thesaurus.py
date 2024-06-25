@@ -15,6 +15,11 @@ class CERLThesaurusReader(SRUReader):
     )
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/cerlthesaurus/"
     SHORT_NAME = "CERL Thesaurus"
+    DESCRIPTION = "The CERL Thesaurus file contains forms of imprint " \
+        "places, imprint names, personal names and corporate names as "\
+        "found in material printed before the middle of the nineteenth "\
+        "century - including variant spellings, forms in Latin and "\
+        "other languages, and fictitious names."
 
     @classmethod
     def _get_acceptable_names(

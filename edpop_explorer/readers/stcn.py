@@ -30,7 +30,8 @@ class STCNReader(SparqlReader):
         'https://edpop.hum.uu.nl/readers/stcn'
     )
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/stcn/"
-    SHORT_NAME = "Short Title Catalogue Netherlands (STCN)"
+    SHORT_NAME = "Short-Title Catalogue Netherlands (STCN)"
+    DESCRIPTION = "National biography of The Netherlands until 1801"
 
     def __init__(self):
         super().__init__()

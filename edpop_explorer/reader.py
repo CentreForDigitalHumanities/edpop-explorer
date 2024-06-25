@@ -227,6 +227,8 @@ class Reader(ABC):
             g.add((cls.CATALOG_URIREF, SDO.name, Literal(cls.SHORT_NAME)))
         if cls.DESCRIPTION:
             g.add((cls.CATALOG_URIREF, SDO.description, Literal(cls.DESCRIPTION)))
+        if (slug := cls.catalog_slug) is not None:
+            g.add((cls.CATALOG_URIREF, ))
 
         # Set namespace prefixes
         bind_common_namespaces(g)
@@ -270,6 +272,11 @@ class Reader(ABC):
         # not be the case). For dataclasses, it is not guaranteed
         prepared_query = str(self.prepared_query)
         return f"{readertype} | {prepared_query}"
+
+    @property
+    def catalog_slug(self) -> Optional[str]:
+        if self.CATALOG_URIREF:
+            return self.CATALOG_URIREF.split("/")[-1]
 
 
 class GetByIdBasedOnQueryMixin(ABC):
