@@ -33,7 +33,7 @@ jobs:
       - name: Lint with ruff
         run: |
           pip install ruff
-          ruff --output-format=github --target-version=py38 .
+          ruff check --output-format=github --target-version=py38 .
       - name: Test with pytest
         run: |
           pytest
