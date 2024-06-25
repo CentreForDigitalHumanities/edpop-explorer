@@ -228,7 +228,7 @@ class Reader(ABC):
         if cls.DESCRIPTION:
             g.add((cls.CATALOG_URIREF, SDO.description, Literal(cls.DESCRIPTION)))
         if (slug := cls.catalog_slug) is not None:
-            g.add((cls.CATALOG_URIREF, ))
+            g.add((cls.CATALOG_URIREF, SDO.identifier, Literal(slug)))
 
         # Set namespace prefixes
         bind_common_namespaces(g)
