@@ -227,7 +227,7 @@ class Reader(ABC):
             g.add((cls.CATALOG_URIREF, SDO.name, Literal(cls.SHORT_NAME)))
         if cls.DESCRIPTION:
             g.add((cls.CATALOG_URIREF, SDO.description, Literal(cls.DESCRIPTION)))
-        if (slug := cls.catalog_slug) is not None:
+        if (slug := cls.get_catalog_slug()) is not None:
             g.add((cls.CATALOG_URIREF, SDO.identifier, Literal(slug)))
 
         # Set namespace prefixes
@@ -273,10 +273,10 @@ class Reader(ABC):
         prepared_query = str(self.prepared_query)
         return f"{readertype} | {prepared_query}"
 
-    @property
-    def catalog_slug(self) -> Optional[str]:
-        if self.CATALOG_URIREF:
-            return self.CATALOG_URIREF.split("/")[-1]
+    @classmethod
+    def get_catalog_slug(cls) -> Optional[str]:
+        if cls.CATALOG_URIREF:
+            return cls.CATALOG_URIREF.split("/")[-1]
 
 
 class GetByIdBasedOnQueryMixin(ABC):
