@@ -14,6 +14,7 @@ def _force_list(data) -> list:
     else:
         return [data]
 
+
 def _force_string(data) -> Optional[str]:
     '''Transform data into one string or None. Can be used if a single 
     string is expected, but if there is a possibility that it is a
@@ -37,6 +38,9 @@ class GallicaReader(SRUReader):
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/gallica/"
     DOCUMENT_API_URL = "https://gallica.bnf.fr/services/OAIRecord?ark={}"
     IDENTIFIER_PREFIX = "https://gallica.bnf.fr/"
+    SHORT_NAME = "Gallica"
+    DESCRIPTION = "Digital library of the Bibliothèque nationale de France " \
+        "and its partners"
 
     @classmethod
     def _convert_record(cls, sruthirecord: dict) -> BibliographicalRecord:

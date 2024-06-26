@@ -21,6 +21,8 @@ class USTCReader(GetByIdBasedOnQueryMixin, Reader):
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/ustc/"
     prepared_query: Optional[SQLPreparedQuery] = None
     FETCH_ALL_AT_ONCE = True
+    SHORT_NAME = "Universal Short Title Catalogue (USTC)"
+    DESCRIPTION = "An open access bibliography of early modern print culture"
 
     def __init__(self):
         super().__init__()
