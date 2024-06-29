@@ -22,6 +22,7 @@ from edpop_explorer.readers import (
     SBTIReader,
     USTCReader,
     BnFReader,
+    KVCSReader,
 )
 
 
@@ -194,6 +195,10 @@ class EDPOPXShell(cmd2.Cmd):
     def do_kb(self, args) -> None:
         'Koninklijke Bibliotheek'
         self._query(KBReader, args)
+
+    def do_kvcs(self, args) -> None:
+        'Drukkers & Uitgevers in KVCS'
+        self._query(KVCSReader, args)
 
     def _show_records(self, records: List[Optional[Record]],
                       start: int,

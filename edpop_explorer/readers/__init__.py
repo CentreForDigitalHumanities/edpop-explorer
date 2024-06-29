@@ -14,6 +14,7 @@ __all__ = [
     "VDLiedReader",
     "STCNReader",
     "USTCReader",
+    "KVCSReader",
     "ALL_READERS",
 ]
 
@@ -29,6 +30,7 @@ from .sbtireader import SBTIReader
 from .stcn import STCNReader
 from .ustc import USTCReader
 from .vd import VD16Reader, VD17Reader, VD18Reader, VDLiedReader
+from .kvcs import KVCSReader
 
 import sys
 from typing import List, Type
