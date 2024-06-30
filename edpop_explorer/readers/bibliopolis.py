@@ -3,6 +3,9 @@ from edpop_explorer import Record, SRUReader
 
 
 class BibliopolisReader(SRUReader):
+    # Note that this reader is currently deactivated by default because
+    # the API is not working. It is not possible for the moment to
+    # test this reader.
     sru_url = 'http://jsru.kb.nl/sru/sru'
     sru_version = '1.2'
     HPB_LINK = 'http://hpb.cerl.org/record/{}'
@@ -10,6 +13,7 @@ class BibliopolisReader(SRUReader):
         'https://edpop.hum.uu.nl/readers/bibliopolis'
     )
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/bibliopolis/"
+    SHORT_NAME = "Bibliopolis"
 
     def __init__(self):
         super().__init__()

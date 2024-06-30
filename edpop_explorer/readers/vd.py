@@ -31,6 +31,8 @@ class VD16Reader(VDCommonMixin, SRUMarc21BibliographicalReader):
         'https://edpop.hum.uu.nl/readers/vd16'
     )
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/vd16/"
+    SHORT_NAME = "VD16"
+    DESCRIPTION = "Verzeichnis der im deutschen Sprachbereich erschienenen Drucke des 16. Jahrhunderts"
 
     @classmethod
     def transform_query(cls, query: str) -> str:
@@ -48,6 +50,8 @@ class VD17Reader(VDCommonMixin, SRUMarc21BibliographicalReader):
         'https://edpop.hum.uu.nl/readers/vd17'
     )
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/vd17/"
+    SHORT_NAME = "VD17"
+    DESCRIPTION = "Verzeichnis der im deutschen Sprachbereich erschienenen Drucke des 17. Jahrhunderts"
 
     @classmethod
     def transform_query(cls, query: str) -> str:
@@ -64,6 +68,8 @@ class VD18Reader(VDCommonMixin, SRUMarc21BibliographicalReader):
         'https://edpop.hum.uu.nl/readers/vd18'
     )
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/vd18/"
+    SHORT_NAME = "VD18"
+    DESCRIPTION = "Verzeichnis der im deutschen Sprachbereich erschienenen Drucke des 18. Jahrhunderts"
 
     @classmethod
     def transform_query(cls, query: str) -> str:
@@ -90,6 +96,8 @@ class VDLiedReader(VDCommonMixin, SRUMarc21BibliographicalReader):
         'https://edpop.hum.uu.nl/readers/vdlied'
     )
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/vdlied/"
+    SHORT_NAME = "VDLied"
+    DESCRIPTION = "Das Verzeichnis der deutschsprachigen Liedflugschriften"
 
     @classmethod
     def transform_query(cls, query: str) -> str:

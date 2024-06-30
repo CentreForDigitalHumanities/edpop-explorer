@@ -3,7 +3,7 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Optional, Union, Dict
-from rdflib import Graph, RDF, URIRef
+from rdflib import Graph, RDF, URIRef, SDO, Literal
 from urllib.parse import quote, unquote
 
 
@@ -59,6 +59,12 @@ class Reader(ABC):
     If an IRI cannot be created with a simple prefix, the 
     `identifier_to_iri` and `iri_to_identifier` methods have to be
     overridden."""
+    SHORT_NAME: Optional[str] = None
+    """Short name of the corresponding catalogue, to be used in
+    user interfaces."""
+    DESCRIPTION: Optional[str] = None
+    """Information about the contents of the corresponding catalogue, 
+    to be used in user interfaces."""
     FETCH_ALL_AT_ONCE = False
     """True if the reader is configured to fetch all records at once,
     even if the user only needs a subset."""
@@ -216,6 +222,14 @@ class Reader(ABC):
             rdfclass = EDPOPREC.BibliographicalCatalog
         g.add((cls.CATALOG_URIREF, RDF.type, rdfclass))
 
+        # Add name and description
+        if cls.SHORT_NAME:
+            g.add((cls.CATALOG_URIREF, SDO.name, Literal(cls.SHORT_NAME)))
+        if cls.DESCRIPTION:
+            g.add((cls.CATALOG_URIREF, SDO.description, Literal(cls.DESCRIPTION)))
+        if (slug := cls.get_catalog_slug()) is not None:
+            g.add((cls.CATALOG_URIREF, SDO.identifier, Literal(slug)))
+
         # Set namespace prefixes
         bind_common_namespaces(g)
 
@@ -258,6 +272,11 @@ class Reader(ABC):
         # not be the case). For dataclasses, it is not guaranteed
         prepared_query = str(self.prepared_query)
         return f"{readertype} | {prepared_query}"
+
+    @classmethod
+    def get_catalog_slug(cls) -> Optional[str]:
+        if cls.CATALOG_URIREF:
+            return cls.CATALOG_URIREF.split("/")[-1]
 
 
 class GetByIdBasedOnQueryMixin(ABC):

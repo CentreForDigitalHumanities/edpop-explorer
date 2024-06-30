@@ -15,6 +15,14 @@ class HPBReader(SRUMarc21BibliographicalReader):
     )
     READERTYPE = BIBLIOGRAPHICAL
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/hpb/"
+    SHORT_NAME = "Heritage of the Printed Book (HPB)"
+    DESCRIPTION = (
+        "The HPB Database (previously called the Hand Press Book Database) "
+        "is a steadily growing collection of files of catalogue records from "
+        "major European and North American research libraries covering items "
+        "of European printing of the hand-press period (c.1455-c.1830) "
+        "integrated into one file."
+    )
 
     @classmethod
     def transform_query(cls, query: str) -> str:
