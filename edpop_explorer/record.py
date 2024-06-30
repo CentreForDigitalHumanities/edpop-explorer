@@ -243,6 +243,11 @@ class BiographicalRecord(Record):
     places_of_activity: Optional[List[Field]] = None
     timespan: Optional[Field] = None
     activities: Optional[List[Field]] = None
+    gender: Optional[List[Field]] = None
+    relations: Optional[List[Field]] = None
+    lifespan: Optional[Field] = None
+    printed_location: Optional[List[Field]] = None
+    alternative_id: Optional[Field] = None
 
     def __init__(self, from_reader: Type["Reader"]):
         super().__init__(from_reader)
@@ -255,6 +260,11 @@ class BiographicalRecord(Record):
             ('places_of_activity', EDPOPREC.placeOfActivity, Field),
             ('timespan', EDPOPREC.timespan, Field),
             ('activities', EDPOPREC.activity, Field),
+            ('gender', EDPOPREC.gender, Field),
+            ('relations', EDPOPREC.relations, Field),
+            ('lifespan', EDPOPREC.lifespan, Field),
+            ('printed_location', EDPOPREC.printedLocation, Field),
+            ('alternative_id', EDPOPREC.alternativeId, Field),
         ]
 
     def __str__(self) -> str:
