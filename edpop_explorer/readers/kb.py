@@ -13,6 +13,8 @@ class KBReader(SRUReader):
     )
     READERTYPE = BIBLIOGRAPHICAL
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/kb/"
+    SHORT_NAME = "Koninklijke Bibliotheek (KB)"
+    DESCRIPTION = "General catalogue of KB, national library of The Netherlands."
 
     def __init__(self):
         super().__init__()
