@@ -36,11 +36,10 @@ class USTCReader(GetByIdBasedOnQueryMixin, Reader):
             # some sort of hidden symlink if Python was installed using
             # the Windows Store...
             db_dir = self.database_file.parent.resolve()
-            print(f'USTC database not found. Please obtain the file '
-                  f'{self.DATABASE_FILENAME} from the project team and add it '
-                  f'to the following directory: {db_dir}')
-            raise ReaderError('Database file not found')
-        self.con = sqlite3.connect(str(self.database_file))
+            error_message = f'USTC database not found. Please obtain the file ' \
+                f'{self.DATABASE_FILENAME} from the project team and add it ' \
+                f'to the following directory: {db_dir}'
+            raise ReaderError(error_message)
 
     @classmethod
     def transform_query(cls, query: str) -> SQLPreparedQuery:
@@ -72,6 +71,7 @@ class USTCReader(GetByIdBasedOnQueryMixin, Reader):
 
     def fetch_range(self, range_to_fetch: range) -> range:
         self.prepare_data()
+        con = sqlite3.connect(str(self.database_file))
 
         # This method fetches all records immediately, because the data is
         # locally stored.
@@ -81,7 +81,7 @@ class USTCReader(GetByIdBasedOnQueryMixin, Reader):
         if self.fetching_exhausted:
             return range(0)
 
-        cur = self.con.cursor()
+        cur = con.cursor()
         columns = [x[1] for x in cur.execute('PRAGMA table_info(editions)')]
         # This kind of query is far from ideal, but the alternative is to
         # implement SQLite full text search which is probably too much work
