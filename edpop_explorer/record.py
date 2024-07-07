@@ -208,10 +208,6 @@ class BibliographicalRecord(Record):
     physical_description: Optional[Field] = None
     bookseller: Optional[Field] = None
     location: Optional[Field] = None
-    update: Optional[Field] = None
-    image: Optional[Field] = None
-    place_of_printing: Optional[Field] = None
-    style: Optional[Field] = None
 
     def __init__(self, from_reader: Type["Reader"]):
         super().__init__(from_reader)
@@ -219,7 +215,7 @@ class BibliographicalRecord(Record):
         self._fields += [
             ('title', EDPOPREC.title, Field),
             ('alternative_title', EDPOPREC.alternativeTitle, Field),
-            ('contributors', EDPOPREC.contributor, Field),
+            ('contributors', EDPOPREC.contributors, Field),
             ('publisher_or_printer', EDPOPREC.publisherOrPrinter, Field),
             ('place_of_publication', EDPOPREC.placeOfPublication, Field),
             ('dating', EDPOPREC.dating, Field),
@@ -229,10 +225,6 @@ class BibliographicalRecord(Record):
             ('physical_description', EDPOPREC.physicalDescription, Field),
             ('bookseller', EDPOPREC.bookseller, Field),
             ('location', EDPOPREC.location, Field),
-            ('update', EDPOPREC.update, Field),
-            ('image', EDPOPREC.image, Field),
-            ('place_of_printing', EDPOPREC.placeOfPrinting, Field),
-            ('style', EDPOPREC.style, Field),
         ]
 
     def __str__(self) -> str:

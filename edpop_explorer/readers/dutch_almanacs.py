@@ -1,7 +1,7 @@
 import csv
 from pathlib import Path
 from typing import List
-from edpop_explorer import Reader, ReaderError, BibliographicalRecord
+from edpop_explorer import Reader, ReaderError, Field, BibliographicalRecord, BIBLIOGRAPHICAL
 from rdflib import URIRef
 
 
@@ -15,24 +15,21 @@ class DutchAlmanacsReader(Reader):
     FETCH_ALL_AT_ONCE = True
     SHORT_NAME = "Dutch Almanacs"
     DESCRIPTION = "Bibliography of Dutch Almanacs 1570-1710"
+    READERTYPE = BIBLIOGRAPHICAL
 
     @classmethod
     def _convert_record(cls, rawrecord: dict) -> BibliographicalRecord:
         record = BibliographicalRecord(from_reader=cls)
         record.data = rawrecord
-        record.identifier = rawrecord['ID']
-        record.dating = rawrecord['Jaar']
-        record.place_of_publication = rawrecord['Plaats uitgave']
-        record.bookseller = rawrecord['Boekverkoper']
-        record.contributors = rawrecord['Auteur']
-        record.title = rawrecord['Titel']
-        record.physical_description = rawrecord['Formaat']
-        record.location = rawrecord['Vindplaats']
-        record.update = rawrecord['Bijwerk']
-        record.image = rawrecord['Figure']
-        record.place_of_printing = rawrecord['Plaats druk']
-        record.publisher_or_printer = rawrecord['Drukker']
-        record.style = rawrecord['Stijl']
+        record.identifier = Field(rawrecord['ID'])
+        record.dating = Field(rawrecord['Jaar'])
+        record.place_of_publication = Field(rawrecord['Plaats uitgave'])
+        record.bookseller = Field(rawrecord['Boekverkoper'])
+        record.contributors = [Field(author.strip()) for author in rawrecord['Auteur'].split('/')]
+        record.title = Field(rawrecord['Titel'])
+        record.physical_description = Field(rawrecord['Formaat'])
+        record.location = Field(rawrecord['Vindplaats'])
+        record.publisher_or_printer = Field(rawrecord['Drukker'])
         return record
 
     @classmethod
