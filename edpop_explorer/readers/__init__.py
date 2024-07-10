@@ -15,6 +15,7 @@ __all__ = [
     "STCNReader",
     "USTCReader",
     "KVCSReader",
+    "DutchAlmanacsReader",
     "PierreBelleReader",
     "ALL_READERS",
 ]
@@ -32,6 +33,7 @@ from .stcn import STCNReader
 from .ustc import USTCReader
 from .vd import VD16Reader, VD17Reader, VD18Reader, VDLiedReader
 from .kvcs import KVCSReader
+from .dutch_almanacs import DutchAlmanacsReader
 from .pierre_belle import PierreBelleReader
 
 import sys
