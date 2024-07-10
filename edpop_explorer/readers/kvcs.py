@@ -1,7 +1,7 @@
 import csv
 from pathlib import Path
 from typing import List
-from edpop_explorer import Reader, ReaderError, BiographicalRecord
+from edpop_explorer import Reader, ReaderError, Field, BiographicalRecord, BIOGRAPHICAL
 from rdflib import URIRef
 
 
@@ -15,21 +15,19 @@ class KVCSReader(Reader):
     FETCH_ALL_AT_ONCE = True
     SHORT_NAME = "KVCS"
     DESCRIPTION = "Drukkers & Uitgevers in KVCS"
-#CHECK LATER AND MODIFY
+    READERTYPE = BIOGRAPHICAL
+
     @classmethod
     def _convert_record(cls, rawrecord: dict) -> BiographicalRecord:
         record = BiographicalRecord(from_reader=cls)
         record.data = rawrecord
-        record.identifier = rawrecord['ID']
-        record.name = rawrecord['Name']
-        record.gender = rawrecord['Gender']
-        record.relations = rawrecord['Relations']
-        record.lifespan = rawrecord['Years of life']
-        record.places_of_activity = rawrecord['City']
-        record.printed_location = rawrecord['Location as mentioned on print products']
-        record.timespan = rawrecord['Years of activity']
-        record.activities = rawrecord['Kind of print and sales activities']
-        record.alternative_id = rawrecord['KVCS-ID']
+        record.identifier = Field(rawrecord['ID'])
+        record.name = Field(rawrecord['Name'])
+        record.gender = Field(rawrecord['Gender'])
+        record.lifespan = Field(rawrecord['Years of life'])
+        record.places_of_activity = Field(rawrecord['City'])
+        record.activity_timespan = Field(rawrecord['Years of activity'])
+        record.activities = Field(rawrecord['Kind of print and sales activities'])
         return record
 
     @classmethod
