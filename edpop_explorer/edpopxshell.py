@@ -22,6 +22,7 @@ from edpop_explorer.readers import (
     SBTIReader,
     USTCReader,
     BnFReader,
+    DutchAlmanacsReader,
     PierreBelleReader,
 )
 
@@ -195,6 +196,10 @@ class EDPOPXShell(cmd2.Cmd):
     def do_kb(self, args) -> None:
         'Koninklijke Bibliotheek'
         self._query(KBReader, args)
+
+    def do_dutalm(self, args) -> None:
+        'Bibliography of Dutch Almanacs 1570-1710'
+        self._query(DutchAlmanacsReader, args)
 
     def do_pb(self, args) -> None:
         'BIBLIOGRAPHY OF EARLY MODERN EDITIONS OF PIERRE DE PROVENCE ET LA BELLE MAGUELONNE (CA. 1470–CA. 1800)'
