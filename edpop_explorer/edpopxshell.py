@@ -22,6 +22,7 @@ from edpop_explorer.readers import (
     SBTIReader,
     USTCReader,
     BnFReader,
+    KVCSReader,
     DutchAlmanacsReader,
     PierreBelleReader,
 )
@@ -196,6 +197,10 @@ class EDPOPXShell(cmd2.Cmd):
     def do_kb(self, args) -> None:
         'Koninklijke Bibliotheek'
         self._query(KBReader, args)
+
+    def do_kvcs(self, args) -> None:
+        'Drukkers & Uitgevers in KVCS'
+        self._query(KVCSReader, args)
 
     def do_dutalm(self, args) -> None:
         'Bibliography of Dutch Almanacs 1570-1710'
