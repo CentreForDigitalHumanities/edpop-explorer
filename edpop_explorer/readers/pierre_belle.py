@@ -1,7 +1,7 @@
 import csv
 from pathlib import Path
 from typing import List
-from edpop_explorer import Reader, ReaderError, BibliographicalRecord
+from edpop_explorer import Reader, ReaderError, BibliographicalRecord, Field
 from rdflib import URIRef
 
 
@@ -22,11 +22,11 @@ class PierreBelleReader(Reader):
         record = BibliographicalRecord(from_reader=cls)
         record.data = rawrecord
         record.identifier = rawrecord['ID']
-        record.title = rawrecord['Shortened title']
-        record.languages = [rawrecord['Language']]
-        record.publisher_or_printer = rawrecord['Publisher']
-        record.place_of_publication = rawrecord['Place of publication']
-        record.dating = rawrecord['Date']
+        record.title = Field(rawrecord['Shortened title'])
+        record.languages = [Field(rawrecord['Language'])]
+        record.publisher_or_printer = Field(rawrecord['Publisher'])
+        record.place_of_publication = Field(rawrecord['Place of publication'])
+        record.dating = Field(rawrecord['Date'])
         return record
 
     @classmethod
