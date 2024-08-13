@@ -14,6 +14,7 @@ from edpop_explorer.sql import SQLPreparedQuery
 
 class FBTEEReader(GetByIdBasedOnQueryMixin, Reader):
     DATABASE_URL = 'https://dhstatic.hum.uu.nl/edpop/cl.sqlite3'
+    DATABASE_FILENAME = 'cl.sqlite3'
     DATABASE_LICENSE = 'https://dhstatic.hum.uu.nl/edpop/LICENSE.txt'
     FBTEE_LINK = 'http://fbtee.uws.edu.au/stn/interface/browse.php?t=book&' \
         'id={}'
@@ -27,25 +28,22 @@ class FBTEEReader(GetByIdBasedOnQueryMixin, Reader):
     SHORT_NAME = "French Book Trade in Enlightenment Europe (FBTEE)"
     DESCRIPTION = "Mapping the Trade of the Société Typographique de " \
         "Neuchâtel, 1769-1794"
-
-    def __init__(self):
-        super().__init__()
-        self.database_file = Path(
-            AppDirs('edpop-explorer', 'cdh').user_data_dir
-        ) / 'cl.sqlite3'
+    database_path: Path
 
     def prepare_data(self):
-        if not self.database_file.exists():
+        self.database_path = Path(
+            AppDirs('edpop-explorer', 'cdh').user_data_dir
+        ) / 'cl.sqlite3'
+        if not self.database_path.exists():
             self._download_database()
-        self.con = sqlite3.connect(str(self.database_file))
 
     def _download_database(self):
         print('Downloading database...')
         response = requests.get(self.DATABASE_URL)
         if response.ok:
             try:
-                self.database_file.parent.mkdir(exist_ok=True, parents=True)
-                with open(self.database_file, 'wb') as f:
+                self.database_path.parent.mkdir(exist_ok=True, parents=True)
+                with open(self.database_path, 'wb') as f:
                     f.write(response.content)
             except OSError as err:
                 raise ReaderError(
@@ -55,7 +53,7 @@ class FBTEEReader(GetByIdBasedOnQueryMixin, Reader):
             raise ReaderError(
                 f'Error downloading database file from {self.DATABASE_URL}'
             )
-        print(f'Successfully saved database to {self.database_file}.')
+        print(f'Successfully saved database to {self.database_path}.')
         print(f'See license: {self.DATABASE_LICENSE}')
 
     @classmethod
@@ -105,41 +103,42 @@ class FBTEEReader(GetByIdBasedOnQueryMixin, Reader):
             raise ReaderError('First call prepare_query method')
         if self.fetching_exhausted:
             return range(0)
-        cur = self.con.cursor()
-        columns = [x[1] for x in cur.execute('PRAGMA table_info(books)')]
-        res = cur.execute(
-            'SELECT B.*, BA.author_code, A.author_name FROM books B '
-            'LEFT OUTER JOIN books_authors BA on B.book_code=BA.book_code '
-            'JOIN authors A on BA.author_code=A.author_code '
-            f'{self.prepared_query.where_statement} '
-            'ORDER BY B.book_code',
-            self.prepared_query.arguments
-        )
-        last_book_code = ''
-        i = -1
-        for row in res:
-            # Since we are joining with another table, a book may be repeated,
-            # so check if this is a new item
-            book_code: str = row[columns.index('book_code')]
-            if last_book_code != book_code:
-                # We have a new book, so update i
-                i += 1
-                record = BibliographicalRecord(self.__class__)
-                record.data = {}
-                for j in range(len(columns)):
-                    record.data[columns[j]] = row[j]
-                record.identifier = book_code
-                record.link = self.FBTEE_LINK.format(book_code)
-                record.data['authors'] = []
-                self.records[i] = record
-                last_book_code = book_code
-            # Add author_code and author_name to the last record
-            assert len(self.records) > 0
-            author_code = row[len(columns)]
-            author_name = row[len(columns) + 1]
-            assert isinstance(self.records[i].data, dict)
-            self.records[i].data['authors'].append((author_code, author_name))
-        for record in self.records:
-            self._add_fields(record)
-        self.number_of_results = len(self.records)
+        with sqlite3.connect(str(self.database_path)) as con:
+            cur = con.cursor()
+            columns = [x[1] for x in cur.execute('PRAGMA table_info(books)')]
+            res = cur.execute(
+                'SELECT B.*, BA.author_code, A.author_name FROM books B '
+                'LEFT OUTER JOIN books_authors BA on B.book_code=BA.book_code '
+                'JOIN authors A on BA.author_code=A.author_code '
+                f'{self.prepared_query.where_statement} '
+                'ORDER BY B.book_code',
+                self.prepared_query.arguments
+            )
+            last_book_code = ''
+            i = -1
+            for row in res:
+                # Since we are joining with another table, a book may be repeated,
+                # so check if this is a new item
+                book_code: str = row[columns.index('book_code')]
+                if last_book_code != book_code:
+                    # We have a new book, so update i
+                    i += 1
+                    record = BibliographicalRecord(self.__class__)
+                    record.data = {}
+                    for j in range(len(columns)):
+                        record.data[columns[j]] = row[j]
+                    record.identifier = book_code
+                    record.link = self.FBTEE_LINK.format(book_code)
+                    record.data['authors'] = []
+                    self.records[i] = record
+                    last_book_code = book_code
+                # Add author_code and author_name to the last record
+                assert len(self.records) > 0
+                author_code = row[len(columns)]
+                author_name = row[len(columns) + 1]
+                assert isinstance(self.records[i].data, dict)
+                self.records[i].data['authors'].append((author_code, author_name))
+            for record in self.records:
+                self._add_fields(record)
+            self.number_of_results = len(self.records)
         return range(0, len(self.records))
