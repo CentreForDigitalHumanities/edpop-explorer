@@ -111,7 +111,9 @@ class FBTEEReader(DatabaseFileMixin, GetByIdBasedOnQueryMixin, Reader):
                 author_name = row[len(columns) + 1]
                 assert isinstance(self.records[i].data, dict)
                 self.records[i].data['authors'].append((author_code, author_name))
-            for record in self.records:
+            for record_number in self.records:
+                record = self.records[record_number]
+                assert isinstance(record, BibliographicalRecord)
                 self._add_fields(record)
             self.number_of_results = len(self.records)
         return range(0, len(self.records))
