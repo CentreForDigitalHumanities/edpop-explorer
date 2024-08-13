@@ -1,5 +1,4 @@
 import csv
-from pathlib import Path
 from typing import List
 from edpop_explorer import Reader, ReaderError, Field, BiographicalRecord, BIOGRAPHICAL, DatabaseFileMixin
 from rdflib import URIRef

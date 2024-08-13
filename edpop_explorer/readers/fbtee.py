@@ -1,8 +1,5 @@
-from pathlib import Path
 import sqlite3
 from rdflib import URIRef
-import requests
-from appdirs import AppDirs
 from typing import Optional
 
 from edpop_explorer import (

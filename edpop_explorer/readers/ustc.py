@@ -1,7 +1,5 @@
-from pathlib import Path
 import sqlite3
 from typing import List, Optional, Union
-from appdirs import AppDirs
 from rdflib import URIRef
 
 from edpop_explorer import (
