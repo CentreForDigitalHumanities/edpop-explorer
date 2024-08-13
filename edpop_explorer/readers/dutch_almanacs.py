@@ -1,13 +1,14 @@
 import csv
 from pathlib import Path
 from typing import List
-from edpop_explorer import Reader, ReaderError, Field, BibliographicalRecord, BIBLIOGRAPHICAL
+from edpop_explorer import Reader, ReaderError, Field, BibliographicalRecord, BIBLIOGRAPHICAL, DatabaseFileMixin
 from rdflib import URIRef
 
 
-class DutchAlmanacsReader(Reader):
+class DutchAlmanacsReader(DatabaseFileMixin, Reader):
     """ Dutch Almanacs database reader. Access with command 'dutalm'."""
-    FILENAME = Path(__file__).parent / 'data' / 'biblio_dutchalmanacs.csv'
+    DATABASE_URL = 'https://dhstatic.hum.uu.nl/edpop/biblio_dutchalmanacs.csv'
+    DATABASE_FILENAME = 'biblio_dutchalmanacs.csv'
     CATALOG_URIREF = URIRef(
         'https://edpop.hum.uu.nl/readers/dutch_almanacs'
     )
@@ -39,7 +40,9 @@ class DutchAlmanacsReader(Reader):
 
     @classmethod
     def get_by_id(cls, identifier: str) -> BibliographicalRecord:
-        with open(cls.FILENAME, 'r', encoding='utf-8-sig') as file:
+        reader = cls()
+        reader.prepare_data()
+        with open(reader.database_path, 'r', encoding='utf-8-sig') as file:
             reader = csv.DictReader(file, delimiter=';')
             for row in reader:
                 if row['ID'] == identifier:
@@ -48,10 +51,11 @@ class DutchAlmanacsReader(Reader):
 
     def _perform_query(self) -> List[BibliographicalRecord]:
         assert isinstance(self.prepared_query, str)
+        self.prepare_data()
 
         # Search query in all columns, and fetch results based on query
         results = []
-        with open(self.__class__.FILENAME, 'r', encoding='utf-8-sig') as file:
+        with open(self.database_path, 'r', encoding='utf-8-sig') as file:
             reader = csv.DictReader(file, delimiter=';')
             for row in reader:
                 for key in row.keys():
