@@ -2,7 +2,11 @@
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Optional, Union, Dict
+
+import requests
+from appdirs import AppDirs
 from rdflib import Graph, RDF, URIRef, SDO, Literal
 from urllib.parse import quote, unquote
 
@@ -310,6 +314,69 @@ class GetByIdBasedOnQueryMixin(ABC):
     @abstractmethod
     def _prepare_get_by_id_query(cls, identifier: str) -> PreparedQueryType:
         pass
+
+
+class DatabaseFileMixin:
+    """Mixin that adds a method ``prepare_data`` to a ``Reader`` class,
+    which will make the database file available in the ``database_path``
+    attribute as a ``pathlib.Path`` object. If the constant attribute
+    ``DATABASE_URL`` is given, the database will be downloaded from
+    that URL if the data is not yet available. The database file will
+    be (expected to be) stored in the application data directory
+    using the filename specified in the constant attribute
+    ``DATABASE_FILENAME``, which has to be specified by the user of
+    this mixin."""
+    DATABASE_URL: Optional[str] = None
+    """The URL to download the database file from. If this attribute is
+    ``None``, automatically downloading the database file is not supported."""
+    DATABASE_FILENAME: str
+    """The filename (not the full path) under which the database is expected
+    to be stored."""
+    DATABASE_LICENSE: Optional[str] = None
+    """A URL that contains the license of the downloaded database file."""
+    database_path: Optional[Path] = None
+    """The path to the database file. Will be set by the ``prepare_data``
+    method."""
+
+    def prepare_data(self) -> None:
+        """Prepare the database file by confirming that it is available,
+        and if not, by attempting to download it."""
+        self.database_path = Path(
+            AppDirs('edpop-explorer', 'cdh').user_data_dir
+        ) / self.DATABASE_FILENAME
+        if not self.database_path.exists():
+            if self.DATABASE_URL is None:
+                # No database URL is given, so the user has to get the database
+                # by themself.
+                # Find database dir with .resolve() because on Windows it is
+                # some sort of hidden symlink if Python was installed using
+                # the Windows Store...
+                db_dir = self.database_path.parent.resolve()
+                error_message = f'USTC database not found. Please obtain the file ' \
+                                f'{self.DATABASE_FILENAME} from the project team and add it ' \
+                                f'to the following directory: {db_dir}'
+                raise ReaderError(error_message)
+            else:
+                self._download_database()
+
+    def _download_database(self) -> None:
+        print('Downloading database...')
+        response = requests.get(self.DATABASE_URL)
+        if response.ok:
+            try:
+                self.database_path.parent.mkdir(exist_ok=True, parents=True)
+                with open(self.database_path, 'wb') as f:
+                    f.write(response.content)
+            except OSError as err:
+                raise ReaderError(
+                    f'Error writing database file to disk: {err}'
+                )
+        else:
+            raise ReaderError(
+                f'Error downloading database file from {self.DATABASE_URL}'
+            )
+        print(f'Successfully saved database to {self.database_path}.')
+        print(f'See license: {self.DATABASE_LICENSE}')
 
 
 class ReaderError(Exception):

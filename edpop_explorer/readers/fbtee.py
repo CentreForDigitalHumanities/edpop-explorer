@@ -6,13 +6,13 @@ from appdirs import AppDirs
 from typing import Optional
 
 from edpop_explorer import (
-    Reader, BibliographicalRecord, ReaderError, Field, BIBLIOGRAPHICAL
+    Reader, BibliographicalRecord, ReaderError, Field, BIBLIOGRAPHICAL, DatabaseFileMixin
 )
 from edpop_explorer.reader import GetByIdBasedOnQueryMixin
 from edpop_explorer.sql import SQLPreparedQuery
 
 
-class FBTEEReader(GetByIdBasedOnQueryMixin, Reader):
+class FBTEEReader(DatabaseFileMixin, GetByIdBasedOnQueryMixin, Reader):
     DATABASE_URL = 'https://dhstatic.hum.uu.nl/edpop/cl.sqlite3'
     DATABASE_FILENAME = 'cl.sqlite3'
     DATABASE_LICENSE = 'https://dhstatic.hum.uu.nl/edpop/LICENSE.txt'
@@ -28,33 +28,6 @@ class FBTEEReader(GetByIdBasedOnQueryMixin, Reader):
     SHORT_NAME = "French Book Trade in Enlightenment Europe (FBTEE)"
     DESCRIPTION = "Mapping the Trade of the Société Typographique de " \
         "Neuchâtel, 1769-1794"
-    database_path: Path
-
-    def prepare_data(self):
-        self.database_path = Path(
-            AppDirs('edpop-explorer', 'cdh').user_data_dir
-        ) / 'cl.sqlite3'
-        if not self.database_path.exists():
-            self._download_database()
-
-    def _download_database(self):
-        print('Downloading database...')
-        response = requests.get(self.DATABASE_URL)
-        if response.ok:
-            try:
-                self.database_path.parent.mkdir(exist_ok=True, parents=True)
-                with open(self.database_path, 'wb') as f:
-                    f.write(response.content)
-            except OSError as err:
-                raise ReaderError(
-                    f'Error writing database file to disk: {err}'
-                )
-        else:
-            raise ReaderError(
-                f'Error downloading database file from {self.DATABASE_URL}'
-            )
-        print(f'Successfully saved database to {self.database_path}.')
-        print(f'See license: {self.DATABASE_LICENSE}')
 
     @classmethod
     def _prepare_get_by_id_query(cls, identifier: str) -> SQLPreparedQuery:
