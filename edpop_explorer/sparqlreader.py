@@ -91,7 +91,8 @@ class RDFRecordMixin(LazyRecordMixin):
         )
         # Call Reader's data conversion method to fill the record's Fields
         assert isinstance(self, Record)
-        self.from_reader._convert_record(self.original_graph, self)
+        assert issubclass(self.from_reader, SparqlReader)
+        self.from_reader.convert_record(self.original_graph, self)
 
         self.fetched = True
 

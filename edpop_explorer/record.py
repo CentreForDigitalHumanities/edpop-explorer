@@ -106,6 +106,13 @@ class Record:
                 EDPOPREC.publicURL,
                 Literal(self.link)
             ))
+        original_data = self.get_data_dict()
+        if original_data is not None:
+            g.add((
+                self.subject_node,
+                EDPOPREC.originalData,
+                Literal(original_data, datatype=RDF.JSON)
+            ))
 
         # Put all fields from self.FIELDS in the graph by accessing
         # the associated attributes or properties. If they contain a
