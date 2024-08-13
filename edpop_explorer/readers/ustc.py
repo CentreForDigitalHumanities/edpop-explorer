@@ -43,6 +43,9 @@ class USTCReader(GetByIdBasedOnQueryMixin, Reader):
 
     @classmethod
     def transform_query(cls, query: str) -> SQLPreparedQuery:
+        if len(query.strip()) < 3:
+            # Do not allow very short USTC queries because they are very slow
+            raise ReaderError('USTC query must have at least 3 characters.')
         where_statement = ( 
             'WHERE E.std_title LIKE ? '
             'OR E.author_name_1 LIKE ? '
