@@ -28,8 +28,7 @@ print culture. The VRE will rely on `edpop-explorer`.
 ## Install
 
 **Please note that `edpop-explorer` is still under active development
-and that while it might be useful, some important features are still
-missing and the public API is not yet stable.**
+and that while it might be useful, the public API is not yet stable.**
 
 `edpop-explorer` can easily be installed from PyPI:
 
@@ -40,6 +39,20 @@ package. The commandline tool can be run using the `edpopx` command.
 (On Windows it may be that the `edpopx` command does not become available 
 on the path. In that case you can also run it using the command `python 
 -m edpop_explorer`.)
+
+EDPOP Explorer comes with a number of pre-installed readers. Most of these
+readers connect to external APIs. Please take into account that there is 
+always a chance that some readers are (temporarily) not available or that
+the public interfaces have changed. In the latter case, you are welcome
+to file an issue or create a fix.
+
+A limited number of pre-installed readers do not work with external APIs
+but with pre-downloaded databases. Where possible,
+these databases are automatically downloaded the first time. In case of the
+USTC reader, an automatic download is not provided but the database file
+may be obtained from the project team. If this database is not available,
+an exception will be given with an indication as to where to put the
+database file.
 
 ## Basic usage
 
@@ -84,8 +97,11 @@ the query you want to perform, such as:
 
     # hpb gruninger
 
-This will give you the number of results and a summary of the first ten
-results. To load more results, use the `next` command:
+Before executing the query, EDPOP Explorer will show the way the query is
+transformed before calling the external API. In many cases, including
+HPB, the transformed query is exactly the same as the user-inputted query.
+After performing the query, you will see the number of results and a 
+summary of the first ten results. To load more results, use the `next` command:
 
     # next
 
