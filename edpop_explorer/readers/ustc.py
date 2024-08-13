@@ -24,12 +24,6 @@ class USTCReader(DatabaseFileMixin, GetByIdBasedOnQueryMixin, Reader):
     SHORT_NAME = "Universal Short Title Catalogue (USTC)"
     DESCRIPTION = "An open access bibliography of early modern print culture"
 
-    def __init__(self):
-        super().__init__()
-        self.database_file = Path(
-            AppDirs('edpop-explorer', 'cdh').user_data_dir
-        ) / self.DATABASE_FILENAME
-
     @classmethod
     def transform_query(cls, query: str) -> SQLPreparedQuery:
         where_statement = ( 
@@ -60,7 +54,7 @@ class USTCReader(DatabaseFileMixin, GetByIdBasedOnQueryMixin, Reader):
 
     def fetch_range(self, range_to_fetch: range) -> range:
         self.prepare_data()
-        con = sqlite3.connect(str(self.database_file))
+        con = sqlite3.connect(str(self.database_path))
 
         # This method fetches all records immediately, because the data is
         # locally stored.
