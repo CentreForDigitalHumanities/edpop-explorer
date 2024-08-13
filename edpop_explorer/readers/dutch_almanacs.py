@@ -22,7 +22,7 @@ class DutchAlmanacsReader(DatabaseFileMixin, Reader):
     def _convert_record(cls, rawrecord: dict) -> BibliographicalRecord:
         record = BibliographicalRecord(from_reader=cls)
         record.data = rawrecord
-        record.identifier = Field(rawrecord['ID'])
+        record.identifier = rawrecord['ID']
         record.dating = Field(rawrecord['Jaar'])
         record.place_of_publication = Field(rawrecord['Plaats uitgave'])
         record.bookseller = Field(rawrecord['Boekverkoper'])
