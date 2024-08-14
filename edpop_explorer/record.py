@@ -215,7 +215,7 @@ class BibliographicalRecord(Record):
         self._fields += [
             ('title', EDPOPREC.title, Field),
             ('alternative_title', EDPOPREC.alternativeTitle, Field),
-            ('contributors', EDPOPREC.contributors, Field),
+            ('contributors', EDPOPREC.contributor, Field),
             ('publisher_or_printer', EDPOPREC.publisherOrPrinter, Field),
             ('place_of_publication', EDPOPREC.placeOfPublication, Field),
             ('dating', EDPOPREC.dating, Field),
