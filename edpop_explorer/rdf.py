@@ -3,7 +3,7 @@
 from rdflib.namespace import Namespace
 from rdflib import Graph, RDF, RDFS
 
-EDPOPREC = Namespace('https://dhstatic.hum.uu.nl/edpop-records/latest/')
+EDPOPREC = Namespace('https://dhstatic.hum.uu.nl/edpop-records/0.1.0/')
 """EDPOP Record Ontology"""
 
 RELATORS = Namespace('http://id.loc.gov/vocabulary/relators/')
