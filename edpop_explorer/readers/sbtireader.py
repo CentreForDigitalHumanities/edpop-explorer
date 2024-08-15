@@ -3,7 +3,7 @@ import requests
 from typing import List, Dict, Optional
 
 from edpop_explorer import (
-    Reader, Record, ReaderError, BiographicalRecord, Field
+    Reader, Record, ReaderError, BiographicalRecord, Field, BIOGRAPHICAL
 )
 
 
@@ -18,6 +18,7 @@ class SBTIReader(Reader):
     )
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/sbti/"
     DEFAULT_RECORDS_PER_PAGE = 10
+    READERTYPE = BIOGRAPHICAL
     SHORT_NAME = "Scottish Book Trade Index (SBTI)"
     DESCRIPTION = "An index of the names, trades and addresses of people "\
         "involved in printing in Scotland up to 1850"

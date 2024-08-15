@@ -1,6 +1,6 @@
 import csv
 from typing import List
-from edpop_explorer import Reader, ReaderError, BibliographicalRecord, Field, DatabaseFileMixin
+from edpop_explorer import Reader, ReaderError, BibliographicalRecord, Field, DatabaseFileMixin, BIBLIOGRAPHICAL
 from rdflib import URIRef
 
 
@@ -13,6 +13,7 @@ class PierreBelleReader(DatabaseFileMixin, Reader):
     )
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/pierre_belle/"
     FETCH_ALL_AT_ONCE = True
+    READERTYPE = BIBLIOGRAPHICAL
     SHORT_NAME = "Pierre and Belle"
     DESCRIPTION = "Bibliography of early modern editions of Pierre de " \
         "Provence et la Belle Maguelonne (ca. 1470-ca. 1800)"

@@ -1,5 +1,5 @@
 from rdflib import URIRef
-from edpop_explorer import SRUReader, BibliographicalRecord, Field
+from edpop_explorer import SRUReader, BibliographicalRecord, Field, BIBLIOGRAPHICAL
 from typing import Optional
 import re
 import requests
@@ -38,6 +38,7 @@ class GallicaReader(SRUReader):
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/gallica/"
     DOCUMENT_API_URL = "https://gallica.bnf.fr/services/OAIRecord?ark={}"
     IDENTIFIER_PREFIX = "https://gallica.bnf.fr/"
+    READERTYPE = BIBLIOGRAPHICAL
     SHORT_NAME = "Gallica"
     DESCRIPTION = "Digital library of the Bibliothèque nationale de France " \
         "and its partners"

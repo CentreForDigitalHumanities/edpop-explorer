@@ -2,7 +2,7 @@ from rdflib import Graph, Namespace, URIRef
 from rdflib.term import Node
 from typing import List, Optional, Tuple
 
-from edpop_explorer import Field
+from edpop_explorer import Field, BIBLIOGRAPHICAL
 from edpop_explorer.sparqlreader import (
     SparqlReader, BibliographicalRDFRecord
 )
@@ -30,6 +30,7 @@ class STCNReader(SparqlReader):
         'https://edpop.hum.uu.nl/readers/stcn'
     )
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/stcn/"
+    READERTYPE = BIBLIOGRAPHICAL
     SHORT_NAME = "Short-Title Catalogue Netherlands (STCN)"
     DESCRIPTION = "National biography of The Netherlands until 1801"
 
