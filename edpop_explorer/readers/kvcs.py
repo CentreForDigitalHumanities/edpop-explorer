@@ -1,13 +1,13 @@
 import csv
-from pathlib import Path
 from typing import List
-from edpop_explorer import Reader, ReaderError, Field, BiographicalRecord, BIOGRAPHICAL
+from edpop_explorer import Reader, ReaderError, Field, BiographicalRecord, BIOGRAPHICAL, DatabaseFileMixin
 from rdflib import URIRef
 
 
-class KVCSReader(Reader):
+class KVCSReader(DatabaseFileMixin, Reader):
     """ KVCS database reader. Access with command 'kvcs'."""
-    FILENAME = Path(__file__).parent / 'data' / 'biblio_kvcs.csv'
+    DATABASE_URL = 'https://dhstatic.hum.uu.nl/edpop/biblio_kvcs.csv'
+    DATABASE_FILENAME = 'biblio_kvcs.csv'
     CATALOG_URIREF = URIRef(
         'https://edpop.hum.uu.nl/readers/kvcs'
     )
@@ -21,7 +21,7 @@ class KVCSReader(Reader):
     def _convert_record(cls, rawrecord: dict) -> BiographicalRecord:
         record = BiographicalRecord(from_reader=cls)
         record.data = rawrecord
-        record.identifier = Field(rawrecord['ID'])
+        record.identifier = rawrecord['ID']
         record.name = Field(rawrecord['Name'])
         record.gender = Field(rawrecord['Gender'])
         record.lifespan = Field(rawrecord['Years of life'])
@@ -37,7 +37,9 @@ class KVCSReader(Reader):
 
     @classmethod
     def get_by_id(cls, identifier: str) -> BiographicalRecord:
-        with open(cls.FILENAME, 'r', encoding='utf-8-sig') as file:
+        reader = cls()
+        reader.prepare_data()
+        with open(reader.database_path, 'r', encoding='utf-8-sig') as file:
             reader = csv.DictReader(file, delimiter=';')
             for row in reader:
                 if row['ID'] == identifier:
@@ -46,10 +48,11 @@ class KVCSReader(Reader):
     
     def _perform_query(self) -> List[BiographicalRecord]:
         assert isinstance(self.prepared_query, str)
+        self.prepare_data()
         
         # Search query in all columns, and fetch results based on query
         results = []
-        with open(self.__class__.FILENAME, 'r', encoding='utf-8-sig') as file:
+        with open(self.database_path, 'r', encoding='utf-8-sig') as file:
             reader = csv.DictReader(file, delimiter=';')
             for row in reader:
                 for key in row.keys():

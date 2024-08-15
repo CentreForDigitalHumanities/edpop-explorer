@@ -1,17 +1,15 @@
-from pathlib import Path
 import sqlite3
 from typing import List, Optional, Union
-from appdirs import AppDirs
 from rdflib import URIRef
 
 from edpop_explorer import (
     Reader, BibliographicalRecord, ReaderError, Field, BIBLIOGRAPHICAL,
-    GetByIdBasedOnQueryMixin
+    GetByIdBasedOnQueryMixin, DatabaseFileMixin
 )
 from edpop_explorer.sql import SQLPreparedQuery
 
 
-class USTCReader(GetByIdBasedOnQueryMixin, Reader):
+class USTCReader(DatabaseFileMixin, GetByIdBasedOnQueryMixin, Reader):
     DATABASE_FILENAME = 'ustc.sqlite3'
     USTC_LINK = 'https://www.ustc.ac.uk/editions/{}'
     READERTYPE = BIBLIOGRAPHICAL
@@ -23,23 +21,6 @@ class USTCReader(GetByIdBasedOnQueryMixin, Reader):
     FETCH_ALL_AT_ONCE = True
     SHORT_NAME = "Universal Short Title Catalogue (USTC)"
     DESCRIPTION = "An open access bibliography of early modern print culture"
-
-    def __init__(self):
-        super().__init__()
-        self.database_file = Path(
-            AppDirs('edpop-explorer', 'cdh').user_data_dir
-        ) / self.DATABASE_FILENAME
-
-    def prepare_data(self):
-        if not self.database_file.exists():
-            # Find database dir with .resolve() because on Windows it is
-            # some sort of hidden symlink if Python was installed using
-            # the Windows Store...
-            db_dir = self.database_file.parent.resolve()
-            error_message = f'USTC database not found. Please obtain the file ' \
-                f'{self.DATABASE_FILENAME} from the project team and add it ' \
-                f'to the following directory: {db_dir}'
-            raise ReaderError(error_message)
 
     @classmethod
     def transform_query(cls, query: str) -> SQLPreparedQuery:
@@ -74,7 +55,7 @@ class USTCReader(GetByIdBasedOnQueryMixin, Reader):
 
     def fetch_range(self, range_to_fetch: range) -> range:
         self.prepare_data()
-        con = sqlite3.connect(str(self.database_file))
+        con = sqlite3.connect(str(self.database_path))
 
         # This method fetches all records immediately, because the data is
         # locally stored.
