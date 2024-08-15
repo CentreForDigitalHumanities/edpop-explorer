@@ -1,7 +1,7 @@
 from typing import Dict, List
 
 from rdflib import URIRef
-from edpop_explorer import SRUReader, Record, BiographicalRecord, Field
+from edpop_explorer import SRUReader, Record, BiographicalRecord, Field, BIOGRAPHICAL
 from edpop_explorer.fields import LocationField
 
 
@@ -14,6 +14,7 @@ class CERLThesaurusReader(SRUReader):
         'https://edpop.hum.uu.nl/readers/cerlthesaurus'
     )
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/cerlthesaurus/"
+    READERTYPE = BIOGRAPHICAL
     SHORT_NAME = "CERL Thesaurus"
     DESCRIPTION = "The CERL Thesaurus file contains forms of imprint " \
         "places, imprint names, personal names and corporate names as "\
