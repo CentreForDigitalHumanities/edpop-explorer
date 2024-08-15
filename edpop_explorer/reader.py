@@ -352,9 +352,11 @@ class DatabaseFileMixin:
                 # some sort of hidden symlink if Python was installed using
                 # the Windows Store...
                 db_dir = self.database_path.parent.resolve()
-                error_message = f'USTC database not found. Please obtain the file ' \
-                                f'{self.DATABASE_FILENAME} from the project team and add it ' \
-                                f'to the following directory: {db_dir}'
+                error_message = (
+                    f'{self.__class__.__name__} database not found. Please obtain the file '
+                    f'{self.DATABASE_FILENAME} from the project team and add it '
+                    f'to the following directory: {db_dir}'
+                )
                 raise ReaderError(error_message)
             else:
                 self._download_database()
