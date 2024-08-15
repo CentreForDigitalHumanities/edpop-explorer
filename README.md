@@ -51,7 +51,7 @@ but with pre-downloaded databases. Where possible,
 these databases are automatically downloaded the first time. In case of the
 USTC reader, an automatic download is not provided but the database file
 may be obtained from the project team. If this database is not available,
-an exception will be given with an indication as to where to put the
+an exception will be raised with an indication as to where to put the
 database file.
 
 ## Basic usage
