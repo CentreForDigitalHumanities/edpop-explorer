@@ -3,6 +3,8 @@ from typing import List
 from edpop_explorer import Reader, ReaderError, BibliographicalRecord, Field, DatabaseFileMixin, BIBLIOGRAPHICAL
 from rdflib import URIRef
 
+from edpop_explorer.fields import LanguageField
+
 
 class PierreBelleReader(DatabaseFileMixin, Reader):
     """ Pierre-Belle database reader. Access with command 'pb'."""
@@ -24,7 +26,8 @@ class PierreBelleReader(DatabaseFileMixin, Reader):
         record.data = rawrecord
         record.identifier = rawrecord['ID']
         record.title = Field(rawrecord['Shortened title'])
-        record.languages = [Field(rawrecord['Language'])]
+        record.languages = [LanguageField(rawrecord['Language'])]
+        [x.normalize() for x in record.languages]
         record.publisher_or_printer = Field(rawrecord['Publisher'])
         record.place_of_publication = Field(rawrecord['Place of publication'])
         record.dating = Field(rawrecord['Date'])

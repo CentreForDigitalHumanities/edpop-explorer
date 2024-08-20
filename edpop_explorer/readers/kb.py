@@ -2,6 +2,7 @@ from typing import Optional, List
 from rdflib import URIRef
 from edpop_explorer import SRUReader, BibliographicalRecord, BIBLIOGRAPHICAL
 from edpop_explorer import Field
+from edpop_explorer.fields import LanguageField
 
 
 class KBReader(SRUReader):
@@ -76,7 +77,10 @@ class KBReader(SRUReader):
         # consisting of three characters are language codes.
         if 'language' not in data:
             return []
-        return [
-            Field(x) for x in data['language']
+        fields = [
+            LanguageField(x) for x in data['language']
             if isinstance(x, str) and len(x) == 3
         ]
+        for field in fields:
+            field.normalize()
+        return fields

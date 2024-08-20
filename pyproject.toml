@@ -21,6 +21,7 @@ dependencies = [
   'Pygments',
   'xmltodict>=0.13.0',
   'typing_extensions',
+  'iso639-lang',
 ]
 
 description = "Common interface to multiple library catalogues and bibliographical databases"
