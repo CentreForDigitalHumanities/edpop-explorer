@@ -5,6 +5,7 @@ from typing import Optional
 from edpop_explorer import (
     Reader, BibliographicalRecord, ReaderError, Field, BIBLIOGRAPHICAL, DatabaseFileMixin
 )
+from edpop_explorer.fields import LanguageField
 from edpop_explorer.reader import GetByIdBasedOnQueryMixin
 from edpop_explorer.sql import SQLPreparedQuery
 
@@ -46,7 +47,8 @@ class FBTEEReader(DatabaseFileMixin, GetByIdBasedOnQueryMixin, Reader):
         record.title = Field(record.data['full_book_title'])
         if record.data['languages']:
             languages = record.data['languages'].split(sep=', ')
-            record.languages = [Field(x) for x in languages]
+            record.languages = [LanguageField(x) for x in languages]
+            [x.normalize() for x in record.languages]
         pages = record.data['pages']
         if pages:
             record.extent = Field(pages)

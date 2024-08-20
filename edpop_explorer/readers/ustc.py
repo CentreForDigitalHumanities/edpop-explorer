@@ -6,6 +6,7 @@ from edpop_explorer import (
     Reader, BibliographicalRecord, ReaderError, Field, BIBLIOGRAPHICAL,
     GetByIdBasedOnQueryMixin, DatabaseFileMixin
 )
+from edpop_explorer.fields import LanguageField
 from edpop_explorer.sql import SQLPreparedQuery
 
 
@@ -107,7 +108,9 @@ class USTCReader(DatabaseFileMixin, GetByIdBasedOnQueryMixin, Reader):
         for i in range(4):
             fieldname = f'language_{i + 1}'
             if data[fieldname]:
-                record.languages.append(Field(data[fieldname]))
+                field = LanguageField(data[fieldname])
+                field.normalize()
+                record.languages.append(field)
         if data['pagination']:
             record.extent = Field(data['pagination'])
         return record

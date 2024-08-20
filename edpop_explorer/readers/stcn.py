@@ -3,6 +3,7 @@ from rdflib.term import Node
 from typing import List, Optional, Tuple
 
 from edpop_explorer import Field, BIBLIOGRAPHICAL
+from edpop_explorer.fields import LanguageField
 from edpop_explorer.sparqlreader import (
     SparqlReader, BibliographicalRDFRecord
 )
@@ -51,7 +52,9 @@ class STCNReader(SparqlReader):
             break
         record.languages = []
         for language in graph.objects(subject_node, SCHEMA.inLanguage):
-            record.languages.append(Field(str(language)))
+            field = LanguageField(str(language))
+            field.normalize()
+            record.languages.append(field)
         # Now get the information from blank nodes
         record.contributors = []
         for author in graph.objects(subject_node, SCHEMA.author):

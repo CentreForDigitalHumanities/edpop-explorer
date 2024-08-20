@@ -5,6 +5,8 @@ import re
 import requests
 import xmltodict
 
+from edpop_explorer.fields import LanguageField
+
 
 def _force_list(data) -> list:
     if isinstance(data, list):
@@ -72,7 +74,8 @@ class GallicaReader(SRUReader):
         if dating:
             record.dating = Field(dating)
         languages = _force_list(sruthirecord.get('language', None))
-        record.languages = [Field(x) for x in languages]
+        record.languages = [LanguageField(x) for x in languages]
+        [x.normalize() for x in record.languages]
         publisher = _force_string(sruthirecord.get('publisher', None))
         if publisher:
             record.publisher_or_printer = Field(publisher)
