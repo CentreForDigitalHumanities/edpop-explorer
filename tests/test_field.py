@@ -4,6 +4,7 @@ from rdflib.term import Node
 
 from edpop_explorer import Field, FieldError, LocationField
 from edpop_explorer import EDPOPREC
+from edpop_explorer.normalizers import NormalizationResult
 
 
 @fixture
@@ -32,7 +33,7 @@ class TestField:
             Literal(basic_field.original_text)
         ) in graph
         # Test string from property
-        basic_field.set_normalized_text('normalized')
+        basic_field.normalized_text = 'normalized'
         graph = basic_field.to_graph()
         assert (
             basic_field.subject_node,
@@ -66,18 +67,22 @@ class TestField:
         assert basic_field.normalized_text is None
         # Set normalized text by hand
         text = 'normalized'
-        basic_field.set_normalized_text(text)
+        basic_field.normalized_text = text
         assert basic_field.normalized_text == text
         # Now test a class with automatic normalized text creation
 
+        def complex_normalizer(field):
+            field.normalized_text = field.original_text.capitalize()
+            return NormalizationResult.SUCCESS
+
         class ComplexField(Field):
-            def _create_normalized_text(self):
-                return self.original_text.capitalize()
+            normalizer = complex_normalizer
         title = 'title'
         complex_field = ComplexField(title)
+        complex_field.normalize()
         assert complex_field.normalized_text == title.capitalize()
         # A manual normalized text should override this
-        complex_field.set_normalized_text(text)
+        complex_field.normalized_text = text
         assert complex_field.normalized_text == text
 
 
