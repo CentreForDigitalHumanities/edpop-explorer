@@ -9,7 +9,7 @@ class NormalizationResult(Enum):
     FAIL = 'fail'
 
 
-def normalize_by_language_code(field: "LanguageField") -> NormalizationResult:
+def normalize_by_language_code(field) -> NormalizationResult:
     """Normalize using the iso639-lang package, which allows the name of the
     language in English as input, as well as one of the ISO-639 language
     codes."""
