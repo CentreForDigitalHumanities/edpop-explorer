@@ -7,7 +7,7 @@ from abc import abstractmethod
 from edpop_explorer import (
     BibliographicalRecord, RawData, SRUReader, Field, BIBLIOGRAPHICAL
 )
-
+from edpop_explorer.fields import LanguageField
 
 READABLE_FIELDS_FILE = Path(__file__).parent / 'M21_fields.csv'
 translation_dictionary: Dict[str, str] = {}
@@ -244,7 +244,9 @@ class SRUMarc21BibliographicalReader(SRUMarc21Reader):
         # TODO: look up if this field is repeatable - if so support multiple
         # languages
         if language:
-            record.languages = [Field(language)]
+            language_field = LanguageField(language)
+            language_field.normalize()
+            record.languages = [language_field]
         dating = data.get_first_subfield(*cls._dating_field_subfield)
         if dating:
             record.dating = Field(dating)

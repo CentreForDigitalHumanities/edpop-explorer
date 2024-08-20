@@ -3,10 +3,12 @@ fields.
 """
 
 from typing import Optional, Callable, List, Tuple
+
 from rdflib import Graph, Literal, BNode, RDF, URIRef
 from rdflib.term import Node
 
-from edpop_explorer import EDPOPREC
+from edpop_explorer import EDPOPREC, normalizers
+from edpop_explorer.normalizers import NormalizationResult
 
 DATATYPES = {
     'string': {
@@ -68,13 +70,13 @@ class Field:
     #: by default.
     subject_node: Node
     _subfields: List[Tuple[str, URIRef, str]]
-    _normalized_text: Optional[str] = None
+    normalized_text: Optional[str] = None
     #: Subfield -- indicates whether the value of this field is explicitly
     #: marked as unknown in the original record.
     unknown: Optional[bool] = None
     #: Subfield -- may contain the URI of an authority record
     authority_record: Optional[str] = None
-    _create_normalized_text: Optional[Callable] = None
+    normalizer: Optional[Callable] = None
     _rdf_class: Node = EDPOPREC.Field
     
     def __init__(self, original_text: str) -> None:
@@ -91,30 +93,11 @@ class Field:
             ('authority_record', EDPOPREC.authorityRecord, 'string'),
         ]
 
-    def set_normalized_text(self, text: Optional[str]):
-        """Manually set the normalized text.
-
-        In case of subclasses that support automatic creation of the 
-        normalized text, this method will override the automatic version. 
-        Give None as an argument to reset the normalized text."""
-        self._normalized_text = text
-
-    @property
-    def normalized_text(self) -> Optional[str]:
-        """Subfield -- a human-readable string representation of the normalized
-        field.
-
-        Should be set manually in the basic ``Field`` class with 
-        ``set_normalized_text`` or is automatically created in more complex 
-        subclasses. Contains ``None`` in case there is no normalization."""
-        if self._normalized_text is not None:
-            return self._normalized_text
-        if callable(self._create_normalized_text):
-            text = self._create_normalized_text()
-            assert isinstance(text, str)
-            return text
-        else:
-            return None
+    def normalize(self) -> NormalizationResult:
+        """Perform normalization on this field, based on the ``normalizer``
+        attribute. Subclasses of ``Field`` may predefine a normalizer function,
+        but this can always be overridden."""
+        return self.normalizer()
 
     def to_graph(self) -> Graph:
         '''Create an ``rdflib`` RDF graph according to the current data.'''
@@ -174,5 +157,17 @@ class LocationField(Field):
         super().__init__(original_text)
         self._subfields.append(
             ('location_type', EDPOPREC.locationType, 'uriref')
+        )
+
+
+class LanguageField(Field):
+    _rdf_class = EDPOPREC.LanguageField
+    language_code: Optional[str] = None
+    normalizer = normalizers.normalize_by_language_code
+
+    def __init__(self, original_text: str) -> None:
+        super().__init__(original_text)
+        self._subfields.append(
+            ('language_code', EDPOPREC.languageCode, 'string')
         )
 
