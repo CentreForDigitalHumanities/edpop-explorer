@@ -33,7 +33,6 @@ class SBTIReader(CERLReader):
             field = Field(f"{name}")
         return field
 
-
     @classmethod
     def _convert_record(cls, rawrecord: dict) -> BiographicalRecord:
         record = BiographicalRecord(from_reader=cls)
