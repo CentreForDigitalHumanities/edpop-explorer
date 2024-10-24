@@ -102,6 +102,6 @@ class CERLReader(Reader):
         number_to_fetch = range_to_fetch.stop - start_record
         results = self._perform_query(start_record, number_to_fetch)
         for i, result in enumerate(results):
-            self.records[i] = result
+            self.records[i + range_to_fetch.start] = result
         return range(start_record, start_record + len(results))
 
