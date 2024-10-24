@@ -14,23 +14,25 @@ from edpop_explorer.normalizers import NormalizationResult
 from edpop_explorer.normalization import relators
 
 DATATYPES = {
-    "string": {
-        "input_type": str,
-        "converter": (lambda x: Literal(x)),
+    'string': {
+        'input_type': str,
+        'converter': (lambda x: Literal(x)),
     },
-    "boolean": {
-        "input_type": bool,
-        "converter": (lambda x: Literal(x)),
+    'boolean': {
+        'input_type': bool,
+        'converter': (lambda x: Literal(x)),
     },
-    "edtf": {
-        "input_type": str,
-        "converter": (
-            lambda x: Literal(x, datatype=URIRef("http://id.loc.gov/datatypes/edtf"))
-        ),
+    'edtf': {
+        'input_type': str,
+        'converter': (
+            lambda x: Literal(
+                x, datatype=URIRef("http://id.loc.gov/datatypes/edtf")
+            )
+        )
     },
-    "uriref": {
-        "input_type": URIRef,
-        "converter": lambda x: x,
+    'uriref': {
+        'input_type': URIRef,
+        'converter': lambda x: x,
     },
 }
 
@@ -51,8 +53,8 @@ class Field:
     not the case for this base class. In those cases, it is still possible to
     set this field using the ``set_normalized_text`` method.
     Except ``original_text``, all subfields are optional and are None by default.
-    Use ``to_graph()`` to obtain an RDF graph. The subject node is by default
-    a blank node, but this may be overridden by setting the subject_node
+    Use ``to_graph()`` to obtain an RDF graph. The subject node is by default 
+    a blank node, but this may be overridden by setting the subject_node 
     attribute.
 
     Subclasses should override the ``_rdf_class`` attribute to the corresponding
@@ -63,9 +65,8 @@ class Field:
     by one using ``self.SUBFIELDS.append(('<attribute-name>',
     EDPOPREC.<rdf-property-name>, '<datatype>'))``, where <datatype> is any
     of the datatypes defined in the ``DATATYPES`` constant of this module.
-    Subclasses may furthermore define the ``_normalized_text`` private
+    Subclasses may furthermore define the ``_normalized_text`` private 
     method."""
-
     #: Subfield -- text of this field according to the original record.
     original_text: str
     #: This field's subject node if converted to RDF. This is a blank node
@@ -79,17 +80,19 @@ class Field:
     authority_record: Optional[str] = None
     normalizer: Optional[Callable] = None
     _rdf_class: Node = EDPOPREC.Field
-
+    
     def __init__(self, original_text: str) -> None:
         if not isinstance(original_text, str):
-            raise FieldError(f"original_text should be str, not {type(original_text)}")
+            raise FieldError(
+                f'original_text should be str, not {type(original_text)}'
+            )
         self.subject_node = BNode()
         self.original_text = original_text
         self._subfields = [
-            ("original_text", EDPOPREC.originalText, "string"),
-            ("summary_text", EDPOPREC.summaryText, "string"),
-            ("unknown", EDPOPREC.unknown, "boolean"),
-            ("authority_record", EDPOPREC.authorityRecord, "string"),
+            ('original_text', EDPOPREC.originalText, 'string'),
+            ('summary_text', EDPOPREC.summaryText, 'string'),
+            ('unknown', EDPOPREC.unknown, 'boolean'),
+            ('authority_record', EDPOPREC.authorityRecord, 'string'),
         ]
 
     def normalize(self) -> NormalizationResult:
@@ -99,10 +102,14 @@ class Field:
         return self.normalizer()
 
     def to_graph(self) -> Graph:
-        """Create an ``rdflib`` RDF graph according to the current data."""
+        '''Create an ``rdflib`` RDF graph according to the current data.'''
         assert isinstance(self.subject_node, Node)
         graph = Graph()
-        graph.add((self.subject_node, RDF.type, self._rdf_class))
+        graph.add((
+            self.subject_node,
+            RDF.type,
+            self._rdf_class
+        ))
         for subfield in self._subfields:
             attrname, propref, datatype = subfield
             value = getattr(self, attrname, None)
@@ -118,17 +125,21 @@ class Field:
                     "{self.__class__} but it does not exist"
                 )
             else:
-                input_type = typedef["input_type"]
+                input_type = typedef['input_type']
                 if not isinstance(value, input_type):
                     raise FieldError(
                         f"Subfield {attrname} should be of type {str(input_type)} but "
                         "it is {str(type(value))}"
                     )
                 else:
-                    converter = typedef["converter"]
+                    converter = typedef['converter']
                     converted = converter(value)
                     assert isinstance(converted, Node)
-                    graph.add((self.subject_node, propref, converted))
+                    graph.add((
+                        self.subject_node,
+                        propref,
+                        converted
+                    ))
         return graph
 
     @property
@@ -150,7 +161,9 @@ class LocationField(Field):
 
     def __init__(self, original_text: str) -> None:
         super().__init__(original_text)
-        self._subfields.append(("location_type", EDPOPREC.locationType, "uriref"))
+        self._subfields.append(
+            ('location_type', EDPOPREC.locationType, 'uriref')
+        )
 
 
 class LanguageField(Field):
@@ -160,7 +173,9 @@ class LanguageField(Field):
 
     def __init__(self, original_text: str) -> None:
         super().__init__(original_text)
-        self._subfields.append(("language_code", EDPOPREC.languageCode, "string"))
+        self._subfields.append(
+            ('language_code', EDPOPREC.languageCode, 'string')
+        )
 
     @property
     def summary_text(self) -> Optional[str]:
@@ -178,12 +193,10 @@ class ContributorField(Field):
 
     def __init__(self, original_text: str) -> None:
         super().__init__(original_text)
-        self._subfields.extend(
-            (
-                ("name", EDPOPREC.name, "string"),
-                ("role", EDPOPREC.role, "string"),
-            )
-        )
+        self._subfields.extend((
+            ('name', EDPOPREC.name, 'string'),
+            ('role', EDPOPREC.role, 'string'),
+        ))
 
     @property
     def summary_text(self) -> Optional[str]:
@@ -193,3 +206,7 @@ class ContributorField(Field):
             return f"{name} ({role})"
         else:
             return name
+
+
+
+

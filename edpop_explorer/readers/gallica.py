@@ -18,11 +18,11 @@ def _force_list(data) -> list:
 
 
 def _force_string(data) -> Optional[str]:
-    """Transform data into one string or None. Can be used if a single
+    '''Transform data into one string or None. Can be used if a single 
     string is expected, but if there is a possibility that it is a
-    list."""
+    list.'''
     if isinstance(data, list):
-        return " ; ".join([str(x) for x in data])
+        return ' ; '.join([str(x) for x in data])
     elif data is None:
         return None
     else:
@@ -30,19 +30,20 @@ def _force_string(data) -> Optional[str]:
 
 
 class GallicaReader(SRUReader):
-    sru_url = "https://gallica.bnf.fr/SRU"
-    sru_version = "1.2"
-    CERL_LINK = "https://data.cerl.org/thesaurus/{}"
-    CTAS_PREFIX = "http://sru.cerl.org/ctas/dtd/1.1:"
-    CATALOG_URIREF = URIRef("https://edpop.hum.uu.nl/readers/gallica")
+    sru_url = 'https://gallica.bnf.fr/SRU'
+    sru_version = '1.2'
+    CERL_LINK = 'https://data.cerl.org/thesaurus/{}'
+    CTAS_PREFIX = 'http://sru.cerl.org/ctas/dtd/1.1:'
+    CATALOG_URIREF = URIRef(
+        'https://edpop.hum.uu.nl/readers/gallica'
+    )
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/gallica/"
     DOCUMENT_API_URL = "https://gallica.bnf.fr/services/OAIRecord?ark={}"
     IDENTIFIER_PREFIX = "https://gallica.bnf.fr/"
     READERTYPE = BIBLIOGRAPHICAL
     SHORT_NAME = "Gallica"
-    DESCRIPTION = (
-        "Digital library of the Bibliothèque nationale de France " "and its partners"
-    )
+    DESCRIPTION = "Digital library of the Bibliothèque nationale de France " \
+        "and its partners"
 
     @classmethod
     def _convert_record(cls, sruthirecord: dict) -> BibliographicalRecord:
@@ -52,30 +53,30 @@ class GallicaReader(SRUReader):
         # string from sruthi, in the latter case as a list of strings.
         # Take the first string starting with https:// as the identifier
         # and as the link.
-        identifiers = _force_list(sruthirecord.get("identifier", None))
+        identifiers = _force_list(sruthirecord.get('identifier', None))
         for identifier in identifiers:
             if identifier.startswith(cls.IDENTIFIER_PREFIX):
-                record.identifier = identifier[len(cls.IDENTIFIER_PREFIX) :]
+                record.identifier = identifier[len(cls.IDENTIFIER_PREFIX):]
                 record.link = identifier
         record.data = {}
         for key in sruthirecord:
-            if key in ["schema", "id"]:
+            if key in ['schema', 'id']:
                 continue
-            showkey: str = key.replace(cls.CTAS_PREFIX, "ctas:")
+            showkey: str = key.replace(cls.CTAS_PREFIX, 'ctas:')
             record.data[showkey] = sruthirecord[key]
         record.data = sruthirecord
-        title = _force_string(sruthirecord.get("title", None))
+        title = _force_string(sruthirecord.get('title', None))
         if title:
             record.title = Field(title)
-        creators = _force_list(sruthirecord.get("creator", None))
+        creators = _force_list(sruthirecord.get('creator', None))
         record.contributors = [Field(x) for x in creators]
-        dating = _force_string(sruthirecord.get("date", None))
+        dating = _force_string(sruthirecord.get('date', None))
         if dating:
             record.dating = Field(dating)
-        languages = _force_list(sruthirecord.get("language", None))
+        languages = _force_list(sruthirecord.get('language', None))
         record.languages = [LanguageField(x) for x in languages]
         [x.normalize() for x in record.languages]
-        publisher = _force_string(sruthirecord.get("publisher", None))
+        publisher = _force_string(sruthirecord.get('publisher', None))
         if publisher:
             record.publisher_or_printer = Field(publisher)
 
@@ -83,12 +84,10 @@ class GallicaReader(SRUReader):
         # the number of views, the MIME type and the extent.
         # Try finding the extent by filtering out the other two.
         # This seems to work correctly.
-        format_strings = _force_list(sruthirecord.get("format", None))
+        format_strings = _force_list(sruthirecord.get('format', None))
         for formatstr in format_strings:
-            if not (
-                formatstr.startswith("Nombre total de vues")
-                or re.match("$[a-z]+/[a-z]+^", formatstr)
-            ):
+            if not (formatstr.startswith('Nombre total de vues') or
+                    re.match('$[a-z]+/[a-z]+^', formatstr)):
                 record.extent = Field(formatstr)
                 break
 
@@ -96,7 +95,7 @@ class GallicaReader(SRUReader):
 
     @classmethod
     def get_by_id(cls, identifier: str) -> BibliographicalRecord:
-        # Getting by id works via another interface (a simple XML API), but the
+        # Getting by id works via another interface (a simple XML API), but the 
         # returned data is the same in a slightly different format. Hence,
         # convert it to JSON just like sruthi does and extract the right piece
         # of data.
@@ -116,8 +115,8 @@ class GallicaReader(SRUReader):
         data = response_as_dict["results"]["notice"]["record"]["metadata"]["dc"]
         # The returned XML has elements with attributes, while these attributes
         # are missing from the XML that is sent back by the SRU interface.
-        # An attribute-less element is represented as a simple string by
-        # xmltodict, while an attribute with elements is represented as a
+        # An attribute-less element is represented as a simple string by 
+        # xmltodict, while an attribute with elements is represented as a 
         # dict where the contents is in the value of "text". Replace these
         # dicts with simple strings. (Not a very clean solution but refactoring
         # is not worth the time at this point.)
@@ -132,4 +131,4 @@ class GallicaReader(SRUReader):
 
     @classmethod
     def transform_query(cls, query: str) -> str:
-        return "gallica all {}".format(query)
+        return 'gallica all {}'.format(query)

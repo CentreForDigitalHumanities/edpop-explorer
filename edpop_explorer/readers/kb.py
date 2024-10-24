@@ -6,10 +6,12 @@ from edpop_explorer.fields import LanguageField
 
 
 class KBReader(SRUReader):
-    sru_url = "http://jsru.kb.nl/sru"
-    sru_version = "1.2"
-    KB_LINK = "https://webggc.oclc.org/cbs/DB=2.37/PPN?PPN={}"
-    CATALOG_URIREF = URIRef("https://edpop.hum.uu.nl/readers/kb")
+    sru_url = 'http://jsru.kb.nl/sru'
+    sru_version = '1.2'
+    KB_LINK = 'https://webggc.oclc.org/cbs/DB=2.37/PPN?PPN={}'
+    CATALOG_URIREF = URIRef(
+        'https://edpop.hum.uu.nl/readers/kb'
+    )
     READERTYPE = BIBLIOGRAPHICAL
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/kb/"
     SHORT_NAME = "Koninklijke Bibliotheek (KB)"
@@ -18,7 +20,9 @@ class KBReader(SRUReader):
     def __init__(self):
         super().__init__()
         # The KB SRU requires 'x-collection' as an additional GET parameter
-        self.session.params = {"x-collection": "GGC"}
+        self.session.params = {
+            'x-collection': 'GGC'
+        }
 
     @classmethod
     def transform_query(cls, query: str) -> str:
@@ -28,12 +32,12 @@ class KBReader(SRUReader):
         """Try to find the PPN given the data that comes from the SRU server;
         return None if PPN cannot be found"""
         # This seems to work fine; not thoroughly tested.
-        oai_pmh_identifier = data.get("OaiPmhIdentifier", None)
+        oai_pmh_identifier = data.get('OaiPmhIdentifier', None)
         if not isinstance(oai_pmh_identifier, str):
             return None
-        PREFIX = "GGC:AC:"
+        PREFIX = 'GGC:AC:'
         if oai_pmh_identifier and oai_pmh_identifier.startswith(PREFIX):
-            return oai_pmh_identifier[len(PREFIX) :]
+            return oai_pmh_identifier[len(PREFIX):]
         return None
 
     def _convert_record(self, sruthirecord: dict) -> BibliographicalRecord:
@@ -52,14 +56,14 @@ class KBReader(SRUReader):
         record.languages = self._get_languages(sruthirecord)
         # TODO: add the other fields
         return record
-
+    
     def _get_title(self, data) -> Optional[Field]:
-        if "title" in data:
-            title = data["title"]
+        if 'title' in data:
+            title = data['title']
             if isinstance(title, list):
                 # Title contains a list of strings if it consists of multiple
                 # parts
-                return Field(" : ".join(title))
+                return Field(' : '.join(title))
             else:
                 return Field(title)
         else:
@@ -71,11 +75,10 @@ class KBReader(SRUReader):
         # One of them is always a three-letter language code, so only
         # pass on these. NB: there is a possibility that not all entries
         # consisting of three characters are language codes.
-        if "language" not in data:
+        if 'language' not in data:
             return []
         fields = [
-            LanguageField(x)
-            for x in data["language"]
+            LanguageField(x) for x in data['language']
             if isinstance(x, str) and len(x) == 3
         ]
         for field in fields:

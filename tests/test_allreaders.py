@@ -92,11 +92,7 @@ def test_realrequest(readercls: Type[Reader]):
             # there was a mistake with the offsets. But just give a warning,
             # because there are APIs that (by mistake?) return duplicated
             # records.
-            warnings.warn(
-                UserWarning(
-                    "Last record from first fetch is same as first record from second fetch"
-                )
-            )
+            warnings.warn(UserWarning("Last record from first fetch is same as first record from second fetch"))
     else:
         assert reader.number_fetched == fetched_before
         assert rng2 == range(0)

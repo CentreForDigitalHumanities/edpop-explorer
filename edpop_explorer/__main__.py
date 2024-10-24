@@ -7,12 +7,11 @@ from edpop_explorer.edpopxshell import EDPOPXShell
 
 try:
     from colorama import just_fix_windows_console
-
     just_fix_windows_console()
 except ImportError:
     pass
 
-historyfile = Path(AppDirs("edpop-explorer", "cdh").user_data_dir) / "history"
+historyfile = Path(AppDirs('edpop-explorer', 'cdh').user_data_dir) / 'history'
 
 
 def save_history() -> None:
@@ -28,5 +27,5 @@ def main() -> None:
     save_history()
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

@@ -1,33 +1,15 @@
 __all__ = [
-    "EDPOPREC",
-    "RELATORS",
-    "bind_common_namespaces",
-    "Field",
-    "FieldError",
-    "LocationField",
-    "Reader",
-    "ReaderError",
-    "NotFoundError",
-    "GetByIdBasedOnQueryMixin",
-    "DatabaseFileMixin",
-    "BasePreparedQuery",
-    "PreparedQueryType",
-    "Record",
-    "RawData",
-    "RecordError",
-    "BibliographicalRecord",
-    "BiographicalRecord",
-    "LazyRecordMixin",
-    "SRUReader",
-    "CERLReader",
-    "Marc21Data",
-    "Marc21Field",
-    "Marc21BibliographicalRecord",
-    "Marc21DataMixin",
-    "SRUMarc21Reader",
-    "SRUMarc21BibliographicalReader",
-    "BIBLIOGRAPHICAL",
-    "BIOGRAPHICAL",
+    'EDPOPREC', 'RELATORS', 'bind_common_namespaces',
+    'Field', 'FieldError', 'LocationField',
+    'Reader', 'ReaderError', 'NotFoundError',
+    'GetByIdBasedOnQueryMixin', 'DatabaseFileMixin',
+    'BasePreparedQuery', 'PreparedQueryType',
+    'Record', 'RawData', 'RecordError', 'BibliographicalRecord',
+    'BiographicalRecord', 'LazyRecordMixin',
+    'SRUReader', 'CERLReader',
+    'Marc21Data', 'Marc21Field', 'Marc21BibliographicalRecord',
+    'Marc21DataMixin', 'SRUMarc21Reader', 'SRUMarc21BibliographicalReader',
+    'BIBLIOGRAPHICAL', 'BIOGRAPHICAL'
 ]
 
 # Define here to avoid circular imports
@@ -38,29 +20,17 @@ BIOGRAPHICAL = "biographical"
 from .rdf import EDPOPREC, RELATORS, bind_common_namespaces
 from .fields import Field, FieldError, LocationField
 from .reader import (
-    Reader,
-    ReaderError,
-    GetByIdBasedOnQueryMixin,
-    BasePreparedQuery,
-    PreparedQueryType,
-    NotFoundError,
-    DatabaseFileMixin,
+    Reader, ReaderError, GetByIdBasedOnQueryMixin, BasePreparedQuery,
+    PreparedQueryType, NotFoundError, DatabaseFileMixin
 )
 from .record import (
-    Record,
-    RawData,
-    RecordError,
-    BibliographicalRecord,
-    BiographicalRecord,
-    LazyRecordMixin,
+    Record, RawData, RecordError, BibliographicalRecord, BiographicalRecord,
+    LazyRecordMixin
 )
 from .srureader import SRUReader
 from .srumarc21reader import (
-    Marc21Data,
-    Marc21Field,
-    Marc21BibliographicalRecord,
-    Marc21DataMixin,
-    SRUMarc21Reader,
-    SRUMarc21BibliographicalReader,
+    Marc21Data, Marc21Field, Marc21BibliographicalRecord, Marc21DataMixin,
+    SRUMarc21Reader, SRUMarc21BibliographicalReader
 )
 from .cerl import CERLReader
+

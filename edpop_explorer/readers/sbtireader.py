@@ -1,24 +1,26 @@
 from rdflib import URIRef
 from typing import List, Dict, Optional
 
-from edpop_explorer import BiographicalRecord, Field, BIOGRAPHICAL
+from edpop_explorer import (
+    BiographicalRecord, Field, BIOGRAPHICAL
+)
 from edpop_explorer.cerl import CERLReader
 
 
 class SBTIReader(CERLReader):
-    API_URL = "https://data.cerl.org/sbti/_search"
-    API_BY_ID_BASE_URL = "https://data.cerl.org/sbti/"
-    LINK_BASE_URL = "https://data.cerl.org/sbti/"
+    API_URL = 'https://data.cerl.org/sbti/_search'
+    API_BY_ID_BASE_URL = 'https://data.cerl.org/sbti/'
+    LINK_BASE_URL = 'https://data.cerl.org/sbti/'
     additional_params: Optional[Dict[str, str]] = None
-    CATALOG_URIREF = URIRef("https://edpop.hum.uu.nl/readers/sbti")
+    CATALOG_URIREF = URIRef(
+        'https://edpop.hum.uu.nl/readers/sbti'
+    )
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/sbti/"
     DEFAULT_RECORDS_PER_PAGE = 10
     READERTYPE = BIOGRAPHICAL
     SHORT_NAME = "Scottish Book Trade Index (SBTI)"
-    DESCRIPTION = (
-        "An index of the names, trades and addresses of people "
+    DESCRIPTION = "An index of the names, trades and addresses of people "\
         "involved in printing in Scotland up to 1850"
-    )
 
     @classmethod
     def _get_name_field(cls, data: dict) -> Optional[Field]:
@@ -35,9 +37,9 @@ class SBTIReader(CERLReader):
     def _convert_record(cls, rawrecord: dict) -> BiographicalRecord:
         record = BiographicalRecord(from_reader=cls)
         record.data = rawrecord
-        record.identifier = rawrecord.get("id", None)
+        record.identifier = rawrecord.get('id', None)
         if not record.identifier:
-            record.identifier = rawrecord.get("_id", None)
+            record.identifier = rawrecord.get('_id', None)
         if record.identifier:
             record.link = cls.LINK_BASE_URL + record.identifier
 
@@ -63,3 +65,4 @@ class SBTIReader(CERLReader):
                     record.places_of_activity.append(field)
 
         return record
+
