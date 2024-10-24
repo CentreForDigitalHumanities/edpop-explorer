@@ -95,7 +95,6 @@ class EDPOPXShell(cmd2.Cmd):
         ))
         recordtype = str(record._rdf_class).rsplit('/',1)[1]
         self.poutput(f'Record type: {recordtype}')
-        self.poutput
         if record.identifier:
             self.poutput(f'Identifier: {record.identifier}')
         if record.link:
