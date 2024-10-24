@@ -5,14 +5,12 @@ from typing import List, Optional, Tuple
 from edpop_explorer import Field, BIBLIOGRAPHICAL, BibliographicalRecord, LocationField
 from edpop_explorer.cerl import CERLReader
 from edpop_explorer.fields import LanguageField, ContributorField
-from edpop_explorer.sparqlreader import (
-    SparqlReader, BibliographicalRDFRecord
-)
+from edpop_explorer.sparqlreader import SparqlReader, BibliographicalRDFRecord
 
 
 def _remove_markup(input_str: str) -> str:
     """Remove STCN-specific markup"""
-    return input_str.replace('`IT`', '').replace('`LO`', '')
+    return input_str.replace("`IT`", "").replace("`LO`", "")
 
 
 def safeget(dictionary: Optional[dict], attribute_chain: tuple, first: bool = False):
@@ -29,12 +27,10 @@ def safeget(dictionary: Optional[dict], attribute_chain: tuple, first: bool = Fa
 
 
 class STCNReader(CERLReader):
-    API_URL = 'https://data.cerl.org/stcn/_search'
-    API_BY_ID_BASE_URL = 'https://data.cerl.org/stcn/'
-    LINK_BASE_URL = 'https://data.cerl.org/stcn/'
-    CATALOG_URIREF = URIRef(
-        'https://edpop.hum.uu.nl/readers/stcn'
-    )
+    API_URL = "https://data.cerl.org/stcn/_search"
+    API_BY_ID_BASE_URL = "https://data.cerl.org/stcn/"
+    LINK_BASE_URL = "https://data.cerl.org/stcn/"
+    CATALOG_URIREF = URIRef("https://edpop.hum.uu.nl/readers/stcn")
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/stcn/"
     READERTYPE = BIBLIOGRAPHICAL
     SHORT_NAME = "Short-Title Catalogue Netherlands (STCN)"
@@ -59,7 +55,7 @@ class STCNReader(CERLReader):
                 continue
             contributor = ContributorField(name)
             contributor.name = name
-            contributor.role = safeget(actor, ('role',), first=True)
+            contributor.role = safeget(actor, ("role",), first=True)
             contributors.append(contributor)
         return contributors
 
@@ -124,7 +120,9 @@ class STCNReader(CERLReader):
         if not collations:
             return None
         # Multiple collation formulas are possible, but this seems to be rare.
-        collation_string = ' ; '.join([x.get("value") for x in collations if "value" in x])
+        collation_string = " ; ".join(
+            [x.get("value") for x in collations if "value" in x]
+        )
         return Field(collation_string)
 
     @classmethod
@@ -133,7 +131,9 @@ class STCNReader(CERLReader):
         if not fingerprints:
             return None
         # Multiple fingerprints are possible, but this seems to be rare
-        fingerprint_string = ' ; '.join([x.get("fingerprint") for x in fingerprints if "fingerprint" in x])
+        fingerprint_string = " ; ".join(
+            [x.get("fingerprint") for x in fingerprints if "fingerprint" in x]
+        )
         return Field(fingerprint_string)
 
     @classmethod
@@ -161,7 +161,7 @@ class STCNReader(CERLReader):
     def _convert_record(cls, rawrecord: dict) -> BibliographicalRecord:
         record = BibliographicalRecord(from_reader=cls)
         record.data = rawrecord
-        record.identifier = rawrecord.get('id', None)
+        record.identifier = rawrecord.get("id", None)
         if record.identifier:
             record.link = cls.LINK_BASE_URL + record.identifier
         record.title = cls._get_title(rawrecord)

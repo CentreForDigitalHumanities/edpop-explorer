@@ -303,5 +303,5 @@ relator_dict = {
     "wit": "witness",
     "wpr": "writer of preface",
     "wst": "writer of supplementary textual content",
-    "wts": "writer of television story"
+    "wts": "writer of television story",
 }

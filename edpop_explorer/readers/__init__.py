@@ -1,4 +1,4 @@
-'''This package contains concrete subclasses of ``Reader``.'''
+"""This package contains concrete subclasses of ``Reader``."""
 
 __all__ = [
     "BnFReader",
@@ -51,5 +51,5 @@ def _get_all_readers() -> List[Type[Reader]]:
             all_readers.append(cls)
     return all_readers
 
-ALL_READERS = _get_all_readers()
 
+ALL_READERS = _get_all_readers()

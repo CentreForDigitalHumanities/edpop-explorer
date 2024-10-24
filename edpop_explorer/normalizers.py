@@ -4,9 +4,9 @@ from enum import Enum
 
 
 class NormalizationResult(Enum):
-    SUCCESS = 'success'
-    NO_DATA = 'nodata'
-    FAIL = 'fail'
+    SUCCESS = "success"
+    NO_DATA = "nodata"
+    FAIL = "fail"
 
 
 def normalize_by_language_code(field) -> NormalizationResult:

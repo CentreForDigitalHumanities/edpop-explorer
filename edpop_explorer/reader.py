@@ -12,7 +12,10 @@ from urllib.parse import quote, unquote
 
 
 from edpop_explorer import (
-    EDPOPREC, BIBLIOGRAPHICAL, BIOGRAPHICAL, bind_common_namespaces
+    EDPOPREC,
+    BIBLIOGRAPHICAL,
+    BIOGRAPHICAL,
+    bind_common_namespaces,
 )
 from .record import Record
 
@@ -22,6 +25,7 @@ class BasePreparedQuery:
     """Empty base dataclass for prepared queries. For prepared queries that
     can be represented by a single string, do not inherit from this class
     but use a simple string instead."""
+
     pass
 
 
@@ -45,6 +49,7 @@ class Reader(ABC):
     ``fetch_range()`` should populate the ``records``, ``number_of_results``,
     ``number_fetched`` and ``range_fetched`` attributes.
     """
+
     number_of_results: Optional[int] = None
     """The total number of results for the query, or None if fetching
     has not yet started and the number is not yet known."""
@@ -111,9 +116,7 @@ class Reader(ABC):
         records."""
         self._fetch_position = start_number
 
-    def fetch(
-            self, number: Optional[int] = None
-    ) -> range:
+    def fetch(self, number: Optional[int] = None) -> range:
         """Perform an initial or subsequent query. Most readers fetch
         a limited number of records at once -- this number depends on
         the reader but it may be adjusted using the ``number`` parameter.
@@ -126,8 +129,9 @@ class Reader(ABC):
             return range(0)
         if number is None:
             number = self.DEFAULT_RECORDS_PER_PAGE
-        resulting_range = self.fetch_range(range(self._fetch_position,
-                                           self._fetch_position + number))
+        resulting_range = self.fetch_range(
+            range(self._fetch_position, self._fetch_position + number)
+        )
         self._fetch_position = resulting_range.stop
         return resulting_range
 
@@ -160,9 +164,9 @@ class Reader(ABC):
             # Try to fetch, if it is allowed, and if there is a chance that
             # it is successful (by verifying that index is not out of
             # available range, if known)
-            if (allow_fetching and
-                    (self.number_of_results is None
-                     or self.number_of_results <= index)):
+            if allow_fetching and (
+                self.number_of_results is None or self.number_of_results <= index
+            ):
                 # Fetch and try again
                 self.fetch_range(range(index, index + 1))
                 record = self.records.get(index)
@@ -200,7 +204,7 @@ class Reader(ABC):
                 "not a string."
             )
         if iri.startswith(cls.IRI_PREFIX):
-            return unquote(iri[len(cls.IRI_PREFIX):])
+            return unquote(iri[len(cls.IRI_PREFIX) :])
         else:
             raise ReaderError(
                 f"Cannot convert IRI {iri} to identifier: IRI does not start "
@@ -209,13 +213,13 @@ class Reader(ABC):
 
     @classmethod
     def catalog_to_graph(cls) -> Graph:
-        '''Create an RDF representation of the catalog that this reader
-        supports as an instance of EDPOPREC:Catalog.'''
+        """Create an RDF representation of the catalog that this reader
+        supports as an instance of EDPOPREC:Catalog."""
         g = Graph()
         if not cls.CATALOG_URIREF:
             raise ReaderError(
-                'Cannot create graph because catalog IRI has not been set. '
-                'This should have been done on class level.'
+                "Cannot create graph because catalog IRI has not been set. "
+                "This should have been done on class level."
             )
 
         # Set reader class
@@ -293,8 +297,9 @@ class GetByIdBasedOnQueryMixin(ABC):
     @classmethod
     def get_by_id(cls, identifier: str) -> Record:
         reader = cls()
-        assert isinstance(reader, Reader), \
-            "GetByIdBasedOnQueryMixin should be used on Reader subclass"
+        assert isinstance(
+            reader, Reader
+        ), "GetByIdBasedOnQueryMixin should be used on Reader subclass"
         reader.set_query(cls._prepare_get_by_id_query(identifier))
         reader.fetch()
         if reader.number_of_results == 0:
@@ -326,6 +331,7 @@ class DatabaseFileMixin:
     using the filename specified in the constant attribute
     ``DATABASE_FILENAME``, which has to be specified by the user of
     this mixin."""
+
     DATABASE_URL: Optional[str] = None
     """The URL to download the database file from. If this attribute is
     ``None``, automatically downloading the database file is not supported."""
@@ -341,9 +347,10 @@ class DatabaseFileMixin:
     def prepare_data(self) -> None:
         """Prepare the database file by confirming that it is available,
         and if not, by attempting to download it."""
-        self.database_path = Path(
-            AppDirs('edpop-explorer', 'cdh').user_data_dir
-        ) / self.DATABASE_FILENAME
+        self.database_path = (
+            Path(AppDirs("edpop-explorer", "cdh").user_data_dir)
+            / self.DATABASE_FILENAME
+        )
         if not self.database_path.exists():
             if self.DATABASE_URL is None:
                 # No database URL is given, so the user has to get the database
@@ -353,37 +360,36 @@ class DatabaseFileMixin:
                 # the Windows Store...
                 db_dir = self.database_path.parent.resolve()
                 error_message = (
-                    f'{self.__class__.__name__} database not found. Please obtain the file '
-                    f'{self.DATABASE_FILENAME} from the project team and add it '
-                    f'to the following directory: {db_dir}'
+                    f"{self.__class__.__name__} database not found. Please obtain the file "
+                    f"{self.DATABASE_FILENAME} from the project team and add it "
+                    f"to the following directory: {db_dir}"
                 )
                 raise ReaderError(error_message)
             else:
                 self._download_database()
 
     def _download_database(self) -> None:
-        print('Downloading database...')
+        print("Downloading database...")
         response = requests.get(self.DATABASE_URL)
         if response.ok:
             try:
                 self.database_path.parent.mkdir(exist_ok=True, parents=True)
-                with open(self.database_path, 'wb') as f:
+                with open(self.database_path, "wb") as f:
                     f.write(response.content)
             except OSError as err:
-                raise ReaderError(
-                    f'Error writing database file to disk: {err}'
-                )
+                raise ReaderError(f"Error writing database file to disk: {err}")
         else:
             raise ReaderError(
-                f'Error downloading database file from {self.DATABASE_URL}'
+                f"Error downloading database file from {self.DATABASE_URL}"
             )
-        print(f'Successfully saved database to {self.database_path}.')
-        print(f'See license: {self.DATABASE_LICENSE}')
+        print(f"Successfully saved database to {self.database_path}.")
+        print(f"See license: {self.DATABASE_LICENSE}")
 
 
 class ReaderError(Exception):
     """Generic exception for failures in ``Reader`` class. More specific errors
     derive from this class."""
+
     pass
 
 

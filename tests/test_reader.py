@@ -1,4 +1,3 @@
-
 from typing_extensions import override
 
 import pytest
@@ -69,9 +68,7 @@ def test_iri_to_identifier_invalid():
 
 def test_iri_to_identifier_and_vv_noprefixset():
     with pytest.raises(ReaderError):
-        SimpleReaderNoIRIPrefix.iri_to_identifier(
-            "http://example.com/records/reader/1"
-        )
+        SimpleReaderNoIRIPrefix.iri_to_identifier("http://example.com/records/reader/1")
     with pytest.raises(ReaderError):
         SimpleReaderNoIRIPrefix.identifier_to_iri("1")
 

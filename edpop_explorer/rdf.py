@@ -3,10 +3,10 @@
 from rdflib.namespace import Namespace
 from rdflib import Graph, RDF, RDFS
 
-EDPOPREC = Namespace('https://dhstatic.hum.uu.nl/edpop-records/0.1.0/')
+EDPOPREC = Namespace("https://dhstatic.hum.uu.nl/edpop-records/0.1.0/")
 """EDPOP Record Ontology"""
 
-RELATORS = Namespace('http://id.loc.gov/vocabulary/relators/')
+RELATORS = Namespace("http://id.loc.gov/vocabulary/relators/")
 """Library of Congress relators. See: https://id.loc.gov/vocabulary/relators.html"""
 
 
@@ -19,4 +19,3 @@ def bind_common_namespaces(graph: Graph) -> None:
     graph.bind("rdf", RDF)
     graph.bind("rdfs", RDFS)
     graph.bind("edpoprec", EDPOPREC)
-

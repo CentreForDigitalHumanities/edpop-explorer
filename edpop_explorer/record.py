@@ -4,7 +4,11 @@ from rdflib.term import Node
 from rdflib import URIRef, Graph, BNode, RDF, Literal
 
 from edpop_explorer import (
-    EDPOPREC, Field, BIBLIOGRAPHICAL, BIOGRAPHICAL, bind_common_namespaces
+    EDPOPREC,
+    Field,
+    BIBLIOGRAPHICAL,
+    BIOGRAPHICAL,
+    bind_common_namespaces,
 )
 
 if TYPE_CHECKING:
@@ -43,7 +47,7 @@ class Record:
     basic attributes and the fields are ``None`` by default.
 
     Subclasses should override the ``_rdf_class`` attribute to
-    the corresponding RDF class. They should define additional 
+    the corresponding RDF class. They should define additional
     fields by adding additional public attributes defaulting
     to ``None`` and by registring them in the ``_fields`` attribute.
     For registring, a constructor ``__init__`` should be defined
@@ -52,17 +56,18 @@ class Record:
     ``('<attribute-name>', EDPOPREC.<rdf-property-name>,
     <Field class name>)``.
     """
+
     #: The raw original data of a record.
     data: Union[None, dict, RawData] = None
     _fields: List[Tuple[str, URIRef, Type[Field]]]
     _rdf_class: Node = EDPOPREC.Record
     link: Optional[str] = None
-    '''A user-friendly link where the user can find the record.'''
+    """A user-friendly link where the user can find the record."""
     identifier: Optional[str] = None
-    '''Unique identifier used by the source catalog.'''
+    """Unique identifier used by the source catalog."""
     from_reader: Type["Reader"]
-    '''The subject node, which will be used to convert the record to 
-    RDF. This is a blank node by default.'''
+    """The subject node, which will be used to convert the record to 
+    RDF. This is a blank node by default."""
     _graph: Optional[Graph] = None
     _bnode: Optional[BNode] = None
 
@@ -71,10 +76,10 @@ class Record:
         self.from_reader = from_reader
 
     def to_graph(self) -> Graph:
-        '''Return an RDF graph for this record.'''
+        """Return an RDF graph for this record."""
         self.fetch()
         g = Graph()
-        
+
         # Set basic properties
         rdfclass = EDPOPREC.Record
         if self.from_reader:
@@ -82,37 +87,28 @@ class Record:
                 rdfclass = EDPOPREC.BiographicalRecord
             elif self.from_reader.READERTYPE == BIBLIOGRAPHICAL:
                 rdfclass = EDPOPREC.BibliographicalRecord
-        g.add((
-            self.subject_node,
-            RDF.type,
-            rdfclass
-        ))
-        if self.from_reader is not None and \
-                self.from_reader.CATALOG_URIREF is not None:
-            g.add((
-                self.subject_node,
-                EDPOPREC.fromCatalog,
-                self.from_reader.CATALOG_URIREF
-            ))
+        g.add((self.subject_node, RDF.type, rdfclass))
+        if self.from_reader is not None and self.from_reader.CATALOG_URIREF is not None:
+            g.add(
+                (
+                    self.subject_node,
+                    EDPOPREC.fromCatalog,
+                    self.from_reader.CATALOG_URIREF,
+                )
+            )
         if self.identifier:
-            g.add((
-                self.subject_node,
-                EDPOPREC.identifier,
-                Literal(self.identifier)
-            ))
+            g.add((self.subject_node, EDPOPREC.identifier, Literal(self.identifier)))
         if self.link:
-            g.add((
-                self.subject_node,
-                EDPOPREC.publicURL,
-                Literal(self.link)
-            ))
+            g.add((self.subject_node, EDPOPREC.publicURL, Literal(self.link)))
         original_data = self.get_data_dict()
         if original_data is not None:
-            g.add((
-                self.subject_node,
-                EDPOPREC.originalData,
-                Literal(original_data, datatype=RDF.JSON)
-            ))
+            g.add(
+                (
+                    self.subject_node,
+                    EDPOPREC.originalData,
+                    Literal(original_data, datatype=RDF.JSON),
+                )
+            )
 
         # Put all fields from self.FIELDS in the graph by accessing
         # the associated attributes or properties. If they contain a
@@ -162,21 +158,21 @@ class Record:
 
     def __str__(self):
         if self.identifier:
-            return f'{self.__class__} object ({self.identifier})'
+            return f"{self.__class__} object ({self.identifier})"
         else:
-            return f'{self.__class__} object'
+            return f"{self.__class__} object"
 
     def fetch(self) -> None:
-        '''Fetch the full contents of the record if this record works with
+        """Fetch the full contents of the record if this record works with
         lazy loading (i.e., if the record's class derives from
         ``RDFRecordMixin``). If the record is not lazy, this method does
-        nothing.'''
+        nothing."""
         pass
 
     @property
     def iri(self) -> Optional[str]:
-        '''A stable IRI based on the `identifier` attribute. `None` if
-        the `identifier` attribute is not set.'''
+        """A stable IRI based on the `identifier` attribute. `None` if
+        the `identifier` attribute is not set."""
         if self.identifier:
             return self.from_reader.identifier_to_iri(self.identifier)
         else:
@@ -184,8 +180,8 @@ class Record:
 
     @property
     def subject_node(self) -> Node:
-        '''A subject node based on the `identifier` attribute. If the 
-        `identifier` attribute is not set, a blank node.'''
+        """A subject node based on the `identifier` attribute. If the
+        `identifier` attribute is not set, a blank node."""
         iri = self.iri
         if iri is not None:
             return URIRef(iri)
@@ -197,11 +193,12 @@ class Record:
 
 
 class BibliographicalRecord(Record):
-    '''Python representation of edpoprec:BibliographicalRecord.
+    """Python representation of edpoprec:BibliographicalRecord.
 
     This subclass adds fields that are specific for bibliographical
     records.
-    '''
+    """
+
     _rdf_class = EDPOPREC.BibliographicalRecord
     title: Optional[Field] = None
     alternative_title: Optional[Field] = None
@@ -225,23 +222,23 @@ class BibliographicalRecord(Record):
         super().__init__(from_reader)
         assert isinstance(self._fields, list)
         self._fields += [
-            ('title', EDPOPREC.title, Field),
-            ('alternative_title', EDPOPREC.alternativeTitle, Field),
-            ('contributors', EDPOPREC.contributor, Field),
-            ('publisher_or_printer', EDPOPREC.publisherOrPrinter, Field),
-            ('place_of_publication', EDPOPREC.placeOfPublication, Field),
-            ('dating', EDPOPREC.dating, Field),
-            ('languages', EDPOPREC.language, Field),
-            ('extent', EDPOPREC.extent, Field),
-            ('size', EDPOPREC.size, Field),
-            ('physical_description', EDPOPREC.physicalDescription, Field),
-            ('bookseller', EDPOPREC.bookseller, Field),
-            ('location', EDPOPREC.location, Field),
-            ('format', EDPOPREC.format, Field),
-            ('fingerprint', EDPOPREC.fingerprint, Field),
-            ('collation_formula', EDPOPREC.collationFormula, Field),
-            ('genres', EDPOPREC.genre, Field),
-            ('holdings', EDPOPREC.holdings, Field),
+            ("title", EDPOPREC.title, Field),
+            ("alternative_title", EDPOPREC.alternativeTitle, Field),
+            ("contributors", EDPOPREC.contributor, Field),
+            ("publisher_or_printer", EDPOPREC.publisherOrPrinter, Field),
+            ("place_of_publication", EDPOPREC.placeOfPublication, Field),
+            ("dating", EDPOPREC.dating, Field),
+            ("languages", EDPOPREC.language, Field),
+            ("extent", EDPOPREC.extent, Field),
+            ("size", EDPOPREC.size, Field),
+            ("physical_description", EDPOPREC.physicalDescription, Field),
+            ("bookseller", EDPOPREC.bookseller, Field),
+            ("location", EDPOPREC.location, Field),
+            ("format", EDPOPREC.format, Field),
+            ("fingerprint", EDPOPREC.fingerprint, Field),
+            ("collation_formula", EDPOPREC.collationFormula, Field),
+            ("genres", EDPOPREC.genre, Field),
+            ("holdings", EDPOPREC.holdings, Field),
         ]
 
     def __str__(self) -> str:
@@ -252,10 +249,11 @@ class BibliographicalRecord(Record):
 
 
 class BiographicalRecord(Record):
-    '''Python representation of edpoprec:BiographicalRecord.
+    """Python representation of edpoprec:BiographicalRecord.
 
     This subclass adds fields that are specific for biographical records.
-    '''
+    """
+
     _rdf_class = EDPOPREC.BiographicalRecord
     name: Optional[Field] = None
     variant_names: Optional[List[Field]] = None
@@ -271,15 +269,15 @@ class BiographicalRecord(Record):
         super().__init__(from_reader)
         assert isinstance(self._fields, list)
         self._fields += [
-            ('name', EDPOPREC.title, Field),
-            ('variant_names', EDPOPREC.variantName, Field),
-            ('place_of_birth', EDPOPREC.placeOfBirth, Field),
-            ('place_of_death', EDPOPREC.placeOfDeath, Field),
-            ('places_of_activity', EDPOPREC.placeOfActivity, Field),
-            ('activity_timespan', EDPOPREC.timespan, Field),
-            ('activities', EDPOPREC.activity, Field),
-            ('gender', EDPOPREC.gender, Field),
-            ('lifespan', EDPOPREC.lifespan, Field),
+            ("name", EDPOPREC.title, Field),
+            ("variant_names", EDPOPREC.variantName, Field),
+            ("place_of_birth", EDPOPREC.placeOfBirth, Field),
+            ("place_of_death", EDPOPREC.placeOfDeath, Field),
+            ("places_of_activity", EDPOPREC.placeOfActivity, Field),
+            ("activity_timespan", EDPOPREC.timespan, Field),
+            ("activities", EDPOPREC.activity, Field),
+            ("gender", EDPOPREC.gender, Field),
+            ("lifespan", EDPOPREC.lifespan, Field),
         ]
 
     def __str__(self) -> str:
@@ -290,13 +288,14 @@ class BiographicalRecord(Record):
 
 
 class LazyRecordMixin(ABC):
-    '''Abstract mixin that adds an interface for lazy loading to a Record.
+    """Abstract mixin that adds an interface for lazy loading to a Record.
 
     To use, implement the ``fetch()`` method and make sure that it fills
-    the record's ``data`` attributes and its Fields and that the 
-    ``fetched`` attribute is set to ``True``.'''
+    the record's ``data`` attributes and its Fields and that the
+    ``fetched`` attribute is set to ``True``."""
+
     fetched: bool = False
-    
+
     @abstractmethod
     def fetch(self) -> None:
         pass
