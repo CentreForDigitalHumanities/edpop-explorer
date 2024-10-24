@@ -215,7 +215,7 @@ class BibliographicalRecord(Record):
     physical_description: Optional[Field] = None
     bookseller: Optional[Field] = None
     location: Optional[Field] = None
-    format: Optional[Field] = None
+    bibliographical_format: Optional[Field] = None
     fingerprint: Optional[Field] = None
     collation_formula: Optional[Field] = None
     genres: Optional[List[Field]] = None
@@ -237,7 +237,7 @@ class BibliographicalRecord(Record):
             ('physical_description', EDPOPREC.physicalDescription, Field),
             ('bookseller', EDPOPREC.bookseller, Field),
             ('location', EDPOPREC.location, Field),
-            ('format', EDPOPREC.format, Field),
+            ('bibliographical_format', EDPOPREC.bibliographicalFormat, Field),
             ('fingerprint', EDPOPREC.fingerprint, Field),
             ('collation_formula', EDPOPREC.collationFormula, Field),
             ('genres', EDPOPREC.genre, Field),

@@ -113,10 +113,10 @@ class STCNReader(CERLReader):
 
     @classmethod
     def _get_format(cls, rawrecord: dict) -> Optional[Field]:
-        format = safeget(rawrecord, ("data", "format", "format"))
-        if format is None:
+        format_ = safeget(rawrecord, ("data", "format", "format"))
+        if format_ is None:
             return None
-        return Field(format)
+        return Field(format_)
 
     @classmethod
     def _get_collation_formula(cls, rawrecord: dict) -> Optional[Field]:
@@ -171,7 +171,7 @@ class STCNReader(CERLReader):
         record.dating = cls._get_dating(rawrecord)
         record.languages = cls._get_languages(rawrecord)
         record.extent = cls._get_extent(rawrecord)
-        record.format = cls._get_format(rawrecord)
+        record.bibliographical_format = cls._get_format(rawrecord)
         record.collation_formula = cls._get_collation_formula(rawrecord)
         record.fingerprint = cls._get_fingerprint(rawrecord)
         record.genres = cls._get_genres(rawrecord)
