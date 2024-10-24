@@ -215,6 +215,11 @@ class BibliographicalRecord(Record):
     physical_description: Optional[Field] = None
     bookseller: Optional[Field] = None
     location: Optional[Field] = None
+    format: Optional[Field] = None
+    fingerprint: Optional[Field] = None
+    collation_formula: Optional[Field] = None
+    genres: Optional[List[Field]] = None
+    holdings: Optional[List[Field]] = None
 
     def __init__(self, from_reader: Type["Reader"]):
         super().__init__(from_reader)
@@ -232,6 +237,11 @@ class BibliographicalRecord(Record):
             ('physical_description', EDPOPREC.physicalDescription, Field),
             ('bookseller', EDPOPREC.bookseller, Field),
             ('location', EDPOPREC.location, Field),
+            ('format', EDPOPREC.format, Field),
+            ('fingerprint', EDPOPREC.fingerprint, Field),
+            ('collation_formula', EDPOPREC.collationFormula, Field),
+            ('genres', EDPOPREC.genre, Field),
+            ('holdings', EDPOPREC.holdings, Field),
         ]
 
     def __str__(self) -> str:
