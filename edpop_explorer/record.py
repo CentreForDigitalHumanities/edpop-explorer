@@ -271,7 +271,7 @@ class BiographicalRecord(Record):
         super().__init__(from_reader)
         assert isinstance(self._fields, list)
         self._fields += [
-            ('name', EDPOPREC.title, Field),
+            ('name', EDPOPREC.name, Field),
             ('variant_names', EDPOPREC.variantName, Field),
             ('place_of_birth', EDPOPREC.placeOfBirth, Field),
             ('place_of_death', EDPOPREC.placeOfDeath, Field),
