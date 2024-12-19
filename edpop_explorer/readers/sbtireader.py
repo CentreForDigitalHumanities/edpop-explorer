@@ -1,5 +1,5 @@
 from rdflib import URIRef
-from typing import List, Dict, Optional
+from typing import Dict, Optional
 
 from edpop_explorer import (
     BiographicalRecord, Field, BIOGRAPHICAL

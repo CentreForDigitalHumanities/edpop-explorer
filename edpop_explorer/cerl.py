@@ -1,11 +1,10 @@
 from abc import abstractmethod
 
-from rdflib import URIRef
 import requests
 from typing import List, Dict, Optional
 
 from edpop_explorer import (
-    Reader, Record, ReaderError, BiographicalRecord, Field, BIOGRAPHICAL
+    Reader, Record, ReaderError
 )
 
 

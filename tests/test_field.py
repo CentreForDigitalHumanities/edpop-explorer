@@ -4,7 +4,6 @@ from rdflib.term import Node
 
 from edpop_explorer import Field, FieldError, LocationField
 from edpop_explorer import EDPOPREC
-from edpop_explorer.normalizers import NormalizationResult
 
 
 @fixture

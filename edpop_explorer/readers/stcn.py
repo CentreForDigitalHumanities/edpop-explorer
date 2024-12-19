@@ -1,14 +1,10 @@
-from rdflib import Graph, Namespace, URIRef
-from rdflib.term import Node
-from typing import List, Optional, Tuple
+from rdflib import URIRef
+from typing import List, Optional
 
 from edpop_explorer import Field, BIBLIOGRAPHICAL, BibliographicalRecord, LocationField, BIOGRAPHICAL, \
     BiographicalRecord
 from edpop_explorer.cerl import CERLReader
 from edpop_explorer.fields import LanguageField, ContributorField
-from edpop_explorer.sparqlreader import (
-    SparqlReader, BibliographicalRDFRecord
-)
 
 
 def _remove_markup(input_str: str) -> str:
