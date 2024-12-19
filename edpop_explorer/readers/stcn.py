@@ -1,5 +1,5 @@
 from rdflib import URIRef
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 from edpop_explorer import Field, BIBLIOGRAPHICAL, BibliographicalRecord, LocationField, BIOGRAPHICAL, \
     BiographicalRecord
@@ -50,7 +50,7 @@ class STCNPersonsReader(STCNBaseReader):
         return f"({query}) AND data.type:pers"
 
     @classmethod
-    def _get_names(cls, rawrecord: dict) -> tuple[Optional[Field], Optional[List[Field]]]:
+    def _get_names(cls, rawrecord: dict) -> Tuple[Optional[Field], Optional[List[Field]]]:
         preferred_name = safeget(rawrecord, ('shortDisplay',))
         namelist = safeget(rawrecord, ('data', 'agent'))
         alternative_names = None
