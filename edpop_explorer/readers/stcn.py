@@ -67,7 +67,7 @@ class STCNPersonsReader(STCNBaseReader):
             return Field(timespan)
 
     @classmethod
-    def _get_activities(cls, rawrecord: dict) -> Optional[list[Field]]:
+    def _get_activities(cls, rawrecord: dict) -> Optional[List[Field]]:
         profession_notes = safeget(rawrecord, ("data", "professionNote",))
         if not profession_notes:
             return None
