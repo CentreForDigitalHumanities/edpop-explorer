@@ -207,6 +207,3 @@ class ContributorField(Field):
         else:
             return name
 
-
-
-

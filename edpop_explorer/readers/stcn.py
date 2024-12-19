@@ -5,7 +5,7 @@ from typing import List, Optional, Tuple
 from edpop_explorer import Field, BIBLIOGRAPHICAL, BibliographicalRecord, LocationField, BIOGRAPHICAL, \
     BiographicalRecord
 from edpop_explorer.cerl import CERLReader
-from edpop_explorer.fields import LanguageField, ContributorField, ActivityField
+from edpop_explorer.fields import LanguageField, ContributorField
 from edpop_explorer.sparqlreader import (
     SparqlReader, BibliographicalRDFRecord
 )
