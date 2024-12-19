@@ -19,6 +19,7 @@ from edpop_explorer.readers import (
     VDLiedReader,
     KBReader,
     STCNReader,
+    STCNPersonsReader,
     SBTIReader,
     USTCReader,
     BnFReader,
@@ -180,6 +181,10 @@ class EDPOPXShell(cmd2.Cmd):
     def do_stcn(self, args) -> None:
         'Short Title Catalogue Netherlands'
         self._query(STCNReader, args)
+
+    def do_stcnpers(self, args) -> None:
+        'Short Title Catalogue Netherlands – Persons'
+        self._query(STCNPersonsReader, args)
     
     def do_sbti(self, args) -> None:
         'Scottish Book Trade Index'
