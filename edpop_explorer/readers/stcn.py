@@ -2,9 +2,10 @@ from rdflib import Graph, Namespace, URIRef
 from rdflib.term import Node
 from typing import List, Optional, Tuple
 
-from edpop_explorer import Field, BIBLIOGRAPHICAL, BibliographicalRecord, LocationField
+from edpop_explorer import Field, BIBLIOGRAPHICAL, BibliographicalRecord, LocationField, BIOGRAPHICAL, \
+    BiographicalRecord
 from edpop_explorer.cerl import CERLReader
-from edpop_explorer.fields import LanguageField, ContributorField
+from edpop_explorer.fields import LanguageField, ContributorField, ActivityField
 from edpop_explorer.sparqlreader import (
     SparqlReader, BibliographicalRDFRecord
 )
@@ -28,8 +29,68 @@ def safeget(dictionary: Optional[dict], attribute_chain: tuple, first: bool = Fa
         return safeget(value, attribute_chain[1:], first)
 
 
-class STCNReader(CERLReader):
+class STCNBaseReader(CERLReader):
+    """STCN uses the same search API for its bibliographical records and
+    its biographical records (persons and publishers/printers), but the
+    data format as well as detail pages are different. This base class
+    builds on CERLReader and adds the API URL."""
     API_URL = 'https://data.cerl.org/stcn/_search'
+
+
+class STCNPersonsReader(STCNBaseReader):
+    API_BY_ID_BASE_URL = 'https://data.cerl.org/stcn_persons/'
+    LINK_BASE_URL = 'https://data.cerl.org/stcn_persons/'
+    CATALOG_URIREF = URIRef(
+        'https://edpop.hum.uu.nl/readers/stcn'
+    )
+    IRI_PREFIX = "https://edpop.hum.uu.nl/readers/stcn-persons/"
+    READERTYPE = BIOGRAPHICAL
+    SHORT_NAME = "STCN Persons"
+    DESCRIPTION = "National bibliography of The Netherlands until 1801 – persons"
+
+    @classmethod
+    def transform_query(cls, query) -> str:
+        # Only person records
+        return f"({query}) AND data.type:pers"
+
+    @classmethod
+    def _get_names(cls, rawrecord: dict) -> tuple[Optional[Field], Optional[List[Field]]]:
+        preferred_name = safeget(rawrecord, ('shortDisplay',))
+        namelist = safeget(rawrecord, ('data', 'agent'))
+        alternative_names = None
+        if namelist:
+            alternative_names = [x["variants"] for x in namelist if x["variants"] != preferred_name]
+        preferred_name_field = Field(preferred_name) if preferred_name else None
+        alternative_names_field = [Field(x) for x in alternative_names] if alternative_names else None
+        return preferred_name_field, alternative_names_field
+
+    @classmethod
+    def _get_timespan(cls, rawrecord: dict) -> Optional[Field]:
+        timespan = safeget(rawrecord, ("dates",))
+        if timespan:
+            return Field(timespan)
+
+    @classmethod
+    def _get_activities(cls, rawrecord: dict) -> Optional[list[Field]]:
+        profession_notes = safeget(rawrecord, ("data", "professionNote",))
+        if not profession_notes:
+            return None
+        return [Field(x) for x in profession_notes]
+
+    @classmethod
+    def _convert_record(cls, rawrecord: dict) -> BiographicalRecord:
+        record = BiographicalRecord(from_reader=cls)
+        record.data = rawrecord
+        record.identifier = rawrecord.get('id', None)
+        if record.identifier:
+            record.link = cls.LINK_BASE_URL + record.identifier
+        record.name, record.variant_names = cls._get_names(rawrecord)
+        record.timespan = cls._get_timespan(rawrecord)
+        record.activities = cls._get_activities(rawrecord)
+        return record
+
+
+class STCNReader(STCNBaseReader):
     API_BY_ID_BASE_URL = 'https://data.cerl.org/stcn/'
     LINK_BASE_URL = 'https://data.cerl.org/stcn/'
     CATALOG_URIREF = URIRef(
@@ -38,7 +99,12 @@ class STCNReader(CERLReader):
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/stcn/"
     READERTYPE = BIBLIOGRAPHICAL
     SHORT_NAME = "Short-Title Catalogue Netherlands (STCN)"
-    DESCRIPTION = "National biography of The Netherlands until 1801"
+    DESCRIPTION = "National bibliography of The Netherlands until 1801"
+
+    @classmethod
+    def transform_query(cls, query) -> str:
+        # Filter out bibliographical records
+        return f"({query}) NOT data.type:pers NOT data.type:impr"
 
     @classmethod
     def _get_title(cls, rawrecord: dict) -> Optional[Field]:
