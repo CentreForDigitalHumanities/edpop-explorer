@@ -110,7 +110,7 @@ class STCNReader(STCNBaseReader):
             return Field(title)
 
     @classmethod
-    def _get_contributors(cls, rawrecord: dict) -> list[Field]:
+    def _get_contributors(cls, rawrecord: dict) -> List[Field]:
         actors = safeget(rawrecord, ("data", "agent"))
         if not actors:
             return []
@@ -199,7 +199,7 @@ class STCNReader(STCNBaseReader):
         return Field(fingerprint_string)
 
     @classmethod
-    def _get_genres(cls, rawrecord: dict) -> list[Field]:
+    def _get_genres(cls, rawrecord: dict) -> List[Field]:
         subjecttopics = safeget(rawrecord, ("data", "subjectTopic"))
         if subjecttopics is None:
             return []
@@ -207,7 +207,7 @@ class STCNReader(STCNBaseReader):
         return fields
 
     @classmethod
-    def _get_holdings(cls, rawrecord: dict) -> list[Field]:
+    def _get_holdings(cls, rawrecord: dict) -> List[Field]:
         holdings = safeget(rawrecord, ("data", "holdings"))
         if holdings is None:
             return []
