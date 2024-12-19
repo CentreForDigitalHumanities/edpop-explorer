@@ -148,7 +148,7 @@ class STCNReader(STCNBaseReader):
             return field
 
     @classmethod
-    def _get_languages(cls, rawrecord: dict) -> list[Field]:
+    def _get_languages(cls, rawrecord: dict) -> List[Field]:
         languages = safeget(rawrecord, ("data", "language"))
         if languages is None:
             return []
