@@ -13,6 +13,8 @@ def _remove_markup(input_str: str) -> str:
 
 
 def safeget(dictionary: Optional[dict], attribute_chain: tuple, first: bool = False):
+    if len(attribute_chain) == 0:
+        raise ValueError("The attribute_chain argument cannot be empty")
     attribute = attribute_chain[0]
     if dictionary is None or attribute not in dictionary:
         return None
