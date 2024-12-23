@@ -39,6 +39,13 @@ def _wrap_contributor(actor_data: dict) -> ContributorField:
     return field
 
 
+def _wrap_holding(holding_data: dict) -> Field:
+    institution = safeget(holding_data, ("data", "institutionName"))
+    shelfmark = safeget(holding_data, ("data", "shelfmark"))
+    summary = f"{institution} - {shelfmark}"
+    return Field(summary)
+
+
 class STCNBaseReader(CERLReader):
     """STCN uses the same search API for its bibliographical records and
     its biographical records (persons and publishers/printers), but the
@@ -218,13 +225,7 @@ class STCNReader(STCNBaseReader):
         holdings = safeget(rawrecord, ("data", "holdings"))
         if holdings is None:
             return []
-        fields = []
-        for holding in holdings:
-            institution = safeget(holding, ("data", "institutionName"))
-            shelfmark = safeget(holding, ("data", "shelfmark"))
-            summary = f"{institution} - {shelfmark}"
-            fields.append(Field(summary))
-        return fields
+        return [_wrap_holding(x) for x in holdings]
 
     @classmethod
     def _convert_record(cls, rawrecord: dict) -> BibliographicalRecord:
