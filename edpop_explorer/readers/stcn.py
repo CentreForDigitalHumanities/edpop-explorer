@@ -15,6 +15,9 @@ def _remove_markup(input_str: str) -> str:
 
 
 def safeget(dictionary: Optional[dict], attribute_chain: tuple, first: bool = False):
+    """Safely get a (nested) attribute in a JSON-like structure. If the
+    result is a list and ``first`` is ``True``, return the first item
+    of the list."""
     if len(attribute_chain) == 0:
         raise ValueError("The attribute_chain argument cannot be empty")
     attribute = attribute_chain[0]

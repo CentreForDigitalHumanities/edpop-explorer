@@ -39,3 +39,8 @@ def test_safeget_nested_second_attribute_nonexistent():
             "other_attribute": "value"
         }
     }, ("attribute", "attribute2")) is None
+
+def test_safeget_first():
+    assert safeget({
+        "attribute": ["value1", "value2"]
+    }, ("attribute",), True) == "value1"
