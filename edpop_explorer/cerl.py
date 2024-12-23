@@ -15,6 +15,7 @@ class CERLReader(Reader):
     This is an abstract class -- to use, derive from this class, set the
     ``API_URL``, ``API_BY_ID_BASE_URL`` and ``LINK_BASE_URL`` constant
     attributes, and implement the ``_convert_record`` class method."""
+
     API_URL: str
     """The base URL of the search API, of the form ``https://data.cerl.org/<CATALOGUE>/_search``."""
     API_BY_ID_BASE_URL: str
