@@ -64,9 +64,7 @@ class CERLReader(Reader):
                     'Accept': 'application/json'
                 }
             ).json()
-        except (
-            requests.exceptions.RequestException
-        ) as err:
+        except requests.exceptions.RequestException as err:
             raise ReaderError('Error during server request: ' + str(err))
 
         # TODO: check for error responses
