@@ -145,7 +145,7 @@ class STCNReader(STCNBaseReader):
         provision_agent = safeget(rawrecord, ("data", "provisionAgent"), first=True)
         if provision_agent is None:
             return None
-        name = provision_agent.get("preferred", None)
+        name = safeget(provision_agent, ("preferred",))
         if name is None:
             return None
         field = Field(name)
