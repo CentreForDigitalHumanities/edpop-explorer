@@ -50,7 +50,6 @@ class CERLReader(Reader):
         assert isinstance(self.prepared_query, str)
         if maximum_records is None:
             maximum_records = self.DEFAULT_RECORDS_PER_PAGE
-        print(f'The query is: {self.prepared_query}')
         try:
             response = requests.get(
                 self.API_URL,
