@@ -76,16 +76,7 @@ class CERLReader(Reader):
         except KeyError:
             raise ReaderError('Number of hits not given in server response')
 
-        if 'rows' not in response:
-            # There are no rows in the response, so stop here
-            return []
-
-        records: List[Record] = []
-        for rawrecord in response['rows']:
-            record = self._convert_record(rawrecord)
-            records.append(record)
-
-        return records
+        return [self._convert_record(x) for x in response['rows']] if 'rows' in response else []
 
     @classmethod
     def transform_query(cls, query) -> str:
