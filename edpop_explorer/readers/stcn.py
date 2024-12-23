@@ -34,6 +34,8 @@ class STCNBaseReader(CERLReader):
 
 
 class STCNPersonsReader(STCNBaseReader):
+    """STCN Persons reader. This reader does not include printers and
+    publishers, because they are in a separate database."""
     API_BY_ID_BASE_URL = 'https://data.cerl.org/stcn_persons/'
     LINK_BASE_URL = 'https://data.cerl.org/stcn_persons/'
     CATALOG_URIREF = URIRef(
