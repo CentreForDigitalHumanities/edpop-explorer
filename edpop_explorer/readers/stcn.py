@@ -1,5 +1,3 @@
-from operator import methodcaller
-
 from rdflib import URIRef
 from typing import List, Optional, Tuple
 
