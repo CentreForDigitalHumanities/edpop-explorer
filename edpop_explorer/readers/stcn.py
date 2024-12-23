@@ -1,3 +1,5 @@
+from operator import methodcaller
+
 from rdflib import URIRef
 from typing import List, Optional, Tuple
 
@@ -25,6 +27,13 @@ def safeget(dictionary: Optional[dict], attribute_chain: tuple, first: bool = Fa
         return value
     else:
         return safeget(value, attribute_chain[1:], first)
+
+
+def _wrap_contributor(actor_data: dict) -> ContributorField:
+    field = ContributorField(actor_data['preferred'])
+    field.name = actor_data['preferred']
+    field.role = safeget(actor_data, ('role',), first=True)
+    return field
 
 
 class STCNBaseReader(CERLReader):
@@ -118,16 +127,7 @@ class STCNReader(STCNBaseReader):
         actors = safeget(rawrecord, ("data", "agent"))
         if not actors:
             return []
-        contributors = []
-        for actor in actors:
-            name = actor.get("preferred", None)
-            if name is None:
-                continue
-            contributor = ContributorField(name)
-            contributor.name = name
-            contributor.role = safeget(actor, ('role',), first=True)
-            contributors.append(contributor)
-        return contributors
+        return [_wrap_contributor(x) for x in actors if x.get('preferred')]
 
     @classmethod
     def _get_publisher_or_printer(cls, rawrecord: dict) -> Optional[Field]:
