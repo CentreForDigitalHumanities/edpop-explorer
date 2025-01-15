@@ -13,6 +13,7 @@ __all__ = [
     "VD18Reader",
     "VDLiedReader",
     "STCNReader",
+    "STCNPersonsReader",
     "USTCReader",
     "KVCSReader",
     "DutchAlmanacsReader",
@@ -29,7 +30,7 @@ from .gallica import GallicaReader
 from .hpb import HPBReader
 from .kb import KBReader
 from .sbtireader import SBTIReader
-from .stcn import STCNReader
+from .stcn import STCNReader, STCNPersonsReader
 from .ustc import USTCReader
 from .vd import VD16Reader, VD17Reader, VD18Reader, VDLiedReader
 from .kvcs import KVCSReader

@@ -24,7 +24,7 @@ class KVCSReader(DatabaseFileMixin, Reader):
         record.identifier = rawrecord['ID']
         record.name = Field(rawrecord['Name'])
         record.gender = Field(rawrecord['Gender'])
-        record.lifespan = Field(rawrecord['Years of life'])
+        record.timespan = Field(rawrecord['Years of life'])
         record.places_of_activity = Field(rawrecord['City'])
         record.activity_timespan = Field(rawrecord['Years of activity'])
         record.activities = Field(rawrecord['Kind of print and sales activities'])

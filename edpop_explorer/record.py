@@ -215,6 +215,11 @@ class BibliographicalRecord(Record):
     physical_description: Optional[Field] = None
     bookseller: Optional[Field] = None
     location: Optional[Field] = None
+    bibliographical_format: Optional[Field] = None
+    fingerprint: Optional[Field] = None
+    collation_formula: Optional[Field] = None
+    genres: Optional[List[Field]] = None
+    holdings: Optional[List[Field]] = None
 
     def __init__(self, from_reader: Type["Reader"]):
         super().__init__(from_reader)
@@ -232,6 +237,11 @@ class BibliographicalRecord(Record):
             ('physical_description', EDPOPREC.physicalDescription, Field),
             ('bookseller', EDPOPREC.bookseller, Field),
             ('location', EDPOPREC.location, Field),
+            ('bibliographical_format', EDPOPREC.bibliographicalFormat, Field),
+            ('fingerprint', EDPOPREC.fingerprint, Field),
+            ('collation_formula', EDPOPREC.collationFormula, Field),
+            ('genres', EDPOPREC.genre, Field),
+            ('holdings', EDPOPREC.holdings, Field),
         ]
 
     def __str__(self) -> str:
@@ -255,13 +265,13 @@ class BiographicalRecord(Record):
     activity_timespan: Optional[Field] = None
     activities: Optional[List[Field]] = None
     gender: Optional[Field] = None
-    lifespan: Optional[Field] = None
+    timespan: Optional[Field] = None
 
     def __init__(self, from_reader: Type["Reader"]):
         super().__init__(from_reader)
         assert isinstance(self._fields, list)
         self._fields += [
-            ('name', EDPOPREC.title, Field),
+            ('name', EDPOPREC.name, Field),
             ('variant_names', EDPOPREC.variantName, Field),
             ('place_of_birth', EDPOPREC.placeOfBirth, Field),
             ('place_of_death', EDPOPREC.placeOfDeath, Field),
@@ -269,7 +279,7 @@ class BiographicalRecord(Record):
             ('activity_timespan', EDPOPREC.timespan, Field),
             ('activities', EDPOPREC.activity, Field),
             ('gender', EDPOPREC.gender, Field),
-            ('lifespan', EDPOPREC.lifespan, Field),
+            ('timespan', EDPOPREC.timespan, Field),
         ]
 
     def __str__(self) -> str:

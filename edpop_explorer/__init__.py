@@ -6,7 +6,7 @@ __all__ = [
     'BasePreparedQuery', 'PreparedQueryType',
     'Record', 'RawData', 'RecordError', 'BibliographicalRecord',
     'BiographicalRecord', 'LazyRecordMixin',
-    'SRUReader',
+    'SRUReader', 'CERLReader',
     'Marc21Data', 'Marc21Field', 'Marc21BibliographicalRecord',
     'Marc21DataMixin', 'SRUMarc21Reader', 'SRUMarc21BibliographicalReader',
     'BIBLIOGRAPHICAL', 'BIOGRAPHICAL'
@@ -32,4 +32,5 @@ from .srumarc21reader import (
     Marc21Data, Marc21Field, Marc21BibliographicalRecord, Marc21DataMixin,
     SRUMarc21Reader, SRUMarc21BibliographicalReader
 )
+from .cerl import CERLReader
 

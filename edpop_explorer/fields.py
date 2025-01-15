@@ -4,11 +4,14 @@ fields.
 
 from typing import Optional, Callable, List, Tuple
 
+from iso639 import Lang
+from iso639.exceptions import InvalidLanguageValue
 from rdflib import Graph, Literal, BNode, RDF, URIRef
 from rdflib.term import Node
 
 from edpop_explorer import EDPOPREC, normalizers
 from edpop_explorer.normalizers import NormalizationResult
+from edpop_explorer.normalization import relators
 
 DATATYPES = {
     'string': {
@@ -70,7 +73,6 @@ class Field:
     #: by default.
     subject_node: Node
     _subfields: List[Tuple[str, URIRef, str]]
-    normalized_text: Optional[str] = None
     #: Subfield -- indicates whether the value of this field is explicitly
     #: marked as unknown in the original record.
     unknown: Optional[bool] = None
@@ -88,7 +90,7 @@ class Field:
         self.original_text = original_text
         self._subfields = [
             ('original_text', EDPOPREC.originalText, 'string'),
-            ('normalized_text', EDPOPREC.normalizedText, 'string'),
+            ('summary_text', EDPOPREC.summaryText, 'string'),
             ('unknown', EDPOPREC.unknown, 'boolean'),
             ('authority_record', EDPOPREC.authorityRecord, 'string'),
         ]
@@ -140,9 +142,13 @@ class Field:
                     ))
         return graph
 
+    @property
+    def summary_text(self) -> Optional[str]:
+        return None
+
     def __str__(self) -> str:
-        if self.normalized_text is not None:
-            return self.normalized_text
+        if self.summary_text is not None:
+            return self.summary_text
         else:
             return self.original_text
 
@@ -170,4 +176,34 @@ class LanguageField(Field):
         self._subfields.append(
             ('language_code', EDPOPREC.languageCode, 'string')
         )
+
+    @property
+    def summary_text(self) -> Optional[str]:
+        try:
+            language = Lang(self.language_code)
+            return language.name
+        except InvalidLanguageValue:
+            return None
+
+
+class ContributorField(Field):
+    _rdf_class = EDPOPREC.ContributorField
+    role: Optional[str] = None
+    name: Optional[str] = None
+
+    def __init__(self, original_text: str) -> None:
+        super().__init__(original_text)
+        self._subfields.extend((
+            ('name', EDPOPREC.name, 'string'),
+            ('role', EDPOPREC.role, 'string'),
+        ))
+
+    @property
+    def summary_text(self) -> Optional[str]:
+        role = relators.relator_dict.get(self.role, self.role)
+        name = self.name if self.name is not None else self.original_text
+        if role is not None:
+            return f"{name} ({role})"
+        else:
+            return name
 

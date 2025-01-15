@@ -18,7 +18,6 @@ def normalize_by_language_code(field) -> NormalizationResult:
     try:
         language = Lang(field.original_text)
         field.language_code = language.pt3
-        field.normalized_text = language.name
         return NormalizationResult.SUCCESS
     except InvalidLanguageValue:
         return NormalizationResult.FAIL
