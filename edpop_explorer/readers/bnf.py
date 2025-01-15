@@ -23,7 +23,11 @@ class BnFReader(SRUMarc21BibliographicalReader):
     _place_field_subfield = ('210', 'a')
     _dating_field_subfield = ('210', 'd')
     _language_field_subfield = ('101', 'a')
-    # TODO: add format etc
+    # Note that the physical description field normally also (or only)
+    # contains the extent, but still physical description is more accurate
+    _physical_description_field_subfield = ('215', 'a')
+    _size_description_field_subfield = ('215', 'd')
+    _extent_field_subfield = ('xxx', 'x')  # Not available
 
     @classmethod
     def transform_query(cls, query: str) -> str:
