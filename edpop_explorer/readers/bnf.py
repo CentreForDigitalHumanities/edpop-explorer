@@ -19,7 +19,7 @@ class BnFReader(SRUMarc21BibliographicalReader):
     # BnF has its information in different fields than normally in Marc21
     _title_field_subfield = ('200', 'a')
     _alternative_title_field_subfield = ('500', 'a')
-    _publisher_field_subfield = ('201', 'c')
+    _publisher_field_subfield = ('210', 'c')
     _place_field_subfield = ('210', 'a')
     _dating_field_subfield = ('210', 'd')
     _language_field_subfield = ('101', 'a')
