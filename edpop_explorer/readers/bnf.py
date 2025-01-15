@@ -1,8 +1,8 @@
-from typing import Optional
+from typing import Optional, List
 
 from rdflib import URIRef
 
-from edpop_explorer import SRUMarc21BibliographicalReader, Marc21Data
+from edpop_explorer import SRUMarc21BibliographicalReader, Marc21Data, Field
 
 
 class BnFReader(SRUMarc21BibliographicalReader):
@@ -16,6 +16,7 @@ class BnFReader(SRUMarc21BibliographicalReader):
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/bnf/"
     SHORT_NAME = "Bibliothèque nationale de France (BnF)"
     DESCRIPTION = "General catalogue of the French National Library"
+    # BnF has its information in different fields than normally in Marc21
     _title_field_subfield = ('200', 'a')
     _alternative_title_field_subfield = ('500', 'a')
     _publisher_field_subfield = ('201', 'c')
@@ -40,3 +41,16 @@ class BnFReader(SRUMarc21BibliographicalReader):
     @classmethod
     def _get_identifier(cls, data: Marc21Data) -> Optional[str]:
         return data.raw["id"]
+
+    @classmethod
+    def _get_contributors(cls, data: Marc21Data) -> List[Field]:
+        contributors: List[Field] = []
+        contributor_fields = data.get_fields('700')
+        for field in contributor_fields:
+            surname = field.subfields.get('a')
+            givenname = field.subfields.get('b')
+            if surname and givenname:
+                contributors.append(Field(f"{givenname} {surname}"))
+            elif surname or givenname:
+                contributors.append(Field(surname or givenname))
+        return contributors
