@@ -113,6 +113,7 @@ class Marc21DataMixin():
             field_strings.append(str(field))
         return '\n'.join(field_strings)
 
+
 class SRUMarc21Reader(SRUReader):
     '''Subclass of ``SRUReader`` that adds Marc21 functionality.
 
