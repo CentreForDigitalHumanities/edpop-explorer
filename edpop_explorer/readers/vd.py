@@ -73,7 +73,12 @@ class VD18Reader(VDCommonMixin, SRUMarc21BibliographicalReader):
 
     @classmethod
     def transform_query(cls, query: str) -> str:
-        return query
+        # Only return physical records, because the digital records are duplicates
+        # of physical ones.
+        # NB: the information from the digital records might be useful, but for
+        # the moment we do not use anything from it and including them just
+        # leads to duplicates in the results.
+        return f"{query} and pica.bbg=A*"
 
     @classmethod
     def _get_identifier(cls, record: Marc21Data):

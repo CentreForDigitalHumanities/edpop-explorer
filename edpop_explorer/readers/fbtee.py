@@ -100,7 +100,10 @@ class FBTEEReader(DatabaseFileMixin, GetByIdBasedOnQueryMixin, Reader):
                     for j in range(len(columns)):
                         record.data[columns[j]] = row[j]
                     record.identifier = book_code
-                    record.link = self.FBTEE_LINK.format(book_code)
+                    # The public web interface has pages for "super books"
+                    # rather than individual editions, so link to these.
+                    super_book_code = record.data['super_book_code']
+                    record.link = self.FBTEE_LINK.format(super_book_code)
                     record.data['authors'] = []
                     self.records[i] = record
                     last_book_code = book_code
