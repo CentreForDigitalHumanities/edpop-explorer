@@ -213,6 +213,7 @@ class SRUMarc21BibliographicalReader(SRUMarc21Reader):
     _extent_field_subfield = ('300', 'a')
     _physical_description_field_subfield = ('300', 'b')
     _size_field_subfield = ('300', 'c')
+    _fingerprint_field_subfield = ('026', 'e')
 
     records: List[Marc21BibliographicalRecord]
     READERTYPE = BIBLIOGRAPHICAL
@@ -262,6 +263,9 @@ class SRUMarc21BibliographicalReader(SRUMarc21Reader):
         size = data.get_first_subfield(*cls._size_field_subfield)
         if size:
             record.size = Field(size)
+        fingerprint = data.get_first_subfield(*cls._fingerprint_field_subfield)
+        if fingerprint:
+            record.fingerprint = Field(fingerprint)
 
         # Add the contributors
         record.contributors = cls._get_contributors(data)
