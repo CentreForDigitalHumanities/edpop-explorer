@@ -7,6 +7,37 @@ from edpop_explorer.cerl import CERLReader
 from edpop_explorer.fields import LanguageField, ContributorField
 
 
+FEATURES = {
+    'a': 'illustrations on title-page',
+    'b': 'illustrations outside collation',
+    'c': 'other illustrations',
+    'd': 'author\'s oeuvre list',
+    'e': 'publisher\'s stocklist',
+    'f': 'bookseller\'s stocklist',
+    'g': 'other stocklist or advertisement',
+    'h': 'printer\'s device',
+    'i': 'typeface Roman',
+    'j': 'typeface black letter',
+    'k': 'typeface italic',
+    'l': 'typeface Civilité',
+    'm': 'typeface Greek',
+    'n': 'typeface Hebrew',
+    'o': 'typeface Arabic',
+    'p': 'typeface Armenian',
+    'q': 'musical notation',
+    'r': 'typeface Cyrillic',
+    's': 'other typefaces',
+    'v': 'printed cover',
+    'w': 'engraved title-page',
+    'x': 'typographical title-page',
+    'y': 'no title-page',
+    'z': 'title-page in multiple colours',
+    '3': 'subscribers\' list or proposal for printing',
+    '4': 'price quotation',
+    '8': 'list of booksellers',
+}
+
+
 def _remove_markup(input_str: str) -> str:
     """Remove STCN-specific markup"""
     return input_str.replace('`IT`', '').replace('`LO`', '')
@@ -226,6 +257,13 @@ class STCNReader(STCNBaseReader):
         return [_wrap_holding(x) for x in holdings]
 
     @classmethod
+    def _get_typographical_features(cls, rawrecord: dict) -> List[Field]:
+        features = safeget(rawrecord, ("data", "feature"))
+        if features is None:
+            return []
+        return [Field(FEATURES.get(x, x)) for x in features]
+
+    @classmethod
     def _convert_record(cls, rawrecord: dict) -> BibliographicalRecord:
         record = BibliographicalRecord(from_reader=cls)
         record.data = rawrecord
@@ -244,4 +282,5 @@ class STCNReader(STCNBaseReader):
         record.fingerprint = cls._get_fingerprint(rawrecord)
         record.genres = cls._get_genres(rawrecord)
         record.holdings = cls._get_holdings(rawrecord)
+        record.typographical_features = cls._get_typographical_features(rawrecord)
         return record
