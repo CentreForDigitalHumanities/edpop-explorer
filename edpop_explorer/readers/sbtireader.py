@@ -63,6 +63,12 @@ class SBTIReader(CERLReader):
                 if name:
                     field = Field(name)
                     record.places_of_activity.append(field)
+        activity_dates = rawrecord.get("activityDates", None)
+        if isinstance(activity_dates, list):
+            record.activity_timespan = [Field(str(x['text'])) for x in activity_dates]
+        activities = rawrecord.get("activity", None)
+        if isinstance(activities, list):
+            record.activities = [Field(x) for x in activities]
 
         return record
 
