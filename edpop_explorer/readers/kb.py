@@ -2,7 +2,7 @@ from typing import Optional, List
 from rdflib import URIRef
 from edpop_explorer import SRUReader, BibliographicalRecord, BIBLIOGRAPHICAL
 from edpop_explorer import Field
-from edpop_explorer.fields import LanguageField
+from edpop_explorer.fields import LanguageField, ContributorField
 
 
 class KBReader(SRUReader):
@@ -16,6 +16,7 @@ class KBReader(SRUReader):
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/kb/"
     SHORT_NAME = "Koninklijke Bibliotheek (KB)"
     DESCRIPTION = "General catalogue of KB, national library of The Netherlands."
+    _EXTENT_LOCATION = "http://purl.org/dc/terms/:extent"
 
     def __init__(self):
         super().__init__()
@@ -54,7 +55,10 @@ class KBReader(SRUReader):
             record.link = self.KB_LINK.format(record.identifier)
         record.title = self._get_title(sruthirecord)
         record.languages = self._get_languages(sruthirecord)
-        # TODO: add the other fields
+        record.extent = self._get_extent(sruthirecord)
+        record.size = self._get_size(sruthirecord)
+        record.publisher_or_printer = self._get_publisher(sruthirecord)
+        record.contributors = self._get_contributors(sruthirecord)
         return record
     
     def _get_title(self, data) -> Optional[Field]:
@@ -84,3 +88,31 @@ class KBReader(SRUReader):
         for field in fields:
             field.normalize()
         return fields
+
+    def _get_extent(self, data) -> Optional[Field]:
+        if self._EXTENT_LOCATION in data:
+            return Field(data[self._EXTENT_LOCATION][0])
+
+    def _get_size(self, data) -> Optional[Field]:
+        if self._EXTENT_LOCATION in data:
+            return Field(data[self._EXTENT_LOCATION][1])
+
+    def _get_publisher(self, data) -> Optional[Field]:
+        if "publisher" in data:
+            return Field(data["publisher"])
+
+    def _get_contributors(self, data) -> Optional[List[Field]]:
+        contributors = []
+        for type_ in ['creator', 'contributor']:
+            data_ = data.get(type_, None)
+            if not data_:
+                continue
+            if isinstance(data_, str):
+                # Wrap in a list if it is a single string
+                data_ = [data_]
+            assert isinstance(data_, list)
+            for item in data_:
+                field = ContributorField(item)
+                field.role = type_
+                contributors.append(field)
+        return contributors
