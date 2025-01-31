@@ -138,6 +138,69 @@ class STCNPersonsReader(STCNBaseReader):
         return record
 
 
+class STCNPrintersReader(STCNBaseReader):
+    API_BY_ID_BASE_URL = 'https://data.cerl.org/stcn_printers/'
+    LINK_BASE_URL = 'https://data.cerl.org/stcn_printers/'
+    CATALOG_URIREF = URIRef(
+        'https://edpop.hum.uu.nl/readers/stcn-printers'
+    )
+    IRI_PREFIX = "https://edpop.hum.uu.nl/readers/stcn-printers/"
+    READERTYPE = BIOGRAPHICAL
+    SHORT_NAME = "STCN Printers"
+    DESCRIPTION = "National bibliography of The Netherlands until 1801 – printers"
+
+    @classmethod
+    def transform_query(cls, query) -> str:
+        # Only person records
+        return f"({query}) AND data.type:impr"
+
+    @classmethod
+    def _get_name(cls, rawrecord: dict) -> Optional[Field]:
+        display_name = safeget(rawrecord, ('shortDisplay',))
+        if display_name:
+            return Field(' '.join(reversed(display_name.split(', '))))
+
+    @classmethod
+    def _get_places_of_activity(cls, rawrecord: dict) -> Optional[List[Field]]:
+        places = safeget(rawrecord, ('data', 'place',))
+        if places:
+            return [Field(x['text']) for x in places]
+
+    @classmethod
+    def _get_timespan(cls, rawrecord: dict) -> Optional[List[Field]]:
+        places = safeget(rawrecord, ('data', 'place',))
+        if places:
+            return [Field(x['dates']) for x in places]
+
+    @classmethod
+    def _get_activity_timespan(cls, rawrecord: dict) -> Optional[List[Field]]:
+        places = safeget(rawrecord, ('data', 'occupation',))
+        if places:
+            return [Field(x['dates']) for x in places]
+
+    @classmethod
+    def _get_activities(cls, rawrecord: dict) -> Optional[List[Field]]:
+        places = safeget(rawrecord, ('data', 'occupation',))
+        if places:
+            return [Field(x['text']) for x in places]
+
+    @classmethod
+    def _convert_record(cls, rawrecord: dict) -> BiographicalRecord:
+        record = BiographicalRecord(from_reader=cls)
+        record.data = rawrecord
+        record.identifier = rawrecord.get('id', None)
+        if record.identifier:
+            record.link = cls.LINK_BASE_URL + record.identifier
+        record.name = cls._get_name(rawrecord)
+        record.places_of_activity = cls._get_places_of_activity(rawrecord)
+        record.timespan = cls._get_timespan(rawrecord)
+        record.activities = cls._get_activities(rawrecord)
+        record.activity_timespan = cls._get_activity_timespan(rawrecord)
+
+
+        return record
+
+
 class STCNReader(STCNBaseReader):
     API_BY_ID_BASE_URL = 'https://data.cerl.org/stcn/'
     LINK_BASE_URL = 'https://data.cerl.org/stcn/'
