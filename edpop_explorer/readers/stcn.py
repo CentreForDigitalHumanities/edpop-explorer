@@ -315,7 +315,7 @@ class STCNReader(STCNBaseReader):
         subjecttopics = safeget(rawrecord, ("data", "subjectTopic"))
         if subjecttopics is None:
             return []
-        fields = [Field(x["preferred"]) for x in subjecttopics if "preferred" in x]
+        fields = [Field(x["preferred"]) for x in subjecttopics if ("preferred" in x and x["preferred"] is not None)]
         return fields
 
     @classmethod
