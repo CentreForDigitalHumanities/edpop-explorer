@@ -30,7 +30,7 @@ from .fbtee import FBTEEReader
 from .gallica import GallicaReader
 from .hpb import HPBReader
 from .kb import KBReader
-from .sbtireader import SBTIReader
+from .sbti import SBTIReader
 from .stcn import STCNReader, STCNPersonsReader, STCNPrintersReader
 from .ustc import USTCReader
 from .vd import VD16Reader, VD17Reader, VD18Reader, VDLiedReader
