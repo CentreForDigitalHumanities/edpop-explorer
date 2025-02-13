@@ -183,11 +183,11 @@ class EDPOPXShell(cmd2.Cmd):
         'Short Title Catalogue Netherlands'
         self._query(STCNReader, args)
 
-    def do_stcnpers(self, args) -> None:
+    def do_stcnpersons(self, args) -> None:
         'Short Title Catalogue Netherlands – Persons (authors and other contributors)'
         self._query(STCNPersonsReader, args)
 
-    def do_stcnimpr(self, args) -> None:
+    def do_stcnprinters(self, args) -> None:
         'Short Title Catalogue Netherlands – Printers and publishers'
         self._query(STCNPrintersReader, args)
     
