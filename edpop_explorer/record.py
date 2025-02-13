@@ -278,7 +278,7 @@ class BiographicalRecord(Record):
             ('place_of_birth', EDPOPREC.placeOfBirth, Field),
             ('place_of_death', EDPOPREC.placeOfDeath, Field),
             ('places_of_activity', EDPOPREC.placeOfActivity, Field),
-            ('activity_timespan', EDPOPREC.timespan, Field),
+            ('activity_timespan', EDPOPREC.activityTimespan, Field),
             ('activities', EDPOPREC.activity, Field),
             ('gender', EDPOPREC.gender, Field),
             ('timespan', EDPOPREC.timespan, Field),
