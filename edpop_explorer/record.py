@@ -220,6 +220,7 @@ class BibliographicalRecord(Record):
     collation_formula: Optional[Field] = None
     genres: Optional[List[Field]] = None
     holdings: Optional[List[Field]] = None
+    typographical_features: Optional[List[Field]] = None
 
     def __init__(self, from_reader: Type["Reader"]):
         super().__init__(from_reader)
@@ -242,6 +243,7 @@ class BibliographicalRecord(Record):
             ('collation_formula', EDPOPREC.collationFormula, Field),
             ('genres', EDPOPREC.genre, Field),
             ('holdings', EDPOPREC.holdings, Field),
+            ('typographical_features', EDPOPREC.typographicalFeatures, Field),
         ]
 
     def __str__(self) -> str:

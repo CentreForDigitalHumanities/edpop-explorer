@@ -14,6 +14,7 @@ __all__ = [
     "VDLiedReader",
     "STCNReader",
     "STCNPersonsReader",
+    "STCNPrintersReader",
     "USTCReader",
     "KVCSReader",
     "DutchAlmanacsReader",
@@ -29,8 +30,8 @@ from .fbtee import FBTEEReader
 from .gallica import GallicaReader
 from .hpb import HPBReader
 from .kb import KBReader
-from .sbtireader import SBTIReader
-from .stcn import STCNReader, STCNPersonsReader
+from .sbti import SBTIReader
+from .stcn import STCNReader, STCNPersonsReader, STCNPrintersReader
 from .ustc import USTCReader
 from .vd import VD16Reader, VD17Reader, VD18Reader, VDLiedReader
 from .kvcs import KVCSReader

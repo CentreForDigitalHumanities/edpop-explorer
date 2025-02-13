@@ -1,10 +1,41 @@
 from rdflib import URIRef
-from typing import List, Optional, Tuple
+from typing import List, Optional, Tuple, Type
 
 from edpop_explorer import Field, BIBLIOGRAPHICAL, BibliographicalRecord, LocationField, BIOGRAPHICAL, \
     BiographicalRecord
 from edpop_explorer.cerl import CERLReader
 from edpop_explorer.fields import LanguageField, ContributorField
+
+
+FEATURES = {
+    'a': 'illustrations on title-page',
+    'b': 'illustrations outside collation',
+    'c': 'other illustrations',
+    'd': 'author\'s oeuvre list',
+    'e': 'publisher\'s stocklist',
+    'f': 'bookseller\'s stocklist',
+    'g': 'other stocklist or advertisement',
+    'h': 'printer\'s device',
+    'i': 'typeface Roman',
+    'j': 'typeface black letter',
+    'k': 'typeface italic',
+    'l': 'typeface Civilité',
+    'm': 'typeface Greek',
+    'n': 'typeface Hebrew',
+    'o': 'typeface Arabic',
+    'p': 'typeface Armenian',
+    'q': 'musical notation',
+    'r': 'typeface Cyrillic',
+    's': 'other typefaces',
+    'v': 'printed cover',
+    'w': 'engraved title-page',
+    'x': 'typographical title-page',
+    'y': 'no title-page',
+    'z': 'title-page in multiple colours',
+    '3': 'subscribers\' list or proposal for printing',
+    '4': 'price quotation',
+    '8': 'list of booksellers',
+}
 
 
 def _remove_markup(input_str: str) -> str:
@@ -44,6 +75,18 @@ def _wrap_holding(holding_data: dict) -> Field:
     return Field(summary)
 
 
+def _wrap_in_fields(data: List, key: Optional[str] = None, fieldclass: Type[Field]=Field) -> Optional[List[Field]]:
+    """Return the entries of the ``data`` list wrapped in fields of type
+    ``fieldclass``. If ``key`` is given, assume that the entry is a dictionary
+    and wrap the requested key."""
+    if data:
+        if key is None:
+            return [fieldclass(x) for x in data]
+        else:
+            fields = [fieldclass(x[key]) for x in data if key in x]
+            return fields if len(fields) else None
+
+
 class STCNBaseReader(CERLReader):
     """STCN uses the same search API for its bibliographical records and
     its biographical records (persons and publishers/printers), but the
@@ -58,7 +101,7 @@ class STCNPersonsReader(STCNBaseReader):
     API_BY_ID_BASE_URL = 'https://data.cerl.org/stcn_persons/'
     LINK_BASE_URL = 'https://data.cerl.org/stcn_persons/'
     CATALOG_URIREF = URIRef(
-        'https://edpop.hum.uu.nl/readers/stcn'
+        'https://edpop.hum.uu.nl/readers/stcn-persons'
     )
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/stcn-persons/"
     READERTYPE = BIOGRAPHICAL
@@ -90,9 +133,7 @@ class STCNPersonsReader(STCNBaseReader):
     @classmethod
     def _get_activities(cls, rawrecord: dict) -> Optional[List[Field]]:
         profession_notes = safeget(rawrecord, ("data", "professionNote",))
-        if not profession_notes:
-            return None
-        return [Field(x) for x in profession_notes]
+        return _wrap_in_fields(profession_notes)
 
     @classmethod
     def _convert_record(cls, rawrecord: dict) -> BiographicalRecord:
@@ -104,6 +145,65 @@ class STCNPersonsReader(STCNBaseReader):
         record.name, record.variant_names = cls._get_names(rawrecord)
         record.timespan = cls._get_timespan(rawrecord)
         record.activities = cls._get_activities(rawrecord)
+        return record
+
+
+class STCNPrintersReader(STCNBaseReader):
+    API_BY_ID_BASE_URL = 'https://data.cerl.org/stcn_printers/'
+    LINK_BASE_URL = 'https://data.cerl.org/stcn_printers/'
+    CATALOG_URIREF = URIRef(
+        'https://edpop.hum.uu.nl/readers/stcn-printers'
+    )
+    IRI_PREFIX = "https://edpop.hum.uu.nl/readers/stcn-printers/"
+    READERTYPE = BIOGRAPHICAL
+    SHORT_NAME = "STCN Printers"
+    DESCRIPTION = "National bibliography of The Netherlands until 1801 – printers"
+
+    @classmethod
+    def transform_query(cls, query) -> str:
+        # Only person records
+        return f"({query}) AND data.type:impr"
+
+    @classmethod
+    def _get_name(cls, rawrecord: dict) -> Optional[Field]:
+        display_name = safeget(rawrecord, ('shortDisplay',))
+        if display_name:
+            return Field(' '.join(reversed(display_name.split(', '))))
+
+    @classmethod
+    def _get_places_of_activity(cls, rawrecord: dict) -> Optional[List[Field]]:
+        places = safeget(rawrecord, ('data', 'place',))
+        return _wrap_in_fields(places, "text")
+
+    @classmethod
+    def _get_timespan(cls, rawrecord: dict) -> Optional[List[Field]]:
+        places = safeget(rawrecord, ('data', 'place',))
+        return _wrap_in_fields(places, "dates")
+
+    @classmethod
+    def _get_activity_timespan(cls, rawrecord: dict) -> Optional[List[Field]]:
+        places = safeget(rawrecord, ('data', 'occupation',))
+        return _wrap_in_fields(places, "dates")
+
+    @classmethod
+    def _get_activities(cls, rawrecord: dict) -> Optional[List[Field]]:
+        places = safeget(rawrecord, ('data', 'occupation',))
+        return _wrap_in_fields(places, "text")
+
+    @classmethod
+    def _convert_record(cls, rawrecord: dict) -> BiographicalRecord:
+        record = BiographicalRecord(from_reader=cls)
+        record.data = rawrecord
+        record.identifier = rawrecord.get('id', None)
+        if record.identifier:
+            record.link = cls.LINK_BASE_URL + record.identifier
+        record.name = cls._get_name(rawrecord)
+        record.places_of_activity = cls._get_places_of_activity(rawrecord)
+        record.timespan = cls._get_timespan(rawrecord)
+        record.activities = cls._get_activities(rawrecord)
+        record.activity_timespan = cls._get_activity_timespan(rawrecord)
+
+
         return record
 
 
@@ -226,6 +326,13 @@ class STCNReader(STCNBaseReader):
         return [_wrap_holding(x) for x in holdings]
 
     @classmethod
+    def _get_typographical_features(cls, rawrecord: dict) -> List[Field]:
+        features = safeget(rawrecord, ("data", "feature"))
+        if features is None:
+            return []
+        return [Field(FEATURES.get(x, x)) for x in features]
+
+    @classmethod
     def _convert_record(cls, rawrecord: dict) -> BibliographicalRecord:
         record = BibliographicalRecord(from_reader=cls)
         record.data = rawrecord
@@ -244,4 +351,5 @@ class STCNReader(STCNBaseReader):
         record.fingerprint = cls._get_fingerprint(rawrecord)
         record.genres = cls._get_genres(rawrecord)
         record.holdings = cls._get_holdings(rawrecord)
+        record.typographical_features = cls._get_typographical_features(rawrecord)
         return record
