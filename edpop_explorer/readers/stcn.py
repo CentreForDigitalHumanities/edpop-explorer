@@ -1,5 +1,5 @@
 from rdflib import URIRef
-from typing import List, Optional, Tuple
+from typing import List, Optional, Tuple, Type
 
 from edpop_explorer import Field, BIBLIOGRAPHICAL, BibliographicalRecord, LocationField, BIOGRAPHICAL, \
     BiographicalRecord
@@ -75,6 +75,18 @@ def _wrap_holding(holding_data: dict) -> Field:
     return Field(summary)
 
 
+def _wrap_in_fields(data: List, key: Optional[str] = None, fieldclass: Type[Field]=Field) -> Optional[List[Field]]:
+    """Return the entries of the ``data`` list wrapped in fields of type
+    ``fieldclass``. If ``key`` is given, assume that the entry is a dictionary
+    and wrap the requested key."""
+    if data:
+        if key is None:
+            return [fieldclass(x) for x in data]
+        else:
+            fields = [fieldclass(x[key]) for x in data if key in x]
+            return fields if len(fields) else None
+
+
 class STCNBaseReader(CERLReader):
     """STCN uses the same search API for its bibliographical records and
     its biographical records (persons and publishers/printers), but the
@@ -121,9 +133,7 @@ class STCNPersonsReader(STCNBaseReader):
     @classmethod
     def _get_activities(cls, rawrecord: dict) -> Optional[List[Field]]:
         profession_notes = safeget(rawrecord, ("data", "professionNote",))
-        if not profession_notes:
-            return None
-        return [Field(x) for x in profession_notes]
+        return _wrap_in_fields(profession_notes)
 
     @classmethod
     def _convert_record(cls, rawrecord: dict) -> BiographicalRecord:
@@ -163,26 +173,22 @@ class STCNPrintersReader(STCNBaseReader):
     @classmethod
     def _get_places_of_activity(cls, rawrecord: dict) -> Optional[List[Field]]:
         places = safeget(rawrecord, ('data', 'place',))
-        if places:
-            return [Field(x['text']) for x in places]
+        return _wrap_in_fields(places, "text")
 
     @classmethod
     def _get_timespan(cls, rawrecord: dict) -> Optional[List[Field]]:
         places = safeget(rawrecord, ('data', 'place',))
-        if places:
-            return [Field(x['dates']) for x in places]
+        return _wrap_in_fields(places, "dates")
 
     @classmethod
     def _get_activity_timespan(cls, rawrecord: dict) -> Optional[List[Field]]:
         places = safeget(rawrecord, ('data', 'occupation',))
-        if places:
-            return [Field(x['dates']) for x in places]
+        return _wrap_in_fields(places, "dates")
 
     @classmethod
     def _get_activities(cls, rawrecord: dict) -> Optional[List[Field]]:
         places = safeget(rawrecord, ('data', 'occupation',))
-        if places:
-            return [Field(x['text']) for x in places]
+        return _wrap_in_fields(places, "text")
 
     @classmethod
     def _convert_record(cls, rawrecord: dict) -> BiographicalRecord:
