@@ -97,9 +97,12 @@ class KBReader(SRUReader):
         if self._EXTENT_LOCATION in data:
             return Field(data[self._EXTENT_LOCATION][1])
 
-    def _get_publisher(self, data) -> Optional[Field]:
+    def _get_publisher(self, data) -> Optional[List[Field]]:
         if "publisher" in data:
-            return Field(data["publisher"])
+            pub = data["publisher"]
+            if not isinstance(pub, list):
+                pub = [pub]
+            return [Field(x) for x in pub]
 
     def _get_contributors(self, data) -> Optional[List[Field]]:
         contributors = []
