@@ -144,7 +144,7 @@ class Field:
                     ))
         return graph
 
-    def bind_parent_record(self, record: "Record", attribute: str) -> None:
+    def bind_parent_record(self, record, attribute: str) -> None:
         """Bind the field to its parent record and set the subject node."""
         self.parent_record_iri = record.iri
         self.field_property_iri = record.get_property_by_attribute(attribute)
@@ -167,10 +167,11 @@ class Field:
         if self.parent_record_iri is None or self.field_property_iri is None:
             # We cannot generate a stable IRI if the parent record IRI is unknown
             return None
-        prop_iri_with_original_text = f"{self.field_property_iri}-{self.original_text}"
+        # Remove the namespace part of the property IRI
+        property_part = self.field_property_iri.removeprefix(EDPOPREC)
         return (
-            self.parent_record_iri + "/" +
-            md5(prop_iri_with_original_text.encode()).hexdigest()
+            self.parent_record_iri + "/" + property_part + "/" +
+            md5(self.original_text.encode()).hexdigest()
         )
 
 
