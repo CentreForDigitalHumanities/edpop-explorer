@@ -11,13 +11,14 @@ from edpop_explorer import (
     ReaderError,
     EDPOPREC,
     GetByIdBasedOnQueryMixin,
-    NotFoundError,
+    NotFoundError, BibliographicalRecord, Field,
 )
 
 
 class SimpleReader(Reader):
     """A simple reader which always yields 20 items which have as their
-    ID the index number."""
+    ID the index number, and always 'Dit is een titel' as the title
+    field."""
 
     CATALOG_URIREF = URIRef("http://example.com/reader")
     IRI_PREFIX = "http://example.com/records/reader/"
@@ -39,11 +40,12 @@ class SimpleReader(Reader):
 
     @classmethod
     @override
-    def get_by_id(cls, identifier: str) -> Record:
+    def get_by_id(cls, identifier: str) -> BibliographicalRecord:
         if int(identifier) not in range(cls.NUMBER_OF_ITEMS):
             raise NotFoundError
-        record = Record(cls)
+        record = BibliographicalRecord(cls)
         record.identifier = identifier
+        record.add_field("title", Field("Dit is een titel"))
         return record
 
 
