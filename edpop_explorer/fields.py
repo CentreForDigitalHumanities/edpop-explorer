@@ -1,7 +1,7 @@
 """This module defines ``Field`` and a number of subclasses for specialized
 fields. 
 """
-
+from hashlib import md5
 from typing import Optional, Callable, List, Tuple
 
 from iso639 import Lang
@@ -79,6 +79,8 @@ class Field:
     #: Subfield -- may contain the URI of an authority record
     authority_record: Optional[str] = None
     normalizer: Optional[Callable] = None
+    parent_record_iri: Optional[str] = None
+    field_property_iri: Optional[str] = None
     _rdf_class: Node = EDPOPREC.Field
     
     def __init__(self, original_text: str) -> None:
@@ -141,6 +143,36 @@ class Field:
                         converted
                     ))
         return graph
+
+    def bind_parent_record(self, record: "Record", attribute: str) -> None:
+        """Bind the field to its parent record and set the subject node."""
+        self.parent_record_iri = record.iri
+        self.field_property_iri = record.get_property_by_attribute(attribute)
+        self.subject_node = URIRef(self.iri)
+
+    @property
+    def iri(self) -> Optional[str]:
+        """Generate the IRI based on the parent record's IRI, the field type and
+        the field's original text.
+
+        The IRI is guaranteed to be unique, assuming that there is no MD5
+        collision (that is, in practice no collision will occur, except if
+        a deliberate attempt is made to generate one). The IRI is guaranteed
+        to be stable as long as the original text of the field
+        in the external catalogue remains the same. Some kinds of changes in
+        EDPOP Explorer might also cause a different IRI, including a change
+        in the property IRI of this field (as defined in the parent record),
+        or if the way changes in which EDPOP Explorer extracts the original
+        text of the field from the external catalogue."""
+        if self.parent_record_iri is None or self.field_property_iri is None:
+            # We cannot generate a stable IRI if the parent record IRI is unknown
+            return None
+        prop_iri_with_original_text = f"{self.field_property_iri}-{self.original_text}"
+        return (
+            self.parent_record_iri + "/" +
+            md5(prop_iri_with_original_text.encode()).hexdigest()
+        )
+
 
     @property
     def summary_text(self) -> Optional[str]:
