@@ -5,7 +5,7 @@ import re
 import requests
 import xmltodict
 
-from edpop_explorer.fields import LanguageField
+from edpop_explorer.fields import LanguageField, DigitizationField
 
 
 def _force_list(data) -> list:
@@ -46,6 +46,24 @@ class GallicaReader(SRUReader):
         "and its partners"
 
     @classmethod
+    def _get_digitization_field(cls, identifier: str, sruthirecord: dict) -> DigitizationField:
+        # In Gallica, every record *is* a digitization, so we can just extract
+        # the values from the record.
+
+        # The IIIF manifest is not included in the record but can be distilled
+        # from the identifier
+        iiif_manifest = f"https://gallica.bnf.fr/iiif/{identifier}/manifest.json"
+        extra = sruthirecord.get('extra', None)
+        preview_url = None
+        if isinstance(extra, dict):
+            preview_url = extra.get('medres', None)
+
+        field = DigitizationField(iiif_manifest)
+        field.iiif_manifest = iiif_manifest
+        field.preview_url = preview_url
+        return field
+
+    @classmethod
     def _convert_record(cls, sruthirecord: dict) -> BibliographicalRecord:
         record = BibliographicalRecord(cls)
         # identifier field contains visitable Gallica URL and possibly
@@ -79,6 +97,7 @@ class GallicaReader(SRUReader):
         publisher = _force_string(sruthirecord.get('publisher', None))
         if publisher:
             record.publisher_or_printer = Field(publisher)
+        record.digitization = [cls._get_digitization_field(record.identifier, sruthirecord)]
 
         # Format is more complicated: this is a list and generally contains
         # the number of views, the MIME type and the extent.
