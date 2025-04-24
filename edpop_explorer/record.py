@@ -4,7 +4,8 @@ from rdflib.term import Node
 from rdflib import URIRef, Graph, BNode, RDF, Literal
 
 from edpop_explorer import (
-    EDPOPREC, Field, BIBLIOGRAPHICAL, BIOGRAPHICAL, bind_common_namespaces
+    EDPOPREC, Field, BIBLIOGRAPHICAL, BIOGRAPHICAL, bind_common_namespaces,
+    DigitizationField
 )
 
 if TYPE_CHECKING:
@@ -221,6 +222,7 @@ class BibliographicalRecord(Record):
     genres: Optional[List[Field]] = None
     holdings: Optional[List[Field]] = None
     typographical_features: Optional[List[Field]] = None
+    digitization: Optional[List[Field]] = None
 
     def __init__(self, from_reader: Type["Reader"]):
         super().__init__(from_reader)
@@ -244,6 +246,7 @@ class BibliographicalRecord(Record):
             ('genres', EDPOPREC.genre, Field),
             ('holdings', EDPOPREC.holdings, Field),
             ('typographical_features', EDPOPREC.typographicalFeatures, Field),
+            ('digitization', EDPOPREC.digitization, DigitizationField),
         ]
 
     def __str__(self) -> str:
