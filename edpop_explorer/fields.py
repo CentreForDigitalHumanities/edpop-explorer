@@ -207,3 +207,30 @@ class ContributorField(Field):
         else:
             return name
 
+
+class DigitizationField(Field):
+    _rdf_class = EDPOPREC.DigitizationField
+    description: Optional[str] = None
+    url: Optional[str] = None
+    iiif_manifest: Optional[str] = None
+    preview_url: Optional[str] = None
+
+    def __init__(self, original_text: str) -> None:
+        super().__init__(original_text)
+        self._subfields.extend((
+            ('description', EDPOPREC.description, 'string'),
+            ('url', EDPOPREC.url, 'string'),
+            ('iiif_manifest', EDPOPREC.iiifManifest, 'string'),
+            ('preview_url', EDPOPREC.previewURL, 'string'),
+        ))
+
+    @property
+    def summary_text(self) -> Optional[str]:
+        if self.description is not None:
+            return self.description
+        elif self.iiif_manifest is not None:
+            return self.iiif_manifest
+        elif self.url is not None:
+            return self.url
+        else:
+            return self.original_text
