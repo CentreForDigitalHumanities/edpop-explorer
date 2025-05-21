@@ -2,7 +2,8 @@ from typing import Optional
 
 from rdflib import URIRef
 
-from edpop_explorer import SRUMarc21BibliographicalReader, Marc21Data
+from edpop_explorer import SRUMarc21BibliographicalReader, Marc21Data, Marc21BibliographicalRecord, Field
+from edpop_explorer.external_data.deutsche_isil_agentur import get_isil_name_by_code
 
 
 class VDCommonMixin():
@@ -91,6 +92,21 @@ class VD18Reader(VDCommonMixin, SRUMarc21BibliographicalReader):
                     field.subfields['2'] == 'vd18':
                 return field.subfields['a'][5:]
         return None
+
+    @classmethod
+    def _convert_record(cls, sruthirecord: dict) -> Marc21BibliographicalRecord:
+        # Add holding institution based on field 850 (the Redaktion field)
+        record = super()._convert_record(sruthirecord)
+        holding_inst = record.data.get_first_subfield('850', 'a').removeprefix('RedVD18-')
+        if holding_inst:
+            institution_name = get_isil_name_by_code(holding_inst)
+            if not institution_name:
+                institution_name = holding_inst
+            holding = Field(institution_name)
+            record.holdings = [holding]
+        return record
+
+
 
 
 class VDLiedReader(VDCommonMixin, SRUMarc21BibliographicalReader):
