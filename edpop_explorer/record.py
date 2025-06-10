@@ -215,7 +215,6 @@ class BibliographicalRecord(Record):
     size: Optional[Field] = None
     physical_description: Optional[Field] = None
     bookseller: Optional[Field] = None
-    location: Optional[Field] = None
     bibliographical_format: Optional[Field] = None
     fingerprint: Optional[Field] = None
     collation_formula: Optional[Field] = None
@@ -239,7 +238,6 @@ class BibliographicalRecord(Record):
             ('size', EDPOPREC.size, Field),
             ('physical_description', EDPOPREC.physicalDescription, Field),
             ('bookseller', EDPOPREC.bookseller, Field),
-            ('location', EDPOPREC.location, Field),
             ('bibliographical_format', EDPOPREC.bibliographicalFormat, Field),
             ('fingerprint', EDPOPREC.fingerprint, Field),
             ('collation_formula', EDPOPREC.collationFormula, Field),
