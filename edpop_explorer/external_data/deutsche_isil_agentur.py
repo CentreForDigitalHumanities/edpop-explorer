@@ -25,6 +25,6 @@ def get_isil_name_by_code(code: str) -> str | None:
     value = graph.value(URIRef(uri), DBP.shortName)
     if not value:
         return None
-    name = str()
+    name = str(value)
     _code_to_name[code] = name
     return name
