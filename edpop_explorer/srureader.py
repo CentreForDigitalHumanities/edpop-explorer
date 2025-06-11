@@ -24,6 +24,13 @@ class SRUReader(GetByIdBasedOnQueryMixin, Reader):
     '''URL of the SRU API.'''
     sru_version: str
     '''Version of the SRU protocol. Can be '1.1' or '1.2'.'''
+    sru_schema: Optional[str] = None
+    '''The requested SRU schema. If ``None`` (default),
+    use the default schema of the SRU provider.'''
+    sru_additional_schema: Optional[str] = None
+    '''Additional SRU schemas for which an additional request is made.
+    The results are merged in the SRU results. If ``None`` (default),
+    do not make an additional request.'''
     query: Optional[str] = None
     session: requests.Session
     '''The ``Session`` object of the ``requests`` library.'''
@@ -54,24 +61,34 @@ class SRUReader(GetByIdBasedOnQueryMixin, Reader):
     def _perform_query(self, start_record: int, maximum_records: Optional[int]) -> List[Record]:
         if maximum_records is None:
             maximum_records = self.DEFAULT_RECORDS_PER_PAGE
-        try:
-            response = sruthi.searchretrieve(
-                self.sru_url,
-                self.prepared_query,
-                start_record=start_record,
-                maximum_records=maximum_records,
-                sru_version=self.sru_version,
-                session=self.session
-            )
-        except (
-            sruthi.errors.SruError
-        ) as err:
-            raise ReaderError('Server returned error: ' + str(err))
 
-        self.number_of_results = response.count
+        schemas = [self.sru_schema]  # This may be None, in which the server's default is used
+        if self.sru_additional_schema is not None:
+            schemas.append(self.sru_additional_schema)
+
+        responses = []
+        for schema in schemas:
+            try:
+                responses.append(sruthi.searchretrieve(
+                    self.sru_url,
+                    self.prepared_query,
+                    start_record=start_record,
+                    maximum_records=maximum_records,
+                    sru_version=self.sru_version,
+                    session=self.session,
+                    record_schema=schema,
+                ))
+            except (
+                sruthi.errors.SruError
+            ) as err:
+                raise ReaderError('Server returned error: ' + str(err))
+
+        self.number_of_results = responses[0].count
 
         records: List[Record] = []
-        for sruthirecord in response[0:maximum_records]:
+        for i, sruthirecord in enumerate(responses[0][0:maximum_records]):
+            if len(responses) > 1:
+                sruthirecord |= responses[1][i]
             records.append(self._convert_record(sruthirecord))
 
         return records
