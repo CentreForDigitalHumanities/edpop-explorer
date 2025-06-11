@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 
 from rdflib import URIRef
 
@@ -45,6 +45,7 @@ class VD16Reader(VDCommonMixin, SRUMarc21BibliographicalReader):
 class VD17Reader(VDCommonMixin, SRUMarc21BibliographicalReader):
     sru_url = 'http://sru.k10plus.de/vd17'
     sru_version = '1.1'
+    sru_additional_schema = 'picaxml'
     LINK_FORMAT = \
         'https://kxp.k10plus.de/DB=1.28/CMD?ACT=SRCHA&IKT=8079&TRM=%27{}%27'
     CATALOG_URIREF = URIRef(
@@ -58,10 +59,33 @@ class VD17Reader(VDCommonMixin, SRUMarc21BibliographicalReader):
     def transform_query(cls, query: str) -> str:
         return query
 
+    @classmethod
+    def _get_holdings(cls, data: Marc21Data) -> List[Field]:
+        # Holdings are in the picaXML record and seemingly a bit messy.
+        # Information is spread out over several repeated fields, but
+        # the signature and (most of the times) the ISIL code of the
+        # holding institution is available in field 209A.
+        holdings: List[Field] = []
+        holdings_fields = data.get_fields('209A', picaxml=True)
+        for field in holdings_fields:
+            institution_code = field.subfields.get('B')
+            if not institution_code:
+                institution_code = field.subfields.get('b')  # Try again with lowercase b...
+            institution_name = get_isil_name_by_code(f"DE-{institution_code}") if institution_code else None
+            shelfmark = field.subfields.get('a')
+            if institution_name and shelfmark:
+                holdings.append(Field(f"{institution_name} / {shelfmark}"))
+            elif institution_name:
+                holdings.append(Field(institution_name))
+            elif shelfmark:
+                holdings.append(Field(shelfmark))
+        return holdings
+
 
 class VD18Reader(VDCommonMixin, SRUMarc21BibliographicalReader):
     sru_url = 'http://sru.k10plus.de/vd18'
     sru_version = '1.1'
+    sru_additional_schema = 'picaxml'
     LINK_FORMAT = 'https://kxp.k10plus.de/DB=1.65/SET=1/TTL=1/CMD?ACT=SRCHA&' \
         'IKT=1016&SRT=YOP&TRM={}&ADI_MAT=B&MATCFILTER=Y&MATCSET=Y&ADI_MAT=T&' \
         'REC=*'
@@ -97,16 +121,34 @@ class VD18Reader(VDCommonMixin, SRUMarc21BibliographicalReader):
     def _convert_record(cls, sruthirecord: dict) -> Marc21BibliographicalRecord:
         # Add holding institution based on field 850 (the Redaktion field)
         record = super()._convert_record(sruthirecord)
-        holding_inst = record.data.get_first_subfield('850', 'a').removeprefix('RedVD18-')
-        if holding_inst:
-            institution_name = get_isil_name_by_code(holding_inst)
-            if not institution_name:
-                institution_name = holding_inst
-            holding = Field(institution_name)
-            record.holdings = [holding]
         return record
 
-
+    @classmethod
+    def _get_holdings(cls, data: Marc21Data) -> List[Field]:
+        # Holdings are in the repeated picaXML field 092B.
+        holdings: List[Field] = []
+        holdings_fields = data.get_fields('092B', picaxml=True)
+        if holdings_fields:
+            for field in holdings_fields:
+                institution_code = field.subfields.get('5')
+                institution_name = get_isil_name_by_code(institution_code) if institution_code else None
+                shelfmark = field.subfields.get('3')
+                if institution_name and shelfmark:
+                    holdings.append(Field(f"{institution_name} / {shelfmark}"))
+                elif institution_name:
+                    holdings.append(Field(institution_name))
+                elif shelfmark:
+                    holdings.append(Field(shelfmark))
+            return holdings
+        else:
+            # If holding not available, try to get the holding institution through the Redaktion field instead
+            holding_inst = data.get_first_subfield('850', 'a').removeprefix('RedVD18-')
+            if holding_inst:
+                institution_name = get_isil_name_by_code(holding_inst)
+                if not institution_name:
+                    institution_name = holding_inst
+                return [Field(institution_name)]
+            return holdings
 
 
 class VDLiedReader(VDCommonMixin, SRUMarc21BibliographicalReader):

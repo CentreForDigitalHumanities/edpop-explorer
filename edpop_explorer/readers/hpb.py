@@ -1,14 +1,15 @@
 from rdflib import URIRef
-from typing import Optional
+from typing import Optional, List
 
 from edpop_explorer import (
-    SRUMarc21BibliographicalReader, Marc21Data, BIBLIOGRAPHICAL
+    SRUMarc21BibliographicalReader, Marc21Data, BIBLIOGRAPHICAL, Field
 )
 
 
 class HPBReader(SRUMarc21BibliographicalReader):
     sru_url = 'http://sru.k10plus.de/hpb'
     sru_version = '1.1'
+    sru_additional_schema = 'picaxml'
     HPB_LINK = 'http://hpb.cerl.org/record/{}'
     CATALOG_URIREF = URIRef(
         'https://edpop.hum.uu.nl/readers/hpb'
@@ -44,7 +45,6 @@ class HPBReader(SRUMarc21BibliographicalReader):
                     field.subfields['a'].startswith('(CERL)'):
                 return field.subfields['a'][len('(CERL)'):]
 
-
     @classmethod
     def _get_link(cls, data: Marc21Data) -> Optional[str]:
         identifier = cls._get_identifier(data)
@@ -52,3 +52,18 @@ class HPBReader(SRUMarc21BibliographicalReader):
             return cls.HPB_LINK.format(identifier)
         else:
             return None
+
+    @classmethod
+    def _get_holdings(cls, data: Marc21Data) -> List[Field]:
+        holdings: List[Field] = []
+        holdings_fields = data.get_fields('009B', picaxml=True)
+        for field in holdings_fields:
+            institution = field.subfields.get('c')
+            shelf_mark = field.subfields.get('a')
+            if institution and shelf_mark:
+                holdings.append(Field(f'{institution} / {shelf_mark}'))
+            elif institution:
+                holdings.append(Field(institution))
+            elif shelf_mark:
+                holdings.append(Field(shelf_mark))
+        return holdings
