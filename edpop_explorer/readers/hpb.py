@@ -2,8 +2,15 @@ from rdflib import URIRef
 from typing import Optional, List
 
 from edpop_explorer import (
-    SRUMarc21BibliographicalReader, Marc21Data, BIBLIOGRAPHICAL, Field
+    SRUMarc21BibliographicalReader, Marc21Data, BIBLIOGRAPHICAL, Field, Marc21Field
 )
+from edpop_explorer.readers.utils import format_holding
+
+
+def holding_from_marc21(field: Marc21Field) -> Field:
+    institution = field.subfields.get('c')
+    shelf_mark = field.subfields.get('a')
+    return format_holding(institution, shelf_mark)
 
 
 class HPBReader(SRUMarc21BibliographicalReader):
@@ -55,15 +62,5 @@ class HPBReader(SRUMarc21BibliographicalReader):
 
     @classmethod
     def _get_holdings(cls, data: Marc21Data) -> List[Field]:
-        holdings: List[Field] = []
         holdings_fields = data.get_fields('009B', picaxml=True)
-        for field in holdings_fields:
-            institution = field.subfields.get('c')
-            shelf_mark = field.subfields.get('a')
-            if institution and shelf_mark:
-                holdings.append(Field(f'{institution} / {shelf_mark}'))
-            elif institution:
-                holdings.append(Field(institution))
-            elif shelf_mark:
-                holdings.append(Field(shelf_mark))
-        return holdings
+        return list(filter(None, map(holding_from_marc21, holdings_fields)))
