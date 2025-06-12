@@ -18,7 +18,12 @@ def get_isil_name_by_code(code: str) -> Optional[str]:
     ``HTTPError`` in case of a network error."""
     uri = get_isil_uri(code)
     graph = Graph()
-    graph.parse(uri)
+    try:
+        graph.parse(uri)
+    except HTTPError as err:
+        if err.code == 404:
+            return None
+        raise
     value = graph.value(URIRef(uri), DBP.shortName)
     if not value:
         return None
