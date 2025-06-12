@@ -78,9 +78,7 @@ class SRUReader(GetByIdBasedOnQueryMixin, Reader):
                     session=self.session,
                     record_schema=schema,
                 ))
-            except (
-                sruthi.errors.SruError
-            ) as err:
+            except sruthi.errors.SruError as err:
                 raise ReaderError('Server returned error: ' + str(err))
 
         self.number_of_results = responses[0].count
