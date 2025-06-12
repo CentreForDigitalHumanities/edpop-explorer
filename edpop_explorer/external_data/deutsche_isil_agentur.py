@@ -7,8 +7,7 @@ from rdflib import Graph, URIRef, Namespace
 DBP = Namespace("http://dbpedia.org/property/")
 
 
-def get_isil_uri(code: str) -> str:
-    return f"https://ld.zdb-services.de/resource/organisations/{code}"
+get_isil_uri = "https://ld.zdb-services.de/resource/organisations/{}".format
 
 
 @cache
