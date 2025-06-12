@@ -1,3 +1,5 @@
+from operator import or_
+
 import sruthi
 import requests
 from abc import abstractmethod
@@ -83,11 +85,12 @@ class SRUReader(GetByIdBasedOnQueryMixin, Reader):
 
         self.number_of_results = responses[0].count
 
-        records: List[Record] = []
-        for i, sruthirecord in enumerate(responses[0][0:maximum_records]):
-            if len(responses) > 1:
-                sruthirecord |= responses[1][i]
-            records.append(self._convert_record(sruthirecord))
+        raw_records = responses[0][0:maximum_records]
+        if len(responses) == 2:
+            # Merge the raw records from the second response into the raw
+            # records of the first response
+            raw_records = map(or_, raw_records, responses[1])
+        records = list(map(self._convert_record, raw_records))
 
         return records
 
