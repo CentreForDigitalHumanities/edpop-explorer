@@ -8,8 +8,7 @@ DBP = Namespace("http://dbpedia.org/property/")
 _code_to_name = {}
 
 
-def get_isil_uri(code: str) -> str:
-    return f"https://ld.zdb-services.de/resource/organisations/{code}"
+get_isil_uri = "https://ld.zdb-services.de/resource/organisations/{}".format
 
 
 def get_isil_name_by_code(code: str) -> Optional[str]:
