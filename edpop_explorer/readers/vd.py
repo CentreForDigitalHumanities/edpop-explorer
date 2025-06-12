@@ -1,4 +1,5 @@
 from typing import Optional, List
+from urllib.error import HTTPError
 
 from rdflib import URIRef
 
@@ -71,7 +72,10 @@ class VD17Reader(VDCommonMixin, SRUMarc21BibliographicalReader):
             institution_code = field.subfields.get('B')
             if not institution_code:
                 institution_code = field.subfields.get('b')  # Try again with lowercase b...
-            institution_name = get_isil_name_by_code(f"DE-{institution_code}") if institution_code else None
+            try:
+                institution_name = get_isil_name_by_code(f"DE-{institution_code}") if institution_code else None
+            except HTTPError:
+                institution_name = institution_code
             shelfmark = field.subfields.get('a')
             if institution_name and shelfmark:
                 holdings.append(Field(f"{institution_name} / {shelfmark}"))
@@ -131,7 +135,10 @@ class VD18Reader(VDCommonMixin, SRUMarc21BibliographicalReader):
         if holdings_fields:
             for field in holdings_fields:
                 institution_code = field.subfields.get('5')
-                institution_name = get_isil_name_by_code(institution_code) if institution_code else None
+                try:
+                    institution_name = get_isil_name_by_code(institution_code) if institution_code else None
+                except HTTPError:
+                    institution_name = institution_code
                 shelfmark = field.subfields.get('3')
                 if institution_name and shelfmark:
                     holdings.append(Field(f"{institution_name} / {shelfmark}"))
@@ -144,7 +151,10 @@ class VD18Reader(VDCommonMixin, SRUMarc21BibliographicalReader):
             # If holding not available, try to get the holding institution through the Redaktion field instead
             holding_inst = data.get_first_subfield('850', 'a').removeprefix('RedVD18-')
             if holding_inst:
-                institution_name = get_isil_name_by_code(holding_inst)
+                try:
+                    institution_name = get_isil_name_by_code(holding_inst)
+                except HTTPError:
+                    institution_name = holding_inst
                 if not institution_name:
                     institution_name = holding_inst
                 return [Field(institution_name)]
