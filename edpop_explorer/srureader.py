@@ -62,7 +62,7 @@ class SRUReader(GetByIdBasedOnQueryMixin, Reader):
         if maximum_records is None:
             maximum_records = self.DEFAULT_RECORDS_PER_PAGE
 
-        schemas = [self.sru_schema]  # This may be None, in which the server's default is used
+        schemas = [self.sru_schema]  # This may be None, in which case the server's default is used
         if self.sru_additional_schema is not None:
             schemas.append(self.sru_additional_schema)
 
