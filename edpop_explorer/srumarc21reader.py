@@ -22,8 +22,8 @@ with open(READABLE_FIELDS_FILE) as dictionary_file:
 class Marc21Field:
     """Python representation of a single field in a Marc21 record"""
     fieldnumber: str
-    indicator1: str
-    indicator2: str
+    indicator1: Optional[str] = None
+    indicator2: Optional[str] = None
     subfields: Dict[str, str] = dataclass_field(default_factory=dict)
     description: Optional[str] = None
 
@@ -32,8 +32,8 @@ class Marc21Field:
         Return the usual marc21 representation
         '''
         sf = []
-        ind1 = self.indicator1 if self.indicator1.rstrip() != '' else '#'
-        ind2 = self.indicator1 if self.indicator2.rstrip() != '' else '#'
+        ind1 = self.indicator1 if self.indicator1 and self.indicator1.rstrip() != '' else '#'
+        ind2 = self.indicator1 if self.indicator2 and self.indicator2.rstrip() != '' else '#'
         description = ' ({})'.format(self.description) \
             if self.description else ''
         for subfield in self.subfields:
@@ -54,41 +54,42 @@ class Marc21Data(RawData):
     # appear more than once
     fields: List[Marc21Field] = dataclass_field(default_factory=list)
     controlfields: Dict[str, str] = dataclass_field(default_factory=dict)
+    picafields: List[Marc21Field] = dataclass_field(default_factory=list)
     raw: dict = dataclass_field(default_factory=dict)
 
-    def get_first_field(self, fieldnumber: str) -> Optional[Marc21Field]:
+    def get_first_field(self, fieldnumber: str, picaxml=False) -> Optional[Marc21Field]:
         '''Return the first occurance of a field with a given field number.
         May be useful for fields that appear only once, such as 245.
         Return None if field is not found.'''
-        for field in self.fields:
+        for field in (self.fields if not picaxml else self.picafields):
             if field.fieldnumber == fieldnumber:
                 return field
         return None
 
-    def get_first_subfield(self, fieldnumber: str, subfield: str) -> Optional[str]:
+    def get_first_subfield(self, fieldnumber: str, subfield: str, picaxml=False) -> Optional[str]:
         '''Return the requested subfield of the first occurance of a field with
         the given field number. Return None if field is not found or if the
         subfield is not present on the first occurance of the field.'''
-        field = self.get_first_field(fieldnumber)
+        field = self.get_first_field(fieldnumber, picaxml=picaxml)
         if field is not None:
             return field.subfields.get(subfield, None)
         else:
             return None
 
-    def get_fields(self, fieldnumber: str) -> List[Marc21Field]:
+    def get_fields(self, fieldnumber: str, picaxml=False) -> List[Marc21Field]:
         '''Return a list of fields with a given field number. May return an
         empty list if field does not occur.'''
         returned_fields: List[Marc21Field] = []
-        for field in self.fields:
+        for field in (self.fields if not picaxml else self.picafields):
             if field.fieldnumber == fieldnumber:
                 returned_fields.append(field)
         return returned_fields
 
-    def get_all_subfields(self, fieldnumber: str, subfield: str) -> List[str]:
+    def get_all_subfields(self, fieldnumber: str, subfield: str, picaxml=False) -> List[str]:
         '''Return a list of subfields that matches the requested field number
         and subfield. May return an empty list if the field and subfield do not
         occur.'''
-        fields = self.get_fields(fieldnumber)
+        fields = self.get_fields(fieldnumber, picaxml)
         returned_subfields: List[str] = []
         for field in fields:
             if subfield in field.subfields:
@@ -125,13 +126,14 @@ class SRUMarc21Reader(SRUReader):
     .. automethod:: _get_link
     .. automethod:: _get_identifier'''
     marcxchange_prefix: str = ''
+    picaxml_prefix: str = 'info:srw/schema/5/picaXML-v1.0:'
 
     @classmethod
-    def _get_subfields(cls, sruthifield) -> list:
+    def _get_subfields(cls, sruthifield, ns_prefix: str = None) -> list:
         # If there is only one subfield, sruthi puts it directly in
         # a dict, otherwise it uses a list of dicts. Make sure that
         # we always have a list.
-        subfielddata = sruthifield[f'{cls.marcxchange_prefix}subfield']
+        subfielddata = sruthifield[f'{ns_prefix}subfield']
         if isinstance(subfielddata, dict):
             sruthisubfields = [subfielddata]
         else:
@@ -168,12 +170,29 @@ class SRUMarc21Reader(SRUReader):
             # easily understand the record.
             if fieldnumber in translation_dictionary:
                 field.description = translation_dictionary[fieldnumber]
-            sruthisubfields = cls._get_subfields(sruthifield)
+            sruthisubfields = cls._get_subfields(sruthifield, ns_prefix=cls.marcxchange_prefix)
 
             for sruthisubfield in sruthisubfields:
                 field.subfields[sruthisubfield['code']] = \
                     sruthisubfield['text']
             data.fields.append(field)
+        # Finally, include the fields of the PicaXML of the record,
+        # if available.
+        if pica_data := sruthirecord.get(f'{cls.picaxml_prefix}datafield'):
+            for sruthifield in pica_data:
+                fieldnumber = sruthifield['tag']
+                field = Marc21Field(
+                    fieldnumber=fieldnumber,
+                    subfields={}
+                )
+                sruthisubfields = cls._get_subfields(sruthifield, ns_prefix=cls.picaxml_prefix)
+                for sruthisubfield in sruthisubfields:
+                    try:
+                        text = sruthisubfield.get('text')
+                        field.subfields[sruthisubfield['code']] = text
+                    except KeyError:
+                        pass  # Code should be present, but don't crash if not
+                data.picafields.append(field)
         return data
     
     @classmethod
@@ -219,9 +238,9 @@ class SRUMarc21BibliographicalReader(SRUMarc21Reader):
     READERTYPE = BIBLIOGRAPHICAL
     
     @classmethod
-    def _convert_record(cls, sruthirecord: dict) -> Marc21BibliographicalRecord:
+    def _convert_record(cls, raw_data: dict) -> Marc21BibliographicalRecord:
         record = Marc21BibliographicalRecord(from_reader=cls)
-        data = cls._convert_to_marc21data(sruthirecord)
+        data = cls._convert_to_marc21data(raw_data)
         record.data = data
         record.link = cls._get_link(data)
         record.identifier = cls._get_identifier(data)
@@ -270,6 +289,9 @@ class SRUMarc21BibliographicalReader(SRUMarc21Reader):
         # Add the contributors
         record.contributors = cls._get_contributors(data)
 
+        # Add the holdings
+        record.holdings = cls._get_holdings(data)
+
         return record
 
     @classmethod
@@ -281,4 +303,10 @@ class SRUMarc21BibliographicalReader(SRUMarc21Reader):
             if name:
                 contributors.append(Field(name))
         return contributors
+
+    @classmethod
+    def _get_holdings(cls, data: Marc21Data) -> List[Field]:
+        # There is no default place where the holdings can be found, so
+        # leave this to readers.
+        return []
 

@@ -28,7 +28,7 @@ class DutchAlmanacsReader(DatabaseFileMixin, Reader):
         record.contributors = [Field(author.strip()) for author in rawrecord['Auteur'].split('/')]
         record.title = Field(rawrecord['Titel'])
         record.physical_description = Field(rawrecord['Formaat'])
-        record.location = Field(rawrecord['Vindplaats'])
+        record.holdings = [Field(rawrecord['Vindplaats'])]
         record.publisher_or_printer = Field(rawrecord['Drukker'])
         return record
 
