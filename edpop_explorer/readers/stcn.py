@@ -2,7 +2,7 @@ from rdflib import URIRef
 from typing import List, Optional, Tuple, Type
 
 from edpop_explorer import Field, BIBLIOGRAPHICAL, BibliographicalRecord, LocationField, BIOGRAPHICAL, \
-    BiographicalRecord
+    BiographicalRecord, DigitizationField
 from edpop_explorer.cerl import CERLReader
 from edpop_explorer.fields import LanguageField, ContributorField
 
@@ -73,6 +73,33 @@ def _wrap_holding(holding_data: dict) -> Field:
     shelfmark = safeget(holding_data, ("data", "shelfmark"))
     summary = f"{institution} - {shelfmark}"
     return Field(summary)
+
+
+def _wrap_digitization_from_holding(holding_data: dict) -> Optional[DigitizationField]:
+    # One of the electronicResource and electronicReproduction field may
+    # contain the digitization. See which (if any) is available.
+    # Since the digitizations are connected to holdings and often
+    # come together with a physical holding, we accept that some of the
+    # information is repeated in the holding field.
+    electronic_resource = safeget(holding_data, ("data", "electronicResource"), first=True)
+    electronic_reproduction = safeget(holding_data, ("data", "electronicReproduction"), first=True)
+    if electronic_resource:
+        dig_data = electronic_resource
+    elif electronic_reproduction:
+        dig_data = electronic_reproduction
+    else:
+        return None
+    institution = safeget(holding_data, ("data", "institutionName"))
+    shelfmark = safeget(holding_data, ("data", "shelfmark"))
+    display_text = safeget(dig_data, ("displayText",))
+    url = safeget(dig_data, ("url",))
+    format_ = safeget(dig_data, ("format",))
+    field = DigitizationField(url)
+    field.url = url
+    field.description = f"{display_text} ({institution}, {shelfmark})"
+    if format_ in ["jpeg", "jpg", "png"]:
+        field.preview_url = field.url
+    return field
 
 
 def _wrap_in_fields(data: List, key: Optional[str] = None, fieldclass: Type[Field]=Field) -> Optional[List[Field]]:
@@ -333,6 +360,14 @@ class STCNReader(STCNBaseReader):
         return [Field(FEATURES.get(x, x)) for x in features]
 
     @classmethod
+    def _get_digitization(cls, rawrecord: dict) -> List[Field]:
+        holdings = safeget(rawrecord, ("data", "holdings"))
+        if holdings is None:
+            return []
+        digitizations = [_wrap_digitization_from_holding(x) for x in holdings]
+        return [x for x in digitizations if x]
+
+    @classmethod
     def _convert_record(cls, rawrecord: dict) -> BibliographicalRecord:
         record = BibliographicalRecord(from_reader=cls)
         record.data = rawrecord
@@ -352,4 +387,5 @@ class STCNReader(STCNBaseReader):
         record.genres = cls._get_genres(rawrecord)
         record.holdings = cls._get_holdings(rawrecord)
         record.typographical_features = cls._get_typographical_features(rawrecord)
+        record.digitization = cls._get_digitization(rawrecord)
         return record
