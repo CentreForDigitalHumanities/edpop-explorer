@@ -83,11 +83,8 @@ def _wrap_digitization_from_holding(holding_data: dict) -> Optional[Digitization
     # information is repeated in the holding field.
     electronic_resource = safeget(holding_data, ("data", "electronicResource"), first=True)
     electronic_reproduction = safeget(holding_data, ("data", "electronicReproduction"), first=True)
-    if electronic_resource:
-        dig_data = electronic_resource
-    elif electronic_reproduction:
-        dig_data = electronic_reproduction
-    else:
+    dig_data = electronic_resource or electronic_reproduction
+    if not dig_data:
         return None
     institution = safeget(holding_data, ("data", "institutionName"))
     shelfmark = safeget(holding_data, ("data", "shelfmark"))
