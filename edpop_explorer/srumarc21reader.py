@@ -1,11 +1,11 @@
 from dataclasses import dataclass, field as dataclass_field
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, assert_type
 import csv
 from pathlib import Path
-from abc import abstractmethod
+from abc import abstractmethod, ABC
 
 from edpop_explorer import (
-    BibliographicalRecord, RawData, SRUReader, Field, BIBLIOGRAPHICAL
+    BibliographicalRecord, RawData, SRUReader, Field, BIBLIOGRAPHICAL, Reader
 )
 from edpop_explorer.fields import LanguageField
 
@@ -215,14 +215,7 @@ class Marc21BibliographicalRecord(Marc21DataMixin, BibliographicalRecord):
     pass
 
 
-class SRUMarc21BibliographicalReader(SRUMarc21Reader):
-    '''Subclass of ``SRUMarc21Reader`` that adds functionality to create
-    instances of ``BibliographicRecord``.
-
-    This subclass assumes that the Marc21 data is according to the standard
-    format of Marc21 for bibliographical data. See:
-    https://www.loc.gov/marc/bibliographic/
-    '''
+class Marc21BibliographicalReaderMixin(Reader, ABC):
     _title_field_subfield = ('245', 'a')
     _alternative_title_field_subfield = ('246', 'a')
     _publisher_field_subfield = ('264', 'b')
@@ -234,13 +227,19 @@ class SRUMarc21BibliographicalReader(SRUMarc21Reader):
     _size_field_subfield = ('300', 'c')
     _fingerprint_field_subfield = ('026', 'e')
 
-    records: List[Marc21BibliographicalRecord]
-    READERTYPE = BIBLIOGRAPHICAL
-    
     @classmethod
-    def _convert_record(cls, raw_data: dict) -> Marc21BibliographicalRecord:
+    @abstractmethod
+    def _get_link(cls, data: Marc21Data) -> Optional[str]:
+        pass
+
+    @classmethod
+    @abstractmethod
+    def _get_identifier(cls, data: Marc21Data) -> Optional[str]:
+        pass
+
+    @classmethod
+    def _marc21data_to_record(cls, data: Marc21Data) -> Marc21BibliographicalRecord:
         record = Marc21BibliographicalRecord(from_reader=cls)
-        data = cls._convert_to_marc21data(raw_data)
         record.data = data
         record.link = cls._get_link(data)
         record.identifier = cls._get_identifier(data)
@@ -309,4 +308,22 @@ class SRUMarc21BibliographicalReader(SRUMarc21Reader):
         # There is no default place where the holdings can be found, so
         # leave this to readers.
         return []
+
+
+class SRUMarc21BibliographicalReader(SRUMarc21Reader, Marc21BibliographicalReaderMixin, ABC):
+    '''Subclass of ``SRUMarc21Reader`` that adds functionality to create
+    instances of ``BibliographicRecord``.
+
+    This subclass assumes that the Marc21 data is according to the standard
+    format of Marc21 for bibliographical data. See:
+    https://www.loc.gov/marc/bibliographic/
+    '''
+
+    records: List[Marc21BibliographicalRecord]
+    READERTYPE = BIBLIOGRAPHICAL
+    
+    @classmethod
+    def _convert_record(cls, raw_data: dict) -> Marc21BibliographicalRecord:
+        data = cls._convert_to_marc21data(raw_data)
+        return cls._marc21data_to_record(data)
 
