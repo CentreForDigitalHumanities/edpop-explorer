@@ -27,6 +27,7 @@ from edpop_explorer.readers import (
     KVCSReader,
     DutchAlmanacsReader,
     PierreBelleReader,
+    ESTCReader,
 )
 
 
@@ -218,6 +219,10 @@ class EDPOPXShell(cmd2.Cmd):
     def do_pb(self, args) -> None:
         'BIBLIOGRAPHY OF EARLY MODERN EDITIONS OF PIERRE DE PROVENCE ET LA BELLE MAGUELONNE (CA. 1470–CA. 1800)'
         self._query(PierreBelleReader, args)
+
+    def do_estc(self, args) -> None:
+        'English Short Title Catalogue'
+        self._query(ESTCReader, args)
 
     def _show_records(self, records: List[Optional[Record]],
                       start: int,
