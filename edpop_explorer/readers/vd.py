@@ -1,12 +1,36 @@
 from typing import Optional, List
+from urllib.error import HTTPError
 
 from rdflib import URIRef
 
-from edpop_explorer import SRUMarc21BibliographicalReader, Marc21Data, Marc21BibliographicalRecord, Field
+from edpop_explorer import SRUMarc21BibliographicalReader, Marc21Data, Marc21BibliographicalRecord, Field, Marc21Field
 from edpop_explorer.external_data.deutsche_isil_agentur import get_isil_name_by_code
+from edpop_explorer.readers.utils import format_holding
 
 
-class VDCommonMixin():
+def holding_from_marc21_vd17(field: Marc21Field) -> Optional[Field]:
+    institution_code = field.subfields.get('B')
+    if not institution_code:
+        institution_code = field.subfields.get('b')  # Try again with lowercase b...
+    try:
+        institution = get_isil_name_by_code(f"DE-{institution_code}") if institution_code else None
+    except HTTPError:
+        institution = institution_code
+    shelf_mark = field.subfields.get('a')
+    return format_holding(institution, shelf_mark)
+
+
+def holding_from_marc21_vd18(field: Marc21Field) -> Optional[Field]:
+    institution_code = field.subfields.get('5')
+    try:
+        institution = get_isil_name_by_code(institution_code) if institution_code else None
+    except HTTPError:
+        institution = institution_code
+    shelfmark = field.subfields.get('3')
+    return format_holding(institution, shelfmark)
+
+
+class VDCommonMixin:
     LINK_FORMAT: str
 
     @classmethod
@@ -65,21 +89,8 @@ class VD17Reader(VDCommonMixin, SRUMarc21BibliographicalReader):
         # Information is spread out over several repeated fields, but
         # the signature and (most of the times) the ISIL code of the
         # holding institution is available in field 209A.
-        holdings: List[Field] = []
         holdings_fields = data.get_fields('209A', picaxml=True)
-        for field in holdings_fields:
-            institution_code = field.subfields.get('B')
-            if not institution_code:
-                institution_code = field.subfields.get('b')  # Try again with lowercase b...
-            institution_name = get_isil_name_by_code(f"DE-{institution_code}") if institution_code else None
-            shelfmark = field.subfields.get('a')
-            if institution_name and shelfmark:
-                holdings.append(Field(f"{institution_name} / {shelfmark}"))
-            elif institution_name:
-                holdings.append(Field(institution_name))
-            elif shelfmark:
-                holdings.append(Field(shelfmark))
-        return holdings
+        return list(filter(None, map(holding_from_marc21_vd17, holdings_fields)))
 
 
 class VD18Reader(VDCommonMixin, SRUMarc21BibliographicalReader):
@@ -126,29 +137,21 @@ class VD18Reader(VDCommonMixin, SRUMarc21BibliographicalReader):
     @classmethod
     def _get_holdings(cls, data: Marc21Data) -> List[Field]:
         # Holdings are in the repeated picaXML field 092B.
-        holdings: List[Field] = []
         holdings_fields = data.get_fields('092B', picaxml=True)
         if holdings_fields:
-            for field in holdings_fields:
-                institution_code = field.subfields.get('5')
-                institution_name = get_isil_name_by_code(institution_code) if institution_code else None
-                shelfmark = field.subfields.get('3')
-                if institution_name and shelfmark:
-                    holdings.append(Field(f"{institution_name} / {shelfmark}"))
-                elif institution_name:
-                    holdings.append(Field(institution_name))
-                elif shelfmark:
-                    holdings.append(Field(shelfmark))
-            return holdings
+            return list(filter(None, map(holding_from_marc21_vd18, holdings_fields)))
         else:
             # If holding not available, try to get the holding institution through the Redaktion field instead
             holding_inst = data.get_first_subfield('850', 'a').removeprefix('RedVD18-')
             if holding_inst:
-                institution_name = get_isil_name_by_code(holding_inst)
+                try:
+                    institution_name = get_isil_name_by_code(holding_inst)
+                except HTTPError:
+                    institution_name = holding_inst
                 if not institution_name:
                     institution_name = holding_inst
                 return [Field(institution_name)]
-            return holdings
+            return []
 
 
 class VDLiedReader(VDCommonMixin, SRUMarc21BibliographicalReader):

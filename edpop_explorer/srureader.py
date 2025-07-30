@@ -1,3 +1,5 @@
+from operator import or_
+
 import sruthi
 import requests
 from abc import abstractmethod
@@ -62,7 +64,7 @@ class SRUReader(GetByIdBasedOnQueryMixin, Reader):
         if maximum_records is None:
             maximum_records = self.DEFAULT_RECORDS_PER_PAGE
 
-        schemas = [self.sru_schema]  # This may be None, in which the server's default is used
+        schemas = [self.sru_schema]  # This may be None, in which case the server's default is used
         if self.sru_additional_schema is not None:
             schemas.append(self.sru_additional_schema)
 
@@ -78,18 +80,17 @@ class SRUReader(GetByIdBasedOnQueryMixin, Reader):
                     session=self.session,
                     record_schema=schema,
                 ))
-            except (
-                sruthi.errors.SruError
-            ) as err:
+            except sruthi.errors.SruError as err:
                 raise ReaderError('Server returned error: ' + str(err))
 
         self.number_of_results = responses[0].count
 
-        records: List[Record] = []
-        for i, sruthirecord in enumerate(responses[0][0:maximum_records]):
-            if len(responses) > 1:
-                sruthirecord |= responses[1][i]
-            records.append(self._convert_record(sruthirecord))
+        raw_records = responses[0][0:maximum_records]
+        if len(responses) == 2:
+            # Merge the raw records from the second response into the raw
+            # records of the first response
+            raw_records = map(or_, raw_records, responses[1])
+        records = list(map(self._convert_record, raw_records))
 
         return records
 
