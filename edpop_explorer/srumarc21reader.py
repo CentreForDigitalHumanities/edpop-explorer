@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field as dataclass_field
-from typing import Dict, List, Optional, assert_type
+from typing import Dict, List, Optional
 import csv
 from pathlib import Path
 from abc import abstractmethod, ABC

@@ -2,7 +2,7 @@ from typing import Optional
 
 from rdflib import URIRef
 
-from edpop_explorer import CERLReader, BiographicalRecord, BIBLIOGRAPHICAL, Field
+from edpop_explorer import CERLReader, BIBLIOGRAPHICAL, Field
 from edpop_explorer.fields import LanguageField
 from edpop_explorer.readers.utils import format_holding
 from edpop_explorer.srumarc21reader import Marc21BibliographicalReaderMixin, Marc21Data, Marc21BibliographicalRecord, \
