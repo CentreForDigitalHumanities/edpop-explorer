@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field as dataclass_field
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Union
 import csv
 from pathlib import Path
 from abc import abstractmethod, ABC
@@ -64,7 +64,7 @@ class Marc21Data(RawData):
                 return field
         return None
 
-    def get_first_subfield(self, fieldnumber: str, subfield: str | tuple[str], picaxml=False) -> Optional[str]:
+    def get_first_subfield(self, fieldnumber: str, subfield: Union[str, tuple[str]], picaxml=False) -> Optional[str]:
         '''Return the requested subfield of the first occurance of a field with
         the given field number. Return None if field is not found or if the
         subfield is not present on the first occurance of the field.
