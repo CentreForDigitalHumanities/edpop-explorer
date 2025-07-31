@@ -66,13 +66,18 @@ class Marc21Data(RawData):
                 return field
         return None
 
-    def get_first_subfield(self, fieldnumber: str, subfield: str, picaxml=False) -> Optional[str]:
+    def get_first_subfield(self, fieldnumber: str, subfield: str | tuple[str], picaxml=False) -> Optional[str]:
         '''Return the requested subfield of the first occurance of a field with
         the given field number. Return None if field is not found or if the
-        subfield is not present on the first occurance of the field.'''
+        subfield is not present on the first occurance of the field.
+        ``subfield`` may be a tuple, in that case a concatenation of all
+        given subfields is returned.'''
         field = self.get_first_field(fieldnumber, picaxml=picaxml)
         if field is not None:
-            return field.subfields.get(subfield, None)
+            if isinstance(subfield, tuple):
+                return ' '.join(field.subfields.get(x, '') for x in subfield)
+            else:
+                return field.subfields.get(subfield, None)
         else:
             return None
 

@@ -2,7 +2,9 @@ from typing import Optional
 
 from rdflib import URIRef
 
-from edpop_explorer import CERLReader, BiographicalRecord, BIBLIOGRAPHICAL
+from edpop_explorer import CERLReader, BiographicalRecord, BIBLIOGRAPHICAL, Field
+from edpop_explorer.fields import LanguageField
+from edpop_explorer.readers.utils import format_holding
 from edpop_explorer.srumarc21reader import Marc21BibliographicalReaderMixin, Marc21Data, Marc21BibliographicalRecord, \
     Marc21Field
 
@@ -17,10 +19,40 @@ class ESTCReader(CERLReader, Marc21BibliographicalReaderMixin):
     READERTYPE = BIBLIOGRAPHICAL
     SHORT_NAME = "English Short Title Catalogue"
 
+    _title_field_subfield = ('245', ('a', 'b'))
+    _alternative_title_field_subfield = ('246', 'a')
+    _publisher_field_subfield = ('260', ('a', 'b'))
+    _place_field_subfield = ('752', 'd')
+    _dating_field_subfield = ('260', 'c')  # NB: consider using the "dates" part out of the Marc21 data
+    _extent_field_subfield = ('300', 'a')
+    _physical_description_field_subfield = ('300', 'b')
+    _size_field_subfield = ('300', 'c')
+
     @classmethod
     def _convert_record(cls, rawrecord: dict) -> Marc21BibliographicalRecord:
         data = cls._convert_to_marc21data(rawrecord)
-        return cls._marc21data_to_record(data)
+        record = cls._marc21data_to_record(data)
+
+        # Some data is available outside the Marc21 data structure, so add it here.
+        language: Optional[str] = rawrecord.get('language', None)
+        if language is not None:
+            language_field = LanguageField(language)
+            language_field.normalize()
+            record.languages = [language_field]
+
+        holding_data: Optional[list] = rawrecord.get('holdings', None)
+        holdings = []
+        if holding_data:
+            assert isinstance(holding_data, list)
+            for holding in holding_data:
+                data = holding.get('data', None)
+                if data:
+                    institution = data.get('institution', None)
+                    shelf_mark = data.get('smk', None)
+                    holdings.append(format_holding(institution, shelf_mark))
+        record.holdings = holdings if holdings else None
+
+        return record
 
     @classmethod
     def _convert_to_marc21data(cls, raw_data: dict) -> Marc21Data:
@@ -42,8 +74,8 @@ class ESTCReader(CERLReader, Marc21BibliographicalReaderMixin):
                         field = Marc21Field(field_number)
                         field.indicator1 = field_data.get('ind1', None)
                         field.indicator2 = field_data.get('ind2', None)
-                        subfields = field_data.get('clean_subfields', None) or field_data.get('subfields', None)
-                        for subfield_data in field_data['subfields']:
+                        subfields = field_data.get('clean_subfields', None) or field_data.get('subfields', [])
+                        for subfield_data in subfields:
                             for subfield_code, contents in subfield_data.items():
                                 field.subfields[subfield_code] = contents
                         data.fields.append(field)
@@ -62,3 +94,15 @@ class ESTCReader(CERLReader, Marc21BibliographicalReaderMixin):
     @classmethod
     def _get_identifier(cls, data: Marc21Data) -> Optional[str]:
         return data.raw.get('id', None)
+
+    @classmethod
+    def _get_contributors(cls, data: Marc21Data) -> list[Field]:
+        contributors: list[Field] = []
+        contributor_fields = data.get_fields('100')
+        for field in contributor_fields:
+            name = field.subfields.get('a', '').rstrip(',')  # Remove any trailing comma
+            name2 = field.subfields.get('b', '').rstrip(',')
+            full_name = (name + ' ' + name2).strip()
+            if full_name:
+                contributors.append(Field(full_name))
+        return contributors
