@@ -1,8 +1,6 @@
 import operator
-from collections import defaultdict
 from functools import reduce
-from itertools import starmap
-from operator import methodcaller, itemgetter
+from operator import methodcaller
 from typing import Optional
 
 from rdflib import URIRef
