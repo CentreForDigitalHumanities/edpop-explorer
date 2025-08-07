@@ -112,9 +112,7 @@ class Marc21DataMixin():
     def show_record(self) -> str:
         if self.data is None:
             return "(no data)"
-        field_strings = []
-        for field in self.data.fields:
-            field_strings.append(str(field))
+        field_strings = list(map(str, self.data.fields))
         return '\n'.join(field_strings)
 
 
