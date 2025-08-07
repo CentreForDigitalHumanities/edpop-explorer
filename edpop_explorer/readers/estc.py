@@ -1,5 +1,8 @@
 import operator
+from collections import defaultdict
 from functools import reduce
+from itertools import starmap
+from operator import methodcaller, itemgetter
 from typing import Optional
 
 from rdflib import URIRef
@@ -58,16 +61,10 @@ class ESTCReader(CERLReader, Marc21BibliographicalReaderMixin):
             language_field.normalize()
             record.languages = [language_field]
 
-        holding_data: Optional[list] = rawrecord.get('holdings', None)
-        holdings = []
-        if holding_data:
-            assert isinstance(holding_data, list)
-            for holding in holding_data:
-                data = holding.get('data', None)
-                if data:
-                    institution = data.get('institution', None)
-                    shelf_mark = data.get('smk', None)
-                    holdings.append(format_holding(institution, shelf_mark))
+        holding_data = rawrecord.get('holdings', [])
+        extracts = map(methodcaller('get', 'data'), holding_data)
+        nonempty = filter(None, extracts)
+        holdings = [format_holding(x.get('institution'), x.get('smk')) for x in nonempty]
         record.holdings = holdings if holdings else None
 
         return record
