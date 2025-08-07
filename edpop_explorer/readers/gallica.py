@@ -59,6 +59,7 @@ class GallicaReader(SRUReader):
             preview_url = extra.get('medres', None)
 
         field = DigitizationField(iiif_manifest)
+        field.description = "IIIF digital object"
         field.iiif_manifest = iiif_manifest
         field.preview_url = preview_url
         return field

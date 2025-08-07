@@ -19,6 +19,7 @@ __all__ = [
     "KVCSReader",
     "DutchAlmanacsReader",
     "PierreBelleReader",
+    "ESTCReader",
     "ALL_READERS",
 ]
 
@@ -37,6 +38,7 @@ from .vd import VD16Reader, VD17Reader, VD18Reader, VDLiedReader
 from .kvcs import KVCSReader
 from .dutch_almanacs import DutchAlmanacsReader
 from .pierre_belle import PierreBelleReader
+from .estc import ESTCReader
 
 import sys
 from typing import List, Type

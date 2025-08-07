@@ -9,6 +9,7 @@ __all__ = [
     'SRUReader', 'CERLReader',
     'Marc21Data', 'Marc21Field', 'Marc21BibliographicalRecord',
     'Marc21DataMixin', 'SRUMarc21Reader', 'SRUMarc21BibliographicalReader',
+    'Marc21BibliographicalReaderMixin',
     'BIBLIOGRAPHICAL', 'BIOGRAPHICAL'
 ]
 
@@ -29,8 +30,14 @@ from .record import (
 )
 from .srureader import SRUReader
 from .srumarc21reader import (
-    Marc21Data, Marc21Field, Marc21BibliographicalRecord, Marc21DataMixin,
     SRUMarc21Reader, SRUMarc21BibliographicalReader
+)
+from .marc21 import (
+    Marc21BibliographicalReaderMixin,
+    Marc21Field,
+    Marc21BibliographicalRecord,
+    Marc21DataMixin,
+    Marc21Data,
 )
 from .cerl import CERLReader
 
