@@ -1,3 +1,5 @@
+import operator
+from functools import reduce
 from typing import Optional
 
 from rdflib import URIRef
@@ -7,6 +9,22 @@ from edpop_explorer.fields import LanguageField
 from edpop_explorer.readers.utils import format_holding
 from edpop_explorer.srumarc21reader import Marc21BibliographicalReaderMixin, Marc21Data, Marc21BibliographicalRecord, \
     Marc21Field
+
+
+def _flatten_sections(sections: dict) -> dict:
+    section_contents = sections.values()
+    return reduce(operator.or_, section_contents, {})
+
+def _parse_data_field(field_data: dict, field_number: str) -> Marc21Field:
+    # Data field; these have a complex structure
+    field = Marc21Field(field_number)
+    field.indicator1 = field_data.get('ind1', None)
+    field.indicator2 = field_data.get('ind2', None)
+    subfields = field_data.get('clean_subfields', None) or field_data.get('subfields', [])
+    for subfield_data in subfields:
+        for subfield_code, contents in subfield_data.items():
+            field.subfields[subfield_code] = contents
+    return field
 
 
 class ESTCReader(CERLReader, Marc21BibliographicalReaderMixin):
@@ -60,28 +78,19 @@ class ESTCReader(CERLReader, Marc21BibliographicalReaderMixin):
         data.raw = raw_data
         marc_sections = raw_data['sections']
         assert isinstance(marc_sections, dict)
-        for _, section_content in marc_sections.items():
-            # The Marc21 fields are divided into sections, but these are irrelevant to us.
-            assert isinstance(section_content, dict)
-            for field_number, repeated_fields in section_content.items():
-                # The field data may contain a list of fields, because fields may be repeated.
-                # Ensure that it is a list.
-                if not isinstance(repeated_fields, list):
-                    repeated_fields = [repeated_fields]
-                for field_data in repeated_fields:
-                    if isinstance(field_data, dict):
-                        # Data field; these have a complex structure
-                        field = Marc21Field(field_number)
-                        field.indicator1 = field_data.get('ind1', None)
-                        field.indicator2 = field_data.get('ind2', None)
-                        subfields = field_data.get('clean_subfields', None) or field_data.get('subfields', [])
-                        for subfield_data in subfields:
-                            for subfield_code, contents in subfield_data.items():
-                                field.subfields[subfield_code] = contents
-                        data.fields.append(field)
-                    elif isinstance(field_data, str):
-                        # Control field; these are simply pairs of numbers and data
-                        data.controlfields[field_number] = field_data
+        # The Marc21 fields are divided into sections, but these are irrelevant to us.
+        marc_data = _flatten_sections(marc_sections)
+        for field_number, repeated_fields in marc_data.items():
+            # The field data may contain a list of fields, because fields may be repeated.
+            # Ensure that it is a list.
+            if not isinstance(repeated_fields, list):
+                repeated_fields = [repeated_fields]
+            for field_data in repeated_fields:
+                if isinstance(field_data, dict):
+                    data.fields.append(_parse_data_field(field_data, field_number))
+                elif isinstance(field_data, str):
+                    # Control field; these are simply pairs of numbers and data
+                    data.controlfields[field_number] = field_data
         return data
 
     @classmethod
