@@ -31,8 +31,8 @@ DATATYPES = {
         )
     },
     'uriref': {
-        'input_type': URIRef,
-        'converter': lambda x: x,
+        'input_type': str,
+        'converter': lambda x: URIRef(x),
     },
 }
 
@@ -92,7 +92,7 @@ class Field:
             ('original_text', EDPOPREC.originalText, 'string'),
             ('summary_text', EDPOPREC.summaryText, 'string'),
             ('unknown', EDPOPREC.unknown, 'boolean'),
-            ('authority_record', EDPOPREC.authorityRecord, 'string'),
+            ('authority_record', EDPOPREC.authorityRecord, 'uriref'),
         ]
 
     def normalize(self) -> NormalizationResult:
