@@ -273,6 +273,9 @@ class STCNReader(STCNBaseReader):
         if name is None:
             return None
         field = Field(name)
+        thesaurus_id = provision_agent.get('id')
+        if thesaurus_id:
+            field.authority_record = STCNPrintersReader.identifier_to_iri(thesaurus_id)
         return field
 
     @classmethod
