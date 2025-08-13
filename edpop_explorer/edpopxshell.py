@@ -7,7 +7,7 @@ from pygments.lexers import TurtleLexer
 from pygments.lexers.data import YamlLexer
 from pygments.formatters import Terminal256Formatter
 
-from edpop_explorer import Reader, Record, ReaderError
+from edpop_explorer import Reader, Record, ReaderError, Field
 from edpop_explorer.readers import (
     FBTEEReader,
     GallicaReader,
@@ -29,6 +29,15 @@ from edpop_explorer.readers import (
     PierreBelleReader,
     ESTCReader,
 )
+
+
+def format_value(value: Field) -> str:
+    # Return string representation of value and add reference to other record
+    # if available
+    formatted = str(value)
+    if value.authority_record:
+        formatted += " -> " + cmd2.ansi.style(f"<{value.authority_record}>", bold=True)
+    return formatted
 
 
 class EDPOPXShell(cmd2.Cmd):
@@ -109,9 +118,9 @@ class EDPOPXShell(cmd2.Cmd):
             value = getattr(record, fieldname)
             if value:
                 if isinstance(value, list):
-                    text = '\n' + '\n'.join([('  - ' + str(x)) for x in value])
+                    text = '\n' + '\n'.join([('  - ' + format_value(x)) for x in value])
                 else:
-                    text = str(value)
+                    text = format_value(value)
                 self.poutput(
                     cmd2.ansi.style(f'- {fieldname_human}: ', bold=True) + text
                 )
