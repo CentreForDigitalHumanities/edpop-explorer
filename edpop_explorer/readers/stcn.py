@@ -65,6 +65,8 @@ def _wrap_contributor(actor_data: dict) -> ContributorField:
     field = ContributorField(actor_data['preferred'])
     field.name = actor_data['preferred']
     field.role = safeget(actor_data, ('role',), first=True)
+    stcn_persons_id = actor_data['id']
+    field.authority_record = STCNPersonsReader.identifier_to_iri(stcn_persons_id)
     return field
 
 
