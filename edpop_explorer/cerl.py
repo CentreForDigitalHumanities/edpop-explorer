@@ -4,11 +4,11 @@ import requests
 from typing import List, Dict, Optional
 
 from edpop_explorer import (
-    Reader, Record, ReaderError
+    Reader, Record, ReaderError, GetByIdBasedOnQueryMixin
 )
 
 
-class CERLReader(Reader):
+class CERLReader(GetByIdBasedOnQueryMixin, Reader):
     """A generic reader class for the CERL databases on the ``data.cerl.org``
     platform.
 
@@ -26,20 +26,8 @@ class CERLReader(Reader):
     DEFAULT_RECORDS_PER_PAGE = 10
 
     @classmethod
-    def get_by_id(cls, identifier: str) -> Record:
-        try:
-            response = requests.get(
-                cls.API_BY_ID_BASE_URL + identifier,
-                headers={
-                    'Accept': 'application/json'
-                },
-            ).json()
-        except requests.exceptions.JSONDecodeError:
-            raise ReaderError(f"Item with id {identifier} does not exist.")
-        except requests.exceptions.RequestException as err:
-            raise ReaderError(f"Error during server request: {err}")
-        return cls._convert_record(response)
-
+    def _prepare_get_by_id_query(cls, identifier: str) -> str:
+        return f"{identifier}"
 
     @classmethod
     @abstractmethod

@@ -65,6 +65,8 @@ def _wrap_contributor(actor_data: dict) -> ContributorField:
     field = ContributorField(actor_data['preferred'])
     field.name = actor_data['preferred']
     field.role = safeget(actor_data, ('role',), first=True)
+    stcn_persons_id = actor_data['id']
+    field.authority_record = STCNPersonsReader.identifier_to_iri(stcn_persons_id)
     return field
 
 
@@ -271,6 +273,9 @@ class STCNReader(STCNBaseReader):
         if name is None:
             return None
         field = Field(name)
+        thesaurus_id = provision_agent.get('id')
+        if thesaurus_id:
+            field.authority_record = STCNPrintersReader.identifier_to_iri(thesaurus_id)
         return field
 
     @classmethod
