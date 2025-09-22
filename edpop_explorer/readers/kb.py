@@ -6,7 +6,7 @@ from edpop_explorer.fields import LanguageField, ContributorField
 
 
 class KBReader(SRUReader):
-    sru_url = 'http://jsru.kb.nl/sru'
+    sru_url = 'https://jsru.kb.nl/sru/sru'
     sru_version = '1.2'
     KB_LINK = 'https://webggc.oclc.org/cbs/DB=2.37/PPN?PPN={}'
     CATALOG_URIREF = URIRef(
