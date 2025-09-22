@@ -56,8 +56,12 @@ class EDPOPXShell(cmd2.Cmd):
         super().__init__()
 
         self.exact = False
+        self.style = 'bw'
         self.add_settable(cmd2.Settable(
             'exact', bool, 'use exact queries without preprocessing', self
+        ))
+        self.add_settable(cmd2.Settable(
+            'style', str, 'pygments style for rendering RDF (see https://pygments.org/styles/)', self
         ))
 
     def get_record_from_argument(self, args) -> Optional[Record]:
@@ -135,7 +139,7 @@ class EDPOPXShell(cmd2.Cmd):
             graph = record.to_graph()
             ttl = graph.serialize()
             highlighted = highlight(
-                ttl, TurtleLexer(), Terminal256Formatter(style='vim')
+                ttl, TurtleLexer(), Terminal256Formatter(style=self.style)
             )
             self.poutput(highlighted)
         except ReaderError as err:
