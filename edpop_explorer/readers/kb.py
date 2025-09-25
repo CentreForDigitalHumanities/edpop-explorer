@@ -82,6 +82,7 @@ class KBReader(SRUReader):
         record.bibliographical_format = get_extent_like_fields(sruthirecord, 'bibliographical-format')
         record.publisher_or_printer = self._get_publisher(sruthirecord)
         record.contributors = self._get_contributors(sruthirecord)
+        record.dating = self._get_dating(sruthirecord)
         return record
     
     def _get_title(self, data) -> Optional[Field]:
@@ -134,3 +135,9 @@ class KBReader(SRUReader):
                 field.role = type_
                 contributors.append(field)
         return contributors
+
+    def _get_dating(self, data) -> Optional[Field]:
+        date = data.get('date', None)
+        # Dates are such as 'Wed Jan 01 01:00:00 CET 1992' - only the year is relevant.
+        if date:
+            return Field(date.split()[-1])
