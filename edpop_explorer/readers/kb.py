@@ -1,8 +1,33 @@
-from typing import Optional, List
+import re
+from typing import Optional, List, Literal
 from rdflib import URIRef
 from edpop_explorer import SRUReader, BibliographicalRecord, BIBLIOGRAPHICAL
 from edpop_explorer import Field
 from edpop_explorer.fields import LanguageField, ContributorField
+
+ExtentType = Literal['extent', 'size', 'bibliographical-format']
+
+
+def get_extent_type(input_string: str) -> ExtentType:
+    # KB's 'extent' field is broader than ours: it may also contain the
+    # bibliographical format or the size.
+    # If it is of the format in-<number>, assume bibliographical format.
+    if re.match(r'^in-\d+$', input_string):
+        return 'bibliographical-format'
+    elif input_string.endswith(' cm'):
+        return 'size'
+    else:
+        return 'extent'
+
+
+def get_extent_like_fields(data: dict, type_: ExtentType) -> List[Field]:
+    if not KBReader.EXTENT_LOCATION in data:
+        return []
+    if isinstance(data[KBReader.EXTENT_LOCATION], list):
+        extent = data[KBReader.EXTENT_LOCATION]
+    else:
+        extent = [data[KBReader.EXTENT_LOCATION]]
+    return list(map(Field, filter(lambda x: get_extent_type(x) == type_, extent)))
 
 
 class KBReader(SRUReader):
@@ -16,7 +41,7 @@ class KBReader(SRUReader):
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/kb/"
     SHORT_NAME = "Koninklijke Bibliotheek (KB)"
     DESCRIPTION = "General catalogue of KB, national library of The Netherlands."
-    _EXTENT_LOCATION = "http://purl.org/dc/terms/:extent"
+    EXTENT_LOCATION = "http://purl.org/dc/terms/:extent"
 
     def __init__(self):
         super().__init__()
@@ -55,8 +80,9 @@ class KBReader(SRUReader):
             record.link = self.KB_LINK.format(record.identifier)
         record.title = self._get_title(sruthirecord)
         record.languages = self._get_languages(sruthirecord)
-        record.extent = self._get_extent(sruthirecord)
-        record.size = self._get_size(sruthirecord)
+        record.extent = get_extent_like_fields(sruthirecord, 'extent')
+        record.size = get_extent_like_fields(sruthirecord, 'size')
+        record.bibliographical_format = get_extent_like_fields(sruthirecord, 'bibliographical-format')
         record.publisher_or_printer = self._get_publisher(sruthirecord)
         record.contributors = self._get_contributors(sruthirecord)
         return record
@@ -88,14 +114,6 @@ class KBReader(SRUReader):
         for field in fields:
             field.normalize()
         return fields
-
-    def _get_extent(self, data) -> Optional[Field]:
-        if self._EXTENT_LOCATION in data:
-            return Field(data[self._EXTENT_LOCATION][0])
-
-    def _get_size(self, data) -> Optional[Field]:
-        if self._EXTENT_LOCATION in data:
-            return Field(data[self._EXTENT_LOCATION][1])
 
     def _get_publisher(self, data) -> Optional[List[Field]]:
         if "publisher" in data:
