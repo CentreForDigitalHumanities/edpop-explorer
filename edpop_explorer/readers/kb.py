@@ -21,7 +21,7 @@ def get_extent_type(input_string: str) -> ExtentType:
 
 
 def get_extent_like_fields(data: dict, type_: ExtentType) -> List[Field]:
-    if not KBReader.EXTENT_LOCATION in data:
+    if KBReader.EXTENT_LOCATION not in data:
         return []
     if isinstance(data[KBReader.EXTENT_LOCATION], list):
         extent = data[KBReader.EXTENT_LOCATION]
