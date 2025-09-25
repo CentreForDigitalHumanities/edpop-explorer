@@ -57,13 +57,16 @@ class KBReader(SRUReader):
     def _find_ppn(self, data: dict):
         """Try to find the PPN given the data that comes from the SRU server;
         return None if PPN cannot be found"""
-        # This seems to work fine; not thoroughly tested.
+        # First try OAI-PMH identifier
         oai_pmh_identifier = data.get('OaiPmhIdentifier', None)
-        if not isinstance(oai_pmh_identifier, str):
-            return None
-        PREFIX = 'GGC:AC:'
-        if oai_pmh_identifier and oai_pmh_identifier.startswith(PREFIX):
-            return oai_pmh_identifier[len(PREFIX):]
+        prefix = 'GGC:AC:'
+        if isinstance(oai_pmh_identifier, str) and oai_pmh_identifier.startswith(prefix):
+            return oai_pmh_identifier[len(prefix):]
+        # If not available, try recordIdentifier
+        record_identifier = data.get('http://krait.kb.nl/coop/tel/handbook/telterms.html:recordIdentifier', None)
+        prefix = 'https://opc-kb.oclc.org/DB=1/PPN?PPN='
+        if isinstance(record_identifier, str) and record_identifier.startswith(prefix):
+            return record_identifier[len(prefix):]
         return None
 
     def _convert_record(self, sruthirecord: dict) -> BibliographicalRecord:
@@ -71,12 +74,6 @@ class KBReader(SRUReader):
         record.data = sruthirecord
         record.identifier = self._find_ppn(record.data)
         if record.identifier:
-            # Also here: it seems to work, but there may be records where
-            # it doesn't work...
-            # NOTE: there is often a URL in the `identifier' field as well,
-            # but not always, and it uses a `resolver', which is slower.
-            # But if we find records for which no link can be found this may
-            # be an alternative.
             record.link = self.KB_LINK.format(record.identifier)
         record.title = self._get_title(sruthirecord)
         record.languages = self._get_languages(sruthirecord)
