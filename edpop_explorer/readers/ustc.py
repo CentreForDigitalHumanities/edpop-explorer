@@ -19,15 +19,11 @@ class USTCReader(DatabaseFileMixin, GetByIdBasedOnQueryMixin, Reader):
     )
     IRI_PREFIX = "https://edpop.hum.uu.nl/readers/ustc/"
     prepared_query: Optional[SQLPreparedQuery] = None
-    FETCH_ALL_AT_ONCE = True
     SHORT_NAME = "Universal Short Title Catalogue (USTC)"
     DESCRIPTION = "An open access bibliography of early modern print culture"
 
     @classmethod
     def transform_query(cls, query: str) -> SQLPreparedQuery:
-        if len(query.strip()) < 3:
-            # Do not allow very short USTC queries because they are very slow
-            raise ReaderError('USTC query must have at least 3 characters.')
         where_statement = ( 
             'WHERE E.std_title LIKE ? '
             'OR E.author_name_1 LIKE ? '
@@ -71,10 +67,15 @@ class USTCReader(DatabaseFileMixin, GetByIdBasedOnQueryMixin, Reader):
         # This kind of query is far from ideal, but the alternative is to
         # implement SQLite full text search which is probably too much work
         # for our current goal (i.e. getting insight in the data structures)
+        limit = range_to_fetch.stop - range_to_fetch.start
+        offset = range_to_fetch.start
+        assert isinstance(limit, int)
+        assert isinstance(offset, int)
         res = cur.execute(
             'SELECT E.* FROM editions E '
             + self.prepared_query.where_statement
-            + ' ORDER BY E.id',
+            + ' ORDER BY E.id'
+            + f' LIMIT {limit} OFFSET {offset}',
             self.prepared_query.arguments,
         )
         for i, row in enumerate(res):
@@ -82,9 +83,14 @@ class USTCReader(DatabaseFileMixin, GetByIdBasedOnQueryMixin, Reader):
             for j in range(len(columns)):
                 data[columns[j]] = row[j]
             record = self._convert_record(data)
-            self.records[i] = record
-        self.number_of_results = len(self.records)
-        return range(0, len(self.records))
+            self.records[i + offset] = record
+        if self.number_of_results is None:
+            self.number_of_results = self.get_number_of_records(cur)
+        return range(offset, len(self.records))
+
+    def get_number_of_records(self, cur) -> int:
+        res = cur.execute('SELECT COUNT(*) FROM editions E ' + self.prepared_query.where_statement, self.prepared_query.arguments)
+        return res.fetchone()[0]
 
     def _convert_record(self, data: dict) -> BibliographicalRecord:
         record = BibliographicalRecord(from_reader=self.__class__)
