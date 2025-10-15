@@ -64,9 +64,11 @@ class KBReader(SRUReader):
             return oai_pmh_identifier[len(prefix):]
         # If not available, try recordIdentifier
         record_identifier = data.get('http://krait.kb.nl/coop/tel/handbook/telterms.html:recordIdentifier', None)
-        prefix = 'https://opc-kb.oclc.org/DB=1/PPN?PPN='
-        if isinstance(record_identifier, str) and record_identifier.startswith(prefix):
-            return record_identifier[len(prefix):]
+        if isinstance(record_identifier, str):
+            # Record identifier is an URL that should end with PPN=<PPN>. The start of the URL is variable.
+            match = re.match(r'^.*PPN=(\d+)$', record_identifier)
+            if match:
+                return match.group(1)
         return None
 
     def _convert_record(self, sruthirecord: dict) -> BibliographicalRecord:
