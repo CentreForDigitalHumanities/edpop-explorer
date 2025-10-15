@@ -66,7 +66,7 @@ class KBReader(SRUReader):
         record_identifier = data.get('http://krait.kb.nl/coop/tel/handbook/telterms.html:recordIdentifier', None)
         if isinstance(record_identifier, str):
             # Record identifier is an URL that should end with PPN=<PPN>. The start of the URL is variable.
-            match = re.match(r'^.*PPN=(\d+X?)$', record_identifier)
+            match = re.match(r'^.*PPN=(\d+)$', record_identifier)
             if match:
                 return match.group(1)
         return None
