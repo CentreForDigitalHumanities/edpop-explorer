@@ -110,6 +110,12 @@ class USTCReader(DatabaseFileMixin, GetByIdBasedOnQueryMixin, Reader):
             record.place_of_publication = Field(data['place'])
         if data['year']:
             record.dating = Field(data['year'])
+        if data['format']:
+            record.bibliographical_format = Field(data['format'])
+        if data['fingerprint_STCN']:
+            record.fingerprint = Field(data['fingerprint_STCN'])
+        if data['signatures']:
+            record.collation_formula = Field(data['signatures'])
         record.languages = []
         for i in range(4):
             fieldname = f'language_{i + 1}'
