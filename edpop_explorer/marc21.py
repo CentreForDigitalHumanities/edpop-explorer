@@ -197,6 +197,12 @@ class Marc21BibliographicalReaderMixin(Reader, ABC):
         # Add the holdings
         record.holdings = cls._get_holdings(data)
 
+        # Add the digitizations
+        record.digitization = cls._get_digitizations(data)
+
+        # Add collation formula
+        record.collation_formula = cls._get_collation_formula(data)
+
         return record
 
     @classmethod
@@ -214,3 +220,15 @@ class Marc21BibliographicalReaderMixin(Reader, ABC):
         # There is no default place where the holdings can be found, so
         # leave this to readers.
         return []
+
+    @classmethod
+    def _get_digitizations(cls, data: Marc21Data) -> List[Field]:
+        # There is no default place where the digitizations can be found, so
+        # leave this to readers.
+        return []
+
+    @classmethod
+    def _get_collation_formula(cls, data: Marc21Data) -> Optional[Field]:
+        # There is no default place where the holdings can be found, so
+        # leave this to readers.
+        return None
