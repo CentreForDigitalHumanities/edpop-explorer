@@ -45,7 +45,8 @@ class ESTCReader(CERLReader, Marc21BibliographicalReaderMixin):
     _dating_field_subfield = ('260', 'c')  # NB: consider using the "dates" part out of the Marc21 data
     _extent_field_subfield = ('300', 'a')
     _physical_description_field_subfield = ('300', 'b')
-    _size_field_subfield = ('300', 'c')
+    _bibliographical_format_field_subfield = ('300', 'c')
+    _size_field_subfield = ('xxx', 'xxx')  # Not available
 
     @classmethod
     def _convert_record(cls, rawrecord: dict) -> Marc21BibliographicalRecord:
