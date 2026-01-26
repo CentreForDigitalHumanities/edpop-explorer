@@ -24,6 +24,7 @@ class CERLReader(GetByIdBasedOnQueryMixin, Reader):
     """The base URL for userfriendly representations of single records."""
     additional_params: Optional[Dict[str, str]] = None
     DEFAULT_RECORDS_PER_PAGE = 10
+    MAXIMUM_RECORDS_PER_PAGE = 100
 
     @classmethod
     def _prepare_get_by_id_query(cls, identifier: str) -> str:

@@ -16,6 +16,7 @@ class KVCSReader(DatabaseFileMixin, Reader):
     SHORT_NAME = "KVCS"
     DESCRIPTION = "Drukkers & Uitgevers in KVCS"
     READERTYPE = BIOGRAPHICAL
+    ALLOW_EMPTY_QUERY = True
 
     @classmethod
     def _convert_record(cls, rawrecord: dict) -> BiographicalRecord:
