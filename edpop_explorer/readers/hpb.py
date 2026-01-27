@@ -32,6 +32,9 @@ class HPBReader(SRUMarc21BibliographicalReader):
         "integrated into one file."
     )
 
+    _bibliographical_format_field_subfield = ('300', 'c')
+    _size_field_subfield = ('xxx', 'xxx')  # Not available
+
     @classmethod
     def transform_query(cls, query: str) -> str:
         return query
