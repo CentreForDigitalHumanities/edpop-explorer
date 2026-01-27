@@ -19,6 +19,7 @@ class PierreBelleReader(DatabaseFileMixin, Reader):
     SHORT_NAME = "Pierre and Belle"
     DESCRIPTION = "Bibliography of early modern editions of Pierre de " \
         "Provence et la Belle Maguelonne (ca. 1470-ca. 1800)"
+    ALLOW_EMPTY_QUERY = True
 
     @classmethod
     def _convert_record(cls, rawrecord: dict) -> BibliographicalRecord:
