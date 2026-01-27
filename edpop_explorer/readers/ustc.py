@@ -21,6 +21,7 @@ class USTCReader(DatabaseFileMixin, GetByIdBasedOnQueryMixin, Reader):
     prepared_query: Optional[SQLPreparedQuery] = None
     SHORT_NAME = "Universal Short Title Catalogue (USTC)"
     DESCRIPTION = "An open access bibliography of early modern print culture"
+    ALLOW_EMPTY_QUERY = True
 
     @classmethod
     def transform_query(cls, query: str) -> SQLPreparedQuery:

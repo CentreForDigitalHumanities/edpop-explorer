@@ -78,6 +78,12 @@ class Reader(ABC):
     _fetch_position: int = 0
     """The index of the record that was fetched last. This is used by
     the ``fetch()`` method to decide where to continue fetching."""
+    MAXIMUM_RECORDS_PER_PAGE: Optional[int] = None
+    """Maximum number of records to fetch per page. If not set, there
+    is no predefined limit."""
+    ALLOW_EMPTY_QUERY = False
+    """If True, it is possible to enter an empty query to fetch all
+    records."""
 
     def __init__(self):
         self.records = {}
@@ -233,6 +239,11 @@ class Reader(ABC):
             g.add((cls.CATALOG_URIREF, SDO.description, Literal(cls.DESCRIPTION)))
         if (slug := cls.get_catalog_slug()) is not None:
             g.add((cls.CATALOG_URIREF, SDO.identifier, Literal(slug)))
+
+        # Add additional properties
+        if cls.MAXIMUM_RECORDS_PER_PAGE:
+            g.add((cls.CATALOG_URIREF, EDPOPREC.maximumRecordsPerPage, Literal(cls.MAXIMUM_RECORDS_PER_PAGE)))
+        g.add((cls.CATALOG_URIREF, EDPOPREC.allowEmptyQuery, Literal(cls.ALLOW_EMPTY_QUERY)))
 
         # Set namespace prefixes
         bind_common_namespaces(g)

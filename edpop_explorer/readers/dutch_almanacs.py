@@ -16,6 +16,7 @@ class DutchAlmanacsReader(DatabaseFileMixin, Reader):
     SHORT_NAME = "Dutch Almanacs"
     DESCRIPTION = "Bibliography of Dutch Almanacs 1570-1710"
     READERTYPE = BIBLIOGRAPHICAL
+    ALLOW_EMPTY_QUERY = True
 
     @classmethod
     def _convert_record(cls, rawrecord: dict) -> BibliographicalRecord:
