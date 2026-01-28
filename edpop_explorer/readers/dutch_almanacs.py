@@ -28,7 +28,7 @@ class DutchAlmanacsReader(DatabaseFileMixin, Reader):
         record.bookseller = Field(rawrecord['Boekverkoper'])
         record.contributors = [Field(author.strip()) for author in rawrecord['Auteur'].split('/')]
         record.title = Field(rawrecord['Titel'])
-        record.physical_description = Field(rawrecord['Formaat'])
+        record.collation_formula = Field(rawrecord['Formaat'])  # This really is the collation formula
         record.holdings = [Field(rawrecord['Vindplaats'])]
         record.publisher_or_printer = Field(rawrecord['Drukker'])
         return record

@@ -33,6 +33,9 @@ def holding_from_marc21_vd18(field: Marc21Field) -> Optional[Field]:
 class VDCommonMixin:
     LINK_FORMAT: str
 
+    _bibliographical_format_field_subfield = ('300', 'c')
+    _size_field_subfield = ('xxx', 'xxx')  # Not available
+
     @classmethod
     def _get_identifier(cls, data: Marc21Data) -> Optional[str]:
         field024 = data.get_first_field('024')

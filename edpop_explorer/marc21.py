@@ -130,6 +130,7 @@ class Marc21BibliographicalReaderMixin(Reader, ABC):
     _dating_field_subfield = ('264', 'c')
     _extent_field_subfield = ('300', 'a')
     _physical_description_field_subfield = ('300', 'b')
+    _bibliographical_format_field_subfield = ('xxx', 'xxx')  # Not available by default
     _size_field_subfield = ('300', 'c')
     _fingerprint_field_subfield = ('026', 'e')
 
@@ -184,6 +185,11 @@ class Marc21BibliographicalReaderMixin(Reader, ABC):
         )
         if physical_description:
             record.physical_description = Field(physical_description)
+        bibliographical_format = data.get_first_subfield(
+            *cls._bibliographical_format_field_subfield
+        )
+        if bibliographical_format:
+            record.bibliographical_format = Field(bibliographical_format)
         size = data.get_first_subfield(*cls._size_field_subfield)
         if size:
             record.size = Field(size)
@@ -196,6 +202,12 @@ class Marc21BibliographicalReaderMixin(Reader, ABC):
 
         # Add the holdings
         record.holdings = cls._get_holdings(data)
+
+        # Add the digitizations
+        record.digitization = cls._get_digitizations(data)
+
+        # Add collation formula
+        record.collation_formula = cls._get_collation_formula(data)
 
         return record
 
@@ -214,3 +226,15 @@ class Marc21BibliographicalReaderMixin(Reader, ABC):
         # There is no default place where the holdings can be found, so
         # leave this to readers.
         return []
+
+    @classmethod
+    def _get_digitizations(cls, data: Marc21Data) -> List[Field]:
+        # There is no default place where the digitizations can be found, so
+        # leave this to readers.
+        return []
+
+    @classmethod
+    def _get_collation_formula(cls, data: Marc21Data) -> Optional[Field]:
+        # There is no default place where the holdings can be found, so
+        # leave this to readers.
+        return None

@@ -6,7 +6,7 @@ from typing import Optional
 from rdflib import URIRef
 
 from edpop_explorer import CERLReader, BIBLIOGRAPHICAL, Field
-from edpop_explorer.fields import LanguageField
+from edpop_explorer.fields import LanguageField, DigitizationField
 from edpop_explorer.readers.utils import format_holding
 from edpop_explorer.srumarc21reader import Marc21BibliographicalReaderMixin, Marc21Data, Marc21BibliographicalRecord, \
     Marc21Field
@@ -45,7 +45,8 @@ class ESTCReader(CERLReader, Marc21BibliographicalReaderMixin):
     _dating_field_subfield = ('260', 'c')  # NB: consider using the "dates" part out of the Marc21 data
     _extent_field_subfield = ('300', 'a')
     _physical_description_field_subfield = ('300', 'b')
-    _size_field_subfield = ('300', 'c')
+    _bibliographical_format_field_subfield = ('300', 'c')
+    _size_field_subfield = ('xxx', 'xxx')  # Not available
 
     @classmethod
     def _convert_record(cls, rawrecord: dict) -> Marc21BibliographicalRecord:
@@ -110,3 +111,28 @@ class ESTCReader(CERLReader, Marc21BibliographicalReaderMixin):
             if full_name:
                 contributors.append(Field(full_name))
         return contributors
+
+    @classmethod
+    def _get_digitizations(cls, data: Marc21Data) -> list[DigitizationField]:
+        digitizations: list[DigitizationField] = []
+        digitization_fields = data.get_fields('856')
+        for field in digitization_fields:
+            url = field.subfields.get('u', None)
+            description = field.subfields.get('y', None)
+            field = DigitizationField(url)
+            field.url = url
+            field.description = description
+            digitizations.append(field)
+        return digitizations
+
+    @classmethod
+    def _get_collation_formula(cls, data: Marc21Data) -> Optional[Field]:
+        # Collation formula is in a Note field starting with "Signatures: "
+        notes_fields = data.get_fields('500')
+        prefix = 'Signatures: '
+        for field in notes_fields:
+            note = field.subfields.get('a', None)
+            if note and note.startswith(prefix):
+                formula = note[len(prefix):].removesuffix('.').strip()
+                return Field(formula)
+        return None
