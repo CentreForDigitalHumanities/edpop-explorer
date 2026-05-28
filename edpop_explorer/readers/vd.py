@@ -145,8 +145,9 @@ class VD18Reader(VDCommonMixin, SRUMarc21BibliographicalReader):
             return list(filter(None, map(holding_from_marc21_vd18, holdings_fields)))
         else:
             # If holding not available, try to get the holding institution through the Redaktion field instead
-            holding_inst = data.get_first_subfield('850', 'a').removeprefix('RedVD18-')
-            if holding_inst:
+            holding_inst_subfield = data.get_first_subfield('850', 'a')
+            if holding_inst_subfield:
+                holding_inst = holding_inst_subfield.removeprefix('RedVD18-')
                 try:
                     institution_name = get_isil_name_by_code(holding_inst)
                 except HTTPError:
