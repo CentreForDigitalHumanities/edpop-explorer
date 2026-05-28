@@ -16,6 +16,9 @@ def holding_from_marc21_vd17(field: Marc21Field) -> Optional[Field]:
         institution = get_isil_name_by_code(f"DE-{institution_code}") if institution_code else None
     except HTTPError:
         institution = institution_code
+    # Try once more with subfield f, which sometimes contains the institution name
+    if not institution:
+        institution = field.subfields.get('f')
     shelf_mark = field.subfields.get('a')
     return format_holding(institution, shelf_mark)
 
