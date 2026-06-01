@@ -16,6 +16,9 @@ def holding_from_marc21_vd17(field: Marc21Field) -> Optional[Field]:
         institution = get_isil_name_by_code(f"DE-{institution_code}") if institution_code else None
     except HTTPError:
         institution = institution_code
+    # Try once more with subfield f, which sometimes contains the institution name
+    if not institution:
+        institution = field.subfields.get('f')
     shelf_mark = field.subfields.get('a')
     return format_holding(institution, shelf_mark)
 
@@ -145,8 +148,9 @@ class VD18Reader(VDCommonMixin, SRUMarc21BibliographicalReader):
             return list(filter(None, map(holding_from_marc21_vd18, holdings_fields)))
         else:
             # If holding not available, try to get the holding institution through the Redaktion field instead
-            holding_inst = data.get_first_subfield('850', 'a').removeprefix('RedVD18-')
-            if holding_inst:
+            holding_inst_subfield = data.get_first_subfield('850', 'a')
+            if holding_inst_subfield:
+                holding_inst = holding_inst_subfield.removeprefix('RedVD18-')
                 try:
                     institution_name = get_isil_name_by_code(holding_inst)
                 except HTTPError:

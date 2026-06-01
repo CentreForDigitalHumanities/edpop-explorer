@@ -5,15 +5,18 @@ from edpop_explorer import SRUReader, BibliographicalRecord, BIBLIOGRAPHICAL
 from edpop_explorer import Field
 from edpop_explorer.fields import LanguageField, ContributorField
 
-ExtentType = Literal['extent', 'size', 'bibliographical-format']
+ExtentType = Literal['extent', 'size', 'bibliographical-format', 'collation-formula']
 
 
 def get_extent_type(input_string: str) -> ExtentType:
     # KB's 'extent' field is broader than ours: it may also contain the
-    # bibliographical format or the size.
+    # bibliographical format, the size or the collation formula.
     # If it is of the format in-<number>, assume bibliographical format.
+    # If it starts with 'A' or '[A]', assume collation formula.
     if re.match(r'^in-\d+$', input_string):
         return 'bibliographical-format'
+    elif input_string.startswith('A') or input_string.startswith('[A]'):
+        return 'collation-formula'
     elif input_string.endswith(' cm'):
         return 'size'
     else:
@@ -82,6 +85,7 @@ class KBReader(SRUReader):
         record.extent = get_extent_like_fields(sruthirecord, 'extent')
         record.size = get_extent_like_fields(sruthirecord, 'size')
         record.bibliographical_format = get_extent_like_fields(sruthirecord, 'bibliographical-format')
+        record.collation_formula = get_extent_like_fields(sruthirecord, 'collation-formula')
         record.publisher_or_printer = self._get_publisher(sruthirecord)
         record.contributors = self._get_contributors(sruthirecord)
         record.dating = self._get_dating(sruthirecord)
