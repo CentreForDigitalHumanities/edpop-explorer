@@ -6,6 +6,7 @@ import requests
 import xmltodict
 
 from edpop_explorer.fields import LanguageField, DigitizationField
+from edpop_explorer.reader import ServiceError
 
 
 def _force_list(data) -> list:
@@ -44,6 +45,12 @@ class GallicaReader(SRUReader):
     SHORT_NAME = "Gallica"
     DESCRIPTION = "Digital library of the Bibliothèque nationale de France " \
         "and its partners"
+    USER_AGENT = "edpop-explorer"
+
+    def __init__(self):
+        super().__init__()
+        # Add user agent, otherwise calls to Gallica are refused
+        self.session.headers.update({'User-Agent': self.USER_AGENT})
 
     @classmethod
     def _get_digitization_field(cls, identifier: str, sruthirecord: dict) -> DigitizationField:
@@ -120,7 +127,12 @@ class GallicaReader(SRUReader):
         # convert it to JSON just like sruthi does and extract the right piece
         # of data.
         url = cls.DOCUMENT_API_URL.format(identifier)
-        res = requests.get(url, headers={"accept": "application/xml"})
+        res = requests.get(url, headers={
+            "accept": "application/xml",
+            "User-Agent": cls.USER_AGENT,
+        })
+        if res.status_code != 200:
+            raise ServiceError(f"Request to Gallica failed with status code {res.status_code}")
         response_as_dict = xmltodict.parse(
             res.text,
             dict_constructor=dict,

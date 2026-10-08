@@ -5,8 +5,8 @@ import requests
 from abc import abstractmethod
 from typing import List, Optional
 
-from edpop_explorer import Reader, Record, ReaderError
-from edpop_explorer.reader import GetByIdBasedOnQueryMixin
+from edpop_explorer import Reader, Record
+from edpop_explorer.reader import GetByIdBasedOnQueryMixin, ServiceError, ReaderError
 
 
 class SRUReader(GetByIdBasedOnQueryMixin, Reader):
@@ -81,7 +81,7 @@ class SRUReader(GetByIdBasedOnQueryMixin, Reader):
                     record_schema=schema,
                 ))
             except sruthi.errors.SruError as err:
-                raise ReaderError('Server returned error: ' + str(err))
+                raise ServiceError('Server returned error: ' + str(err))
 
         self.number_of_results = responses[0].count
 

@@ -1,6 +1,7 @@
 import csv
 from typing import List
-from edpop_explorer import Reader, ReaderError, Field, BiographicalRecord, BIOGRAPHICAL, DatabaseFileMixin
+from edpop_explorer import Reader, ReaderError, Field, BiographicalRecord, BIOGRAPHICAL, DatabaseFileMixin, \
+    NotFoundError
 from rdflib import URIRef
 
 
@@ -45,7 +46,7 @@ class KVCSReader(DatabaseFileMixin, Reader):
             for row in reader:
                 if row['ID'] == identifier:
                     return cls._convert_record(row)
-        raise ReaderError(f"Item with id {identifier} does not exist.")
+        raise NotFoundError(f"Item with id {identifier} does not exist.")
     
     def _perform_query(self) -> List[BiographicalRecord]:
         assert isinstance(self.prepared_query, str)
