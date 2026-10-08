@@ -398,5 +398,13 @@ class ReaderError(Exception):
     pass
 
 
-class NotFoundError(ReaderError):
+class ServiceError(ReaderError):
+    """Generic exception for failures in calls of external services. They may
+    be the result of (temporary) problems with external APIs, although they
+    may also be the result of an incorrect call.
+    Exception messages in this class are safe to display to users."""
+    pass
+
+
+class NotFoundError(ServiceError):
     pass

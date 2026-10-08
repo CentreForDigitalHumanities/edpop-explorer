@@ -4,7 +4,7 @@ import requests
 from typing import List, Dict, Optional
 
 from edpop_explorer import (
-    Reader, Record, ReaderError, GetByIdBasedOnQueryMixin
+    Reader, Record, ReaderError, ServiceError, GetByIdBasedOnQueryMixin
 )
 
 
@@ -54,7 +54,7 @@ class CERLReader(GetByIdBasedOnQueryMixin, Reader):
                 }
             ).json()
         except requests.exceptions.RequestException as err:
-            raise ReaderError('Error during server request: ' + str(err))
+            raise ServiceError('Error during server request: ' + str(err))
 
         # TODO: check for error responses
         try:
